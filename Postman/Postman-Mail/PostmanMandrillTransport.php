@@ -87,7 +87,7 @@ class PostmanMandrillTransport extends PostmanAbstractModuleTransport implements
 	 * @return string
 	 */
 	public function getSecurityType() {
-		return self::PROTOCOL;
+		return PostmanOptions::SECURITY_TYPE_NONE;
 	}
 	/**
 	 * v0.2.1
@@ -311,7 +311,7 @@ class PostmanMandrillTransport extends PostmanAbstractModuleTransport implements
 		$this->printMandrillAuthSectionInfo ();
 		printf ( '<label for="api_key">%s</label>', __ ( 'API Key', 'post-smtp' ) );
 		print '<br />';
-		print $this->mandrill_api_key_callback ();
+		$this->mandrill_api_key_callback ();
 		print '</section>';
 	}
 }

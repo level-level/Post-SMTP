@@ -166,7 +166,7 @@ if ( ! class_exists( 'PostmanMandrillMailEngine' ) ) {
 				if ( $this->logger->isDebug() ) {
 					$this->logger->debug( 'Creating Mandrill service with apiKey=' . $this->apiKey );
 				}
-				$mandrill = new Postman_Mandrill( $this->apiKey );
+				$mandrill = new Mandrill( $this->apiKey );
 
 				// send the message
 				if ( $this->logger->isDebug() ) {
