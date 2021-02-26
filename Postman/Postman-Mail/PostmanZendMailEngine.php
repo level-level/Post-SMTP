@@ -76,8 +76,8 @@ if ( ! class_exists( 'PostmanZendMailEngine' ) ) {
 
 			// create the Message
 			$charset = $message->getCharset();
-			$this->logger->debug( 'Building Postman_Zend_Mail with charset=' . $charset );
-			$mail = new Postman_Zend_Mail( $charset );
+			$this->logger->debug( 'Building Zend_Mail with charset=' . $charset );
+			$mail = new Zend_Mail( $charset );
 
 			// add the Postman signature - append it to whatever the user may have set
 			if ( ! PostmanOptions::getInstance()->isStealthModeEnabled() ) {
@@ -219,13 +219,13 @@ if ( ! class_exists( 'PostmanZendMailEngine' ) ) {
 		}
 
 		/**
-		 * Get the sender from PostmanMessage and add it to the Postman_Zend_Mail object
+		 * Get the sender from PostmanMessage and add it to the Zend_Mail object
 		 *
 		 * @param PostmanMessage    $message
-		 * @param Postman_Zend_Mail $mail
+		 * @param Zend_Mail $mail
 		 * @return PostmanEmailAddress
 		 */
-		public function addFrom( PostmanMessage $message, Postman_Zend_Mail $mail ) {
+		public function addFrom( PostmanMessage $message, Zend_Mail $mail ) {
 			$sender = $message->getFromAddress();
 			// now log it and push it into the message
 			$senderEmail = $sender->getEmail();
