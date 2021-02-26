@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<psalm
+    totallyTyped="false"
+    autoloader="psalm-autoloader.php"
+    resolveFromConfigFile="true"
+    hideExternalErrors="true"
+    allowStringToStandInForClass="true"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="https://getpsalm.org/schema/config"
+    xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+    errorLevel="2"
+    phpVersion="7.3"
+>
+    <projectFiles>
+        <directory name="Postman" />
+        <ignoreFiles>
+            <directory name="vendor" />
+            <directory name="Postman/Postman-Mail/google-api-client" />
+            <directory name="Postman/Postman-Mail/mailchimp-mandrill-api-php-da3adc10042e" />
+            <directory name="Postman/Postman-Mail/mailgun" />
+            <directory name="Postman/Postman-Mail/sendgrid" />
+            <directory name="Postman/Postman-Mail/Zend-1.12.10" />
+        </ignoreFiles>
+    </projectFiles>
+</psalm>
