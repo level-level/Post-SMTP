@@ -1,15 +1,15 @@
 <?php
 if (! class_exists ( "PostmanAuthenticationManagerFactory" )) {
-	
+
 	require_once 'PostmanGoogleAuthenticationManager.php';
 	require_once 'PostmanMicrosoftAuthenticationManager.php';
 	require_once 'PostmanNonOAuthAuthenticationManager.php';
 	require_once 'PostmanYahooAuthenticationManager.php';
-	
+
 	//
 	class PostmanAuthenticationManagerFactory {
 		private $logger;
-		
+
 		// singleton instance
 		public static function getInstance() {
 			static $inst = null;
@@ -48,6 +48,7 @@ if (! class_exists ( "PostmanAuthenticationManagerFactory" )) {
 			} else {
 				$authenticationManager = new PostmanNonOAuthAuthenticationManager ();
 			}
+			if( ! isset( $authenticationManager ) ) { throw new Exception('kapot'); }
 			$this->logger->debug ( 'Created ' . get_class ( $authenticationManager ) );
 			return $authenticationManager;
 		}

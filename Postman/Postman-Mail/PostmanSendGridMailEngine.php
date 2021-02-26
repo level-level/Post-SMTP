@@ -53,7 +53,7 @@ if ( ! class_exists( 'PostmanSendGridMailEngine' ) ) {
 
             // now log it
 			$sender->log( $this->logger, 'From' );
-
+			$emails = array();
             // add the to recipients
 			foreach ( ( array ) $message->getToRecipients() as $recipient ) {
                 $emails[] = new \SendGrid\Mail\To($recipient->getEmail(), $recipient->getName() );
@@ -187,7 +187,7 @@ if ( ! class_exists( 'PostmanSendGridMailEngine' ) ) {
 				throw $e;
 			}
 		}
-		
+
 
 		private function errorCodesMap($error_code): string {
 			switch ($error_code) {
