@@ -25,7 +25,12 @@ if (! class_exists ( 'PostmanImportableConfiguration' )) {
 	 */
 	class PostmanImportableConfiguration {
 		private $lazyInit;
+
+		/**
+		 * @var PostmanPluginOptions[]
+		 */
 		private $availableOptions;
+		
 		private $importAvailable;
 		private $logger;
 		function __construct() {

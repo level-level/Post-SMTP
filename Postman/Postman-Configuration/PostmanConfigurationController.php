@@ -479,10 +479,10 @@ class PostmanConfigurationController {
 		printf( '<p>%s</p>', __( 'Enter the email address and name you\'d like to send mail as.', 'post-smtp' ) );
 		printf( '<p>%s</p>', __( 'Please note that to prevent abuse, many email services will <em>not</em> let you send from an email address other than the one you authenticate with.', 'post-smtp' ) );
 		printf( '<label for="postman_options[sender_email]">%s</label>', __( 'Email Address', 'post-smtp' ) );
-		print $this->settingsRegistry->from_email_callback();
+		$this->settingsRegistry->from_email_callback();
 		print '<br/>';
 		printf( '<label for="postman_options[sender_name]">%s</label>', __( 'Name', 'post-smtp' ) );
-		print $this->settingsRegistry->sender_name_callback();
+		$this->settingsRegistry->sender_name_callback();
 		print '</fieldset>';
 
 		// Wizard Step 2
@@ -772,12 +772,10 @@ class PostmanManageConfigurationAjaxHandler extends PostmanAbstractAjaxHandler {
 	}
 
 	/**
-	 * 	 * // for each successful host/port combination
-	 * 	 * // ask a transport if they support it, and if they do at what priority is it
-	 * 	 * // configure for the highest priority you find
-	 * 	 *
-	 *
-	 * @param mixed $queryHostData
+	 * for each successful host/port combination
+	 * ask a transport if they support it, and if they do at what priority is it
+	 * configure for the highest priority you find
+	 * 
 	 * @param PostmanWizardSocket[] $sockets
 	 *
 	 * @return mixed
@@ -824,10 +822,6 @@ class PostmanManageConfigurationAjaxHandler extends PostmanAbstractAjaxHandler {
 	}
 
 	/**
-	 * 	 * 	 *
-	 * 	 *
-	 *
-	 * @param mixed $queryHostData
 	 * @param PostmanWizardSocket[] $sockets
 	 *
 	 * @return array
