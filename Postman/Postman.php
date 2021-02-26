@@ -62,7 +62,6 @@ class Postman {
 		require_once 'PostmanWpMailBinder.php';
 		require_once 'PostmanConfigTextHelper.php';
 		require_once 'Postman-Email-Log/PostmanEmailLogPostType.php';
-		require_once 'Postman-Mail/PostmanMyMailConnector.php';
 		require_once 'Postman-Mail/PostmanContactForm7.php';
 		require_once 'Phpmailer/PostsmtpMailer.php';
 		//require_once 'Postman-Mail/PostmanWooCommerce.php';
@@ -121,9 +120,6 @@ class Postman {
 			$upgrader = new PostmanInstaller();
 			$upgrader->activatePostman();
 		}
-
-		// MyMail integration
-		new PostmanMyMailConnector( $rootPluginFilenameAndPath );
 
 		// Contact form 7
 		new Postsmtp_ContactForm7;

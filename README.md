@@ -61,7 +61,6 @@ SendGrid has a free SMTP plan that you can use to send up to 100 emails per day.
 * [Contact Form Builder](https://wordpress.org/plugins/contact-form-builder/)
 * [PlanSo Forms](https://wordpress.org/plugins/planso-forms/)
 * [Quform](https://www.quform.com/)
-* [MyMail Newsletter](http://revaxarts-themes.com/?t=mymail) by revaxarts
 * [SendPress Newsletters](https://wordpress.org/plugins/sendpress/)
 * [WP HTML Mail](https://wordpress.org/plugins/wp-html-mail/)
 * [Email Templates](https://wordpress.org/plugins/email-templates/)
