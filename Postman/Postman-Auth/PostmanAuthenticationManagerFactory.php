@@ -25,10 +25,9 @@ if (! class_exists ( "PostmanAuthenticationManagerFactory" )) {
 			$transport = PostmanTransportRegistry::getInstance ()->getSelectedTransport ();
 			return $this->createManager ( $transport );
 		}
-		private function createManager(PostmanZendModuleTransport $transport) {
+		private function createManager(PostmanModuleTransport $transport) {
 			$options = PostmanOptions::getInstance ();
 			$authorizationToken = PostmanOAuthToken::getInstance ();
-			$authenticationType = $options->getAuthenticationType ();
 			$hostname = $options->getHostname ();
 			$clientId = $options->getClientId ();
 			$clientSecret = $options->getClientSecret ();

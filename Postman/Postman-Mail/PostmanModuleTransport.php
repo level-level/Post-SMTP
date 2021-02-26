@@ -48,6 +48,7 @@ interface PostmanModuleTransport extends PostmanTransport {
 	public function isEmailValidationSupported();
 	public function getPort();
 	public function init();
+	public function getScribe();
 }
 interface PostmanZendModuleTransport extends PostmanModuleTransport {
 	public function getAuthenticationType();
