@@ -761,7 +761,7 @@ class PostmanManageConfigurationAjaxHandler extends PostmanAbstractAjaxHandler {
 			wp_send_json_success( $response );
 		} else {
 			/* translators: where %s is the URL to the Connectivity Test page */
-			$configuration ['message'] = sprintf( __( 'Postman can\'t find any way to send mail on your system. Run a <a href="%s">connectivity test</a>.', 'post-smtp' ), PostmanViewController::getPageUrl( PostmanViewController::PORT_TEST_SLUG ) );
+			$configuration ['message'] = sprintf( __( 'Postman can\'t find any way to send mail on your system. Run a <a href="%s">connectivity test</a>.', 'post-smtp' ), PostmanViewController::getPageUrl( PostmanViewController::POSTMAN_MENU_SLUG ) );
 			$response ['configuration'] = $configuration;
 			if ( $this->logger->isTrace() ) {
 				$this->logger->trace( 'configuration:' );
