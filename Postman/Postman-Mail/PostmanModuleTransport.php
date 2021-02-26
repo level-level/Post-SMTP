@@ -580,11 +580,11 @@ abstract class PostmanAbstractZendModuleTransport extends PostmanAbstractModuleT
 	public function getPublicTransportUri() {
 		$transportName = $this->getSlug ();
 		$options = PostmanOptions::getInstance ();
-		$auth = $this->getAuthenticationType ( $options );
+		$auth = $this->getAuthenticationType();
 		$protocol = $this->getProtocol ();
 		$security = $this->getSecurityType ();
-		$host = $this->getHostname ( $options );
-		$port = $this->getPort ( $options );
+		$host = $this->getHostname ();
+		$port = $this->getPort ();
 		if (! empty ( $security ) && $security != 'ssl') {
 			return sprintf ( '%s:%s:%s://%s:%s', $protocol, $security, $auth, $host, $port );
 		} else {
