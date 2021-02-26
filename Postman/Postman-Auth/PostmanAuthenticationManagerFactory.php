@@ -48,7 +48,7 @@ if (! class_exists ( "PostmanAuthenticationManagerFactory" )) {
 			} else {
 				$authenticationManager = new PostmanNonOAuthAuthenticationManager ();
 			}
-			if( ! isset( $authenticationManager ) ) { throw new Exception('kapot'); }
+			if( ! isset( $authenticationManager ) ) { throw new Exception('Postman authentication failed'); }
 			$this->logger->debug ( 'Created ' . get_class ( $authenticationManager ) );
 			return $authenticationManager;
 		}
