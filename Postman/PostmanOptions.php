@@ -231,7 +231,7 @@ if ( ! class_exists( 'PostmanOptions' ) ) {
 			if ( defined( 'POST_SMTP_RUN_MODE' ) ) {
 				return POST_SMTP_RUN_MODE;
 			}
-			
+
 			if ( isset( $this->options [ self::RUN_MODE ] ) ) {
 				return $this->options [ self::RUN_MODE ];
 			} else { 				return self::DEFAULT_RUN_MODE; }
@@ -456,7 +456,7 @@ if ( ! class_exists( 'PostmanOptions' ) ) {
 			if ( defined( 'POST_SMTP_API_KEY' ) ) {
 				return POST_SMTP_API_KEY;
 			}
-			
+
 			if ( isset( $this->options [ PostmanOptions::MANDRILL_API_KEY ] ) ) {
 				return base64_decode( $this->options [ PostmanOptions::MANDRILL_API_KEY ] ); }
 		}
@@ -488,27 +488,19 @@ if ( ! class_exists( 'PostmanOptions' ) ) {
 			}
 		}
 
-		/**
-		 * @return false|null|string
-		 */
 		public function getPushoverUser() {
 			if ( isset( $this->options [ PostmanOptions::PUSHOVER_USER ] ) ) {
 				return base64_decode( $this->options [ PostmanOptions::PUSHOVER_USER ] );
 			}
 		}
 
-		/**
-		 * @return false|null|string
-		 */
+
 		public function getPushoverToken() {
 			if ( isset( $this->options [ PostmanOptions::PUSHOVER_TOKEN ] ) ) {
 				return base64_decode( $this->options [ PostmanOptions::PUSHOVER_TOKEN ] );
 			}
 		}
 
-		/**
-		 * @return false|null|string
-		 */
 		public function getSlackToken() {
 			if ( isset( $this->options [ PostmanOptions::SLACK_TOKEN ] ) ) {
 				return base64_decode( $this->options [ PostmanOptions::SLACK_TOKEN ] );
@@ -521,15 +513,12 @@ if ( ! class_exists( 'PostmanOptions' ) ) {
             }
         }
 
-        /**
-         * @return false|null|string
-         */
         public function getNotificationChromeUid() {
             if ( isset( $this->options [ PostmanOptions::NOTIFICATION_CHROME_UID ] ) ) {
                 return base64_decode( $this->options [ PostmanOptions::NOTIFICATION_CHROME_UID ] );
             }
         }
-		
+
 		public function getReplyTo() {
 			if ( isset( $this->options [ PostmanOptions::REPLY_TO ] ) ) {
 				return $this->options [ PostmanOptions::REPLY_TO ]; }
@@ -555,7 +544,7 @@ if ( ! class_exists( 'PostmanOptions' ) ) {
 			if ( isset( $this->options [ PostmanOptions::DISABLE_EMAIL_VALIDAITON ] ) ) {
 				return $this->options [ PostmanOptions::DISABLE_EMAIL_VALIDAITON ]; }
 		}
-		
+
 		/**
 		 * (non-PHPdoc)
 		 *
@@ -659,10 +648,6 @@ if ( ! class_exists( 'PostmanOptions' ) ) {
 			return $this->getMessageSenderName();
 		}
 
-		/**
-		 *
-		 * @return string
-		 */
 		public function export() {
 			if ( PostmanPreRequisitesCheck::checkZlibEncode() ) {
 				$data = $this->options;
@@ -680,7 +665,6 @@ if ( ! class_exists( 'PostmanOptions' ) ) {
 		 *
 		 * @param mixed $data
 		 *
-		 * @return bool|null
 		 */
 		public function import( $data ) {
 			if ( PostmanPreRequisitesCheck::checkZlibEncode() ) {
