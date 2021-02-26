@@ -93,7 +93,7 @@ class PostmanPortTest {
 		$this->logger->trace ( 'testCustomConnection()' );
 		// test if the port is open
 		$connectionString = sprintf ( '%s:%s', $this->hostname, $this->port );
-		$stream = $this->createStream ( $connectionString, $this->connectionTimeout );
+		$stream = $this->createStream ( $connectionString );
 		return null != $stream;
 	}
 	
@@ -140,7 +140,7 @@ class PostmanPortTest {
 			return true;
 		}
 		$connectionString = sprintf ( "%s:%s", $this->hostname, $this->port );
-		$success = $this->talkToMailServer ( $connectionString, $this->connectionTimeout, $this->readTimeout );
+		$success = $this->talkToMailServer ( $connectionString );
 		if ($success) {
 			$this->protocol = 'SMTP';
 			if (! ($this->authCrammd5 || $this->authLogin || $this->authPlain || $this->authXoauth)) {
@@ -160,7 +160,7 @@ class PostmanPortTest {
 	public function testSmtpsPorts() {
 		$this->logger->trace ( 'testSmtpsPorts()' );
 		$connectionString = sprintf ( "ssl://%s:%s", $this->hostname, $this->port );
-		$success = $this->talkToMailServer ( $connectionString, $this->connectionTimeout, $this->readTimeout );
+		$success = $this->talkToMailServer ( $connectionString );
 		if ($success) {
 			if (! ($this->authCrammd5 || $this->authLogin || $this->authPlain || $this->authXoauth)) {
 				$this->authNone = true;
@@ -182,7 +182,7 @@ class PostmanPortTest {
 	 */
 	private function talkToMailServer(string $connectionString): bool {
 		$this->logger->trace ( 'talkToMailServer()' );
-		$stream = $this->createStream ( $connectionString, $this->connectionTimeout );
+		$stream = $this->createStream ( $connectionString );
 		if ($stream) {
 			$serverName = PostmanUtils::postmanGetServerName ();
 			@stream_set_timeout ( $stream, $this->readTimeout );
