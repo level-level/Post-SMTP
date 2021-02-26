@@ -3,6 +3,12 @@ includes:
 parameters:
     level: max
     inferPrivatePropertyTypeFromConstructor: true
+    excludePaths:
+        - Postman/Postman-Mail/google-api-client
+        - Postman/Postman-Mail/mailchimp-mandrill-api-php-da3adc10042e
+        - Postman/Postman-Mail/mailgun
+        - Postman/Postman-Mail/sendgrid
+        - Postman/Postman-Mail/Zend-1.12.10
     paths:
         - postman-smtp.php
         - Postman/
