@@ -14,6 +14,7 @@
     },
     "require": {
         "google/apiclient": "^2",
+        "mailgun/mailgun-php": "^2.3",
         "sendgrid/sendgrid": "^7.9",
         "zf1/zend-mail": "^1.12"
     },
