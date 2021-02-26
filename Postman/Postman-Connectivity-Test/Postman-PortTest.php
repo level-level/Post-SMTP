@@ -36,8 +36,6 @@ class PostmanPortTest {
 	//
 	const SMTPS_PROTOCOL = 'SMTPS';
 	
-	/**
-	 */
 	public function __construct($hostname, $port) {
 		$this->logger = new PostmanLogger ( get_class ( $this ) );
 		$this->hostname = $hostname;
@@ -48,10 +46,8 @@ class PostmanPortTest {
 	}
 	
 	/**
-	 * 	 * Wrap the regDomain/getRegisteredDomain function
-	 * 	 *
+	 * Wrap the regDomain/getRegisteredDomain function
 	 *
-	 * @param mixed $domain
 	 * @param string $hostname
 	 *
 	 * @return mixed
@@ -85,8 +81,6 @@ class PostmanPortTest {
 	}
 	
 	/**
-	 *
-	 * @param number $timeout        	
 	 * @return boolean
 	 */
 	public function genericConnectionTest() {
@@ -98,10 +92,7 @@ class PostmanPortTest {
 	}
 	
 	/**
-	 * 	 * Given a hostname, test if it has open ports
-	 * 	 *
-	 *
-	 * @param string $hostname        	
+	 * Given a hostname, test if it has open ports	
 	 *
 	 * @return null|true
 	 */
@@ -123,12 +114,11 @@ class PostmanPortTest {
 		} catch ( Exception $e ) {
 			$this->debug ( 'return false' );
 		}
+		return null;
 	}
 	
 	/**
-	 * Given a hostname, test if it has open ports
-	 *
-	 * @param string $hostname        	
+	 * Given a hostname, test if it has open ports	
 	 */
 	public function testSmtpPorts() {
 		$this->logger->trace ( 'testSmtpPorts()' );
@@ -153,9 +143,7 @@ class PostmanPortTest {
 	}
 	
 	/**
-	 * Given a hostname, test if it has open ports
-	 *
-	 * @param string $hostname        	
+	 * Given a hostname, test if it has open ports     	
 	 */
 	public function testSmtpsPorts() {
 		$this->logger->trace ( 'testSmtpsPorts()' );
@@ -173,10 +161,9 @@ class PostmanPortTest {
 	}
 	
 	/**
-	 * 	 * Given a hostname, test if it has open ports
-	 * 	 *
+	 * Given a hostname, test if it has open ports
 	 *
-	 * @param string $hostname        	
+	 * @param string $connectionString        	
 	 *
 	 * @return bool
 	 */

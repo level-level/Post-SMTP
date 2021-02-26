@@ -197,8 +197,6 @@ class PostmanPortTestAjaxController {
 	private $logger;
 	/**
 	 * Constructor
-	 *
-	 * @param PostmanOptions $options
 	 */
 	function __construct() {
 		$this->logger = new PostmanLogger( get_class( $this ) );
@@ -284,7 +282,6 @@ class PostmanPortTestAjaxController {
 		$transportName = trim( PostmanUtils::getRequestParameter( 'transport_name' ) );
 		$this->logger->debug( sprintf( 'testing SMTPS socket %s:%s (%s)', $hostname, $port, $transport ) );
 		$portTest = new PostmanPortTest( $hostname, $port );
-		$portTest->transportName = $transportName;
 		$success = $portTest->testSmtpsPorts();
 		$this->buildResponse( $hostname, $port, $portTest, $success, $transport );
 	}
