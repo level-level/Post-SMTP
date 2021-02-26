@@ -245,7 +245,7 @@ class PostmanSendGridTransport extends PostmanAbstractModuleTransport implements
 		$this->printSendGridAuthSectionInfo ();
 		printf ( '<label for="api_key">%s</label>', __ ( 'API Key', 'post-smtp' ) );
 		print '<br />';
-		print $this->sendgrid_api_key_callback ();
+		$this->sendgrid_api_key_callback ();
 		print '</section>';
 	}
 }

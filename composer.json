@@ -13,6 +13,7 @@
         "sort-packages": true
     },
     "require": {
+        "sendgrid/sendgrid": "^7.9",
         "zf1/zend-mail": "^1.12"
     },
     "require-dev": {

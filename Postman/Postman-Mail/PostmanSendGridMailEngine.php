@@ -1,9 +1,6 @@
 <?php
 
 if ( ! class_exists( 'PostmanSendGridMailEngine' ) ) {
-
-	require_once 'sendgrid/sendgrid-php.php';
-
 	/**
 	 * Sends mail with the SendGrid API
 	 * https://sendgrid.com/docs/API_Reference/Web_API/mail.html
@@ -181,7 +178,7 @@ if ( ! class_exists( 'PostmanSendGridMailEngine' ) ) {
 				$this->transcript = print_r( $response->body(), true );
 				$this->transcript .= PostmanModuleTransport::RAW_MESSAGE_FOLLOWS;
 				$this->transcript .= print_r( $email, true );
-			} catch ( SendGrid\Exception $e ) {
+			} catch ( Exception $e ) {
 				$this->transcript = $e->getMessage();
 				$this->transcript .= PostmanModuleTransport::RAW_MESSAGE_FOLLOWS;
 				$this->transcript .= print_r( $email, true );
