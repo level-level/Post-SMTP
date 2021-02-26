@@ -1,6 +1,6 @@
 <?php
 if (! class_exists ( 'PostmanSession' )) {
-	
+
 	/**
 	 * Persist session state to the database
 	 *
@@ -13,17 +13,17 @@ if (! class_exists ( 'PostmanSession' )) {
 	 * plugin's similiarily named variables.
 	 *
 	 * @author jasonhendriks
-	 *        
+	 *
 	 */
 	class PostmanSession {
 		// length of time to keep items around
 		const MINUTES_IN_SECONDS = 60;
-		
+
 		//
 		const OAUTH_IN_PROGRESS = 'oauth_in_progress';
 		const ACTION = 'action';
 		const ERROR_MESSAGE = 'error_message';
-		
+
 		// singleton instance
 		public static function getInstance() {
 			static $inst = null;
@@ -32,13 +32,12 @@ if (! class_exists ( 'PostmanSession' )) {
 			}
 			return $inst;
 		}
-		
+
 		/**
 		 * 		 * OAuth is in progress $state is the randomly generated
 		 * 		 * transaction ID
 		 * 		 *
 		 *
-		 * @param mixed $state        	
 		 *
 		 * @return bool
 		 */
@@ -54,13 +53,8 @@ if (! class_exists ( 'PostmanSession' )) {
 		public function unsetOauthInProgress(): void {
 			delete_transient ( self::OAUTH_IN_PROGRESS );
 		}
-		
+
 		/**
-		 * 		 * Sometimes I need to keep track of what I'm doing between requests
-		 * 		 *
-		 *
-		 * @param mixed $action        	
-		 *
 		 * @return bool
 		 */
 		public function isSetAction(): bool {
@@ -75,13 +69,8 @@ if (! class_exists ( 'PostmanSession' )) {
 		public function unsetAction(): void {
 			delete_transient ( self::ACTION );
 		}
-		
+
 		/**
-		 * 		 * Sometimes I need to keep track of what I'm doing between requests
-		 * 		 *
-		 *
-		 * @param mixed $message        	
-		 *
 		 * @return bool
 		 */
 		public function isSetErrorMessage(): bool {
@@ -96,6 +85,6 @@ if (! class_exists ( 'PostmanSession' )) {
 		public function unsetMessage(): void {
 			delete_transient ( self::ERROR_MESSAGE );
 		}
-		
+
 	}
 }
