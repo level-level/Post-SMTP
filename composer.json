@@ -1,0 +1,13 @@
+{
+    "name": "level-level/postman",
+    "description": "Adapter between WordPress mail and several mail service providers.",
+    "type": "wordpress-plugin",
+    "license": "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "Level Level",
+            "email": "info@level-level.com"
+        }
+    ],
+    "require": {}
+}
