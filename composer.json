@@ -14,7 +14,6 @@
     },
     "require": {},
     "require-dev": {
-        "szepeviktor/phpstan-wordpress": "^0.7.3",
-        "vimeo/psalm": "^4.6"
+        "szepeviktor/phpstan-wordpress": "^0.7.3"
     }
 }
