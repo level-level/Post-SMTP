@@ -95,10 +95,6 @@ if ( ! class_exists( 'PostmanEmailLogService' ) ) {
 		 * @param mixed                $transcript
 		 * @param PostmanModuleTransport $transport
 		 * @param mixed                $statusMessage
-		 * @param mixed                $originalTo
-		 * @param mixed                $originalSubject
-		 * @param mixed                $originalMessage
-		 * @param mixed                $originalHeaders
 		 *
 		 * @return void
 		 */
@@ -322,9 +318,6 @@ if ( ! class_exists( 'PostmanEmailLogPurger' ) ) {
 		}
 
 		/**
-		 * 		 *
-		 *
-		 * @param array   $posts
 		 * @param mixed $postid
 		 *
 		 * @return void
