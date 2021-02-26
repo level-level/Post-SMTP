@@ -25,7 +25,7 @@ class PostmanEmailLogs {
 
     public static function get_instance() {
         if ( ! self::$instance ) {
-            self::$instanc = new static();
+            self::$instance = new self();
         }
 
         return self::$instance;
@@ -86,9 +86,9 @@ class PostmanEmailLogs {
         foreach ( $logs->posts as $log ) {
 
             foreach ($this->fields as $key ) {
-                $value = $this->get_meta( $log->ID, $key, true );
+                $value = $logs->get_meta( $log->ID, $key, true );
 
-                if ( $this->add_meta( $log->ID, $key, $value ) ) {
+                if ( $logs->add_meta( $log->ID, $key, $value ) ) {
                     delete_post_meta( $log->ID, $key );
                 } else {
                     $failed_records++;
@@ -109,7 +109,7 @@ class PostmanEmailLogs {
     function save( $data ): void {
         $this->db->query( $this->db->prepare(
             "
-		INSERT INTO $this->db_name 
+		INSERT INTO $this->db_name
 		( " . implode( ',', array_keys( $data ) ) . " )
 		VALUES ( " . str_repeat( '%s', count( $data ) ) . " )", array_values( $data )
         ) );
