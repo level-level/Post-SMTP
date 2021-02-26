@@ -346,7 +346,7 @@ class PostmanEmailLogView extends WP_List_Table {
 		if ( isset( $_POST['postman_trash_all'] ) ) {
 			$args['posts_per_page'] = -1;
 		}
-		$posts = new WP_query( $args );
+		$posts = new WP_Query( $args );
 
 		if ( isset( $_POST['postman_trash_all'] ) ) {
 			foreach ( $posts->posts as $post ) {
@@ -381,21 +381,6 @@ class PostmanEmailLogView extends WP_List_Table {
 			array_push( $data, $flattenedPost );
 		}
 
-		/**
-		 * This checks for sorting input and sorts the data in our array accordingly.
-		 *
-		 * In a real-world situation involving a database, you would probably want
-		 * to handle sorting by passing the 'orderby' and 'order' values directly
-		 * to a custom query. The returned data will be pre-sorted, and this array
-		 * sorting technique would be unnecessary.
-		 */
-		function usort_reorder( $a, $b ) {
-			$orderby = ( ! empty( $_REQUEST ['orderby'] )) ? $_REQUEST ['orderby'] : 'title'; // If no sort, default to title
-			$order = ( ! empty( $_REQUEST ['order'] )) ? $_REQUEST ['order'] : 'asc'; // If no order, default to asc
-			$result = strcmp( $a [ $orderby ], $b [ $orderby ] ); // Determine sort order
-			return ($order === 'asc') ? $result : - $result; // Send final sort direction to usort
-		}
-		// usort($data, 'usort_reorder');
 		/**
 		 * *********************************************************************
 		 * ---------------------------------------------------------------------

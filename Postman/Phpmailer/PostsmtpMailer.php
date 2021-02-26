@@ -1,6 +1,10 @@
 <?php
-require_once ABSPATH . WPINC . '/class-phpmailer.php';
-require_once ABSPATH . WPINC . '/class-smtp.php';
+
+use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\PHPMailer;
+
+require_once ABSPATH . WPINC . '/PHPMailer/PHPMailer.php';
+require_once ABSPATH . WPINC . '/PHPMailer/SMTP.php';
 
 add_action('plugins_loaded', function() {
     global $phpmailer;
@@ -59,7 +63,7 @@ class PostsmtpMailer extends PHPMailer {
 
         try {
             return $postmanWpMail->sendMessage( $message, $log );
-        } catch (phpmailerException $exc) {
+        } catch (Exception $exc) {
 
             $this->error = $exc;
 

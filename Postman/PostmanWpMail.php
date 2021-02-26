@@ -1,5 +1,7 @@
 <?php
 
+use PHPMailer\PHPMailer\Exception;
+
 if ( ! class_exists( 'PostmanWpMail' ) ) {
 
 	/**
@@ -293,7 +295,7 @@ if ( ! class_exists( 'PostmanWpMail' ) ) {
 
 				// return failure
                 if ( PostmanOptions::getInstance()->getSmtpMailer() == 'phpmailer' ) {
-                    throw new phpmailerException($e->getMessage(), $e->getCode());
+                    throw new Exception($e->getMessage(), $e->getCode());
                 }
 				return false;
 

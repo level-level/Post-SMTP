@@ -14,6 +14,7 @@
     },
     "require": {},
     "require-dev": {
+        "phpmailer/phpmailer": "^6.3",
         "szepeviktor/phpstan-wordpress": "^0.7.3"
     }
 }
