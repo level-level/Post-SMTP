@@ -179,7 +179,7 @@ foreach ($lines as $line) {
 	}
 
 	// this must be a TLD
-	$tldParts = preg_split('\.', $line);
+	$tldParts = preg_split('/\./', $line);
 	buildSubdomain($tldTree, $tldParts);
 }
 
