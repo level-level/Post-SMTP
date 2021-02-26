@@ -64,7 +64,7 @@ class regDomain {
 	}
 
 	/* validate parts */
-	public function validDomainPart($domPart): bool {
+	public function validDomainPart(string $domPart): bool {
 		// see http://www.register.com/domain-extension-rules.rcmx
 		$len = strlen($domPart);
 
@@ -82,7 +82,10 @@ class regDomain {
 	}
 
 	/* recursive helper method */
-	public function findRegisteredDomain($remainingSigningDomainParts, &$treeNode) {
+	/**
+	 * @param string[] $remainingSigningDomainParts
+	 */
+	public function findRegisteredDomain(array $remainingSigningDomainParts, &$treeNode) {
 		$sub = array_pop($remainingSigningDomainParts);
 
 		$result = NULL;

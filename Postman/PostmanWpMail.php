@@ -28,15 +28,18 @@ if ( ! class_exists( 'PostmanWpMail' ) ) {
 		}
 
 		/**
-		 * This methods follows the wp_mail function interface, but implements it Postman-style.
-		 * Exceptions are held for later inspection.
-		 * An instance of PostmanState updates the success/fail tally.
+		 * 		 * This methods follows the wp_mail function interface, but implements it Postman-style.
+		 * 		 * Exceptions are held for later inspection.
+		 * 		 * An instance of PostmanState updates the success/fail tally.
+		 * 		 *
 		 *
 		 * @param mixed $to
 		 * @param mixed $subject
 		 * @param mixed $body
 		 * @param mixed $headers
 		 * @param mixed $attachments
+		 * @param string $message
+		 *
 		 * @return boolean
 		 */
 		public function send( $to, $subject, $message, $headers = '', $attachments = array() ) {
@@ -300,7 +303,7 @@ if ( ! class_exists( 'PostmanWpMail' ) ) {
 		/**
 		 * @return bool
 		 */
-		private function fallback( $log, $postMessage,$options ) {
+		private function fallback( PostmanEmailLog $log, PostmanMessage $postMessage,PostmanOptions $options ) {
 
             if ( ! $options->is_fallback && $options->getFallbackIsEnabled() && $options->getFallbackIsEnabled() == 'yes' ) {
 

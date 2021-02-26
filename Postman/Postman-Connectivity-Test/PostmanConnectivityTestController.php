@@ -298,7 +298,7 @@ class PostmanPortTestAjaxController {
 	 *
 	 * @return void
 	 */
-	private function buildResponse( $hostname, $port, PostmanPortTest $portTest, $success, $transport = '' ): void {
+	private function buildResponse( $hostname, $port, PostmanPortTest $portTest, $success, string $transport = '' ): void {
 		$this->logger->debug( sprintf( 'testing port result for %s:%s success=%s', $hostname, $port, $success ) );
 		$response = array(
 				'hostname' => $hostname,

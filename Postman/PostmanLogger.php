@@ -23,18 +23,33 @@ if (! class_exists ( "PostmanLogger" )) {
 				$this->logLevel = self::OFF_INT;
 			}
 		}
+		/**
+		 * @param false|string $text
+		 */
 		function trace($text): void {
 			$this->printLog ( $text, self::TRACE_INT, 'TRACE' );
 		}
+		/**
+		 * @param string $text
+		 */
 		function debug($text): void {
 			$this->printLog ( $text, self::DEBUG_INT, 'DEBUG' );
 		}
+		/**
+		 * @param string $text
+		 */
 		function info($text): void {
 			$this->printLog ( $text, self::INFO_INT, 'INFO' );
 		}
+		/**
+		 * @param string $text
+		 */
 		function warn($text): void {
 			$this->printLog ( $text, self::WARN_INT, 'WARN' );
 		}
+		/**
+		 * @param string $text
+		 */
 		function error($text): void {
 			$this->printLog ( $text, self::ERROR_INT, 'ERROR' );
 		}

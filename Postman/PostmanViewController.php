@@ -99,7 +99,7 @@ if ( ! class_exists( 'PostmanViewController' ) ) {
 		/**
 		 * @return string
 		 */
-		public static function getPageUrl( $slug ) {
+		public static function getPageUrl( string $slug ) {
 			return PostmanUtils::getPageUrl( $slug );
 		}
 

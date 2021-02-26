@@ -116,11 +116,14 @@ abstract class PostmanAbstractModuleTransport implements PostmanModuleTransport 
 	}
 	
 	/**
-	 * 	 * Creates a single socket for the Wizard to test
+	 * 	 * 	 * Creates a single socket for the Wizard to test
+	 * 	 *
 	 *
 	 * @return (false|mixed|string)[]
 	 *
 	 * @psalm-return array{host: mixed, port: mixed, id: string, transport_id: mixed, transport_name: mixed, smtp: false}
+	 * @param string $hostname
+	 * @param int $port
 	 */
 	protected function createSocketDefinition($hostname, $port) {
 		$socket = array ();

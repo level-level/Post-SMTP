@@ -168,9 +168,11 @@ class PostmanSmtpModuleTransport extends PostmanAbstractZendModuleTransport impl
 	}
 
 	/**
-	 * Creates a single socket for the Wizard to test
+	 * 	 * Creates a single socket for the Wizard to test
+	 *
+	 * @param int $port
 	 */
-	protected function createSocketDefinition( $hostname, $port ) {
+	protected function createSocketDefinition( $hostname, int $port ) {
 		$socket = parent::createSocketDefinition( $hostname, $port );
 		$socket ['smtp'] = true;
 		return $socket;

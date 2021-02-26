@@ -317,7 +317,7 @@ if ( ! class_exists( 'PostmanMessage' ) ) {
 		public function getContentType() {
 			return $this->contentType;
 		}
-		public function setContentType( $contentType ): void {
+		public function setContentType( string $contentType ): void {
 			$this->contentType = $contentType;
 		}
 		/**
@@ -330,7 +330,7 @@ if ( ! class_exists( 'PostmanMessage' ) ) {
 		 *
 		 * @return void
 		 */
-		public function addTo( $to ): void {
+		public function addTo( string $to ): void {
 			$this->addRecipients( $this->toRecipients, $to );
 		}
 		/**
@@ -343,7 +343,7 @@ if ( ! class_exists( 'PostmanMessage' ) ) {
 		 *
 		 * @return void
 		 */
-		public function addCc( $cc ): void {
+		public function addCc( string $cc ): void {
 			$this->addRecipients( $this->ccRecipients, $cc );
 		}
 		/**
@@ -356,7 +356,7 @@ if ( ! class_exists( 'PostmanMessage' ) ) {
 		 *
 		 * @return void
 		 */
-		public function addBcc( $bcc ): void {
+		public function addBcc( string $bcc ): void {
 			$this->addRecipients( $this->bccRecipients, $bcc );
 		}
 		/**
@@ -382,11 +382,14 @@ if ( ! class_exists( 'PostmanMessage' ) ) {
 		}
 
 		/**
-		 * 		 * For the string version, each header line (beginning with From:, Cc:, etc.) is delimited with a newline ("\r\n")
+		 * 		 * 		 * For the string version, each header line (beginning with From:, Cc:, etc.) is delimited with a newline ("\r\n")
+		 * 		 *
 		 *
 		 * @return void
+		 *
+		 * @param (mixed|string)[] $headers
 		 */
-		public function addHeaders( $headers ): void {
+		public function addHeaders( array $headers ): void {
 			if ( ! is_array( $headers ) ) {
 				// WordPress may send a string where "each header line (beginning with From:, Cc:, etc.) is delimited with a newline ("\r\n") (advanced)"
 				// this converts that string to an array
@@ -428,7 +431,7 @@ if ( ! class_exists( 'PostmanMessage' ) ) {
 		 *
 		 * @return void
 		 */
-		private function processHeader( $name, $content ): void {
+		private function processHeader( $name, string $content ): void {
 			$name = trim( $name );
 			$content = trim( $content );
 			switch ( strtolower( $name ) ) {
@@ -550,35 +553,35 @@ if ( ! class_exists( 'PostmanMessage' ) ) {
 				}
 			}
 		}
-		function setBody( $body ): void {
+		function setBody( string $body ): void {
 			$this->body = $body;
 		}
-		function setBodyTextPart( $bodyTextPart ): void {
+		function setBodyTextPart( string $bodyTextPart ): void {
 			$this->bodyTextPart = $bodyTextPart;
 		}
-		function setBodyHtmlPart( $bodyHtmlPart ): void {
+		function setBodyHtmlPart( string $bodyHtmlPart ): void {
 			$this->bodyHtmlPart = $bodyHtmlPart;
 		}
-		function setSubject( $subject ): void {
+		function setSubject( string $subject ): void {
 			$this->subject = $subject;
 		}
 		function setAttachments( $attachments ): void {
 			$this->attachments = $attachments;
 		}
-		function setFrom( $email, $name = null ): void {
+		function setFrom( string $email, $name = null ): void {
 			if ( ! empty( $email ) ) {
 				$this->from = new PostmanEmailAddress( $email, $name );
 			}
 		}
-		function setReplyTo( $replyTo ): void {
+		function setReplyTo( string $replyTo ): void {
 			if ( ! empty( $replyTo ) ) {
 				$this->replyTo = new PostmanEmailAddress( $replyTo );
 			}
 		}
-		function setMessageId( $messageId ): void {
+		function setMessageId( string $messageId ): void {
 			$this->messageId = $messageId;
 		}
-		function setDate( $date ): void {
+		function setDate( string $date ): void {
 			$this->date = $date;
 		}
 

@@ -219,7 +219,7 @@ if ( ! class_exists( 'PostmanMailgunMailEngine' ) ) {
 		/**
 		 * @return false|string
 		 */
-		private function getRecipientVariables( $emails ) {
+		private function getRecipientVariables( array $emails ) {
 			$recipient_variables = array();
 			foreach ( $emails as $key => $email ) {
 				$recipient_variables[$email] = array( 'id' => $key );
@@ -228,7 +228,11 @@ if ( ! class_exists( 'PostmanMailgunMailEngine' ) ) {
 			return json_encode( $recipient_variables );
 		}
 
-		private function addHeader( $name, $value, $deprecated = '' ): void {
+		/**
+		 * @param string $value
+		 * @param string|true $deprecated
+		 */
+		private function addHeader( string $name, $value, $deprecated = '' ): void {
 			if ( $value && ! empty( $value ) ) {
 				$this->mailgunMessage['h:' . $name] = preg_replace('/.*:\s?/', '', $value);
 			}

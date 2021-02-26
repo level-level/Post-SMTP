@@ -138,7 +138,10 @@ class PostmanGetDiagnosticsViaAjax {
 		$this->diagnostics = '';
 		PostmanUtils::registerAjaxHandler( 'postman_diagnostics', $this, 'getDiagnostics' );
 	}
-	private function addToDiagnostics( $header, $data ): void {
+	/**
+	 * @param false|null|string $data
+	 */
+	private function addToDiagnostics( string $header, $data ): void {
 		if ( isset( $data ) ) {
 			$this->diagnostics .= sprintf( '%s: %s%s', $header, $data, PHP_EOL );
 		}
@@ -203,7 +206,7 @@ class PostmanGetDiagnosticsViaAjax {
 	 *
 	 * @return null|string
 	 */
-	private function getFilters( $hook = '' ) {
+	private function getFilters( string $hook = '' ) {
 		global $wp_filter;
 		if ( empty( $hook ) || ! isset( $wp_filter [ $hook ] ) ) {
 			return null; }

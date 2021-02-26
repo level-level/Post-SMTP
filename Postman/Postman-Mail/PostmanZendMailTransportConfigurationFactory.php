@@ -94,7 +94,7 @@ if (! class_exists ( 'PostmanOAuth2ConfigurationFactory' )) {
 		 *
 		 * @psalm-return array{ssl: mixed, port: mixed, auth: mixed, xoauth2_request: mixed}
 		 */
-		private static function createConfiguration($logger, $hostname, $port, $securityType, $authenticationType, $initClientRequestEncoded): array {
+		private static function createConfiguration(PostmanLogger $logger, $hostname, $port, $securityType, $authenticationType, $initClientRequestEncoded): array {
 			$config = array (
 					'ssl' => $securityType,
 					'port' => $port,

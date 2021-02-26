@@ -68,7 +68,7 @@ class PostmanUtils {
 		return menu_page_url( self::POSTMAN_SETTINGS_PAGE_STUB, self::NO_ECHO );
 	}
 
-	public static function isCurrentPagePostmanAdmin( $page = 'postman' ): bool {
+	public static function isCurrentPagePostmanAdmin( string $page = 'postman' ): bool {
 		$result = (isset( $_REQUEST ['page'] ) && substr( $_REQUEST ['page'], 0, strlen( $page ) ) == $page);
 		return $result;
 	}
@@ -106,7 +106,7 @@ class PostmanUtils {
 	 * @param mixed $ipAddress
 	 * @return bool
 	 */
-	public static function isHostAddressNotADomainName( $host ) {
+	public static function isHostAddressNotADomainName( string $host ) {
 		// IPv4 / IPv6 test from http://stackoverflow.com/a/17871737/4368109
 		$ipv6Detected = preg_match( '/(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))/', $host );
 		$ipv4Detected = preg_match( '/((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])/', $host );
@@ -115,15 +115,18 @@ class PostmanUtils {
 		// return preg_match ( '/^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9‌​]{2}|2[0-4][0-9]|25[0-5])$/', $ipAddress );
 	}
 	/**
-	 * Makes the outgoing HTTP requests
-	 * Inside WordPress we can use wp_remote_post().
-	 * Outside WordPress, not so much.
+	 * 	 * Makes the outgoing HTTP requests
+	 * 	 * Inside WordPress we can use wp_remote_post().
+	 * 	 * Outside WordPress, not so much.
+	 * 	 *
 	 *
 	 * @param mixed $url
 	 * @param mixed $args
+	 * @param (false|mixed|string)[] $parameters
+	 *
 	 * @return string the HTML body
 	 */
-	static function remotePostGetBodyOnly( $url, $parameters, array $headers = array() ) {
+	static function remotePostGetBodyOnly( $url, array $parameters, array $headers = array() ) {
 		$response = PostmanUtils::remotePost( $url, $parameters, $headers );
 		$theBody = wp_remote_retrieve_body( $response );
 		return $theBody;
@@ -412,10 +415,12 @@ class PostmanUtils {
 	}
 
 	/**
+	 * 	 * 	 *
 	 * 	 *
 	 *
 	 * @param mixed $actionName
 	 * @param mixed $callbackName
+	 * @param PostmanConfigurationController|PostmanConnectivityTestController|PostmanDiagnosticTestController|PostmanSendTestEmailController|PostmanViewController $viewController
 	 *
 	 * @return void
 	 */
@@ -432,10 +437,12 @@ class PostmanUtils {
 	}
 
 	/**
+	 * 	 * 	 *
 	 * 	 *
 	 *
 	 * @param mixed $actionName
 	 * @param mixed $callbackName
+	 * @param PostmanGetDiagnosticsViaAjax|PostmanGetHostnameByEmailAjaxController|PostmanImportConfigurationAjaxController|PostmanManageConfigurationAjaxHandler|PostmanPortTestAjaxController|PostmanSendTestEmailAjaxController $class
 	 *
 	 * @return void
 	 */

@@ -11,6 +11,10 @@ class PostmanNotify {
         $this->notify = $notify;
     }
 
+    /**
+     * @param string $message
+     * @param PostmanEmailLog $log
+     */
     public function send( $message, $log ): void {
         $this->notify->send_message( $message );
     }

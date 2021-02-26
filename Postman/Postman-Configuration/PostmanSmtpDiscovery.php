@@ -82,6 +82,9 @@ if (! class_exists ( 'PostmanSmtpMappings' )) {
 				'presmtp.ex4.secureserver.net' => 'smtp.ex2.secureserver.net',
 				'htvhosting.com' => 'mail.htvhosting.com' 
 		);
+		/**
+		 * @param false|string $hostname
+		 */
 		public static function getSmtpFromEmail($hostname) {
 			reset ( PostmanSmtpMappings::$emailDomain );
 			foreach ( PostmanSmtpMappings::$emailDomain as $domain => $smtp ) {
@@ -91,6 +94,9 @@ if (! class_exists ( 'PostmanSmtpMappings' )) {
 			}
 			return false;
 		}
+		/**
+		 * @param string $mx
+		 */
 		public static function getSmtpFromMx($mx) {
 			reset ( PostmanSmtpMappings::$mxMappings );
             foreach ( PostmanSmtpMappings::$mxMappings as $domain => $smtp ) {

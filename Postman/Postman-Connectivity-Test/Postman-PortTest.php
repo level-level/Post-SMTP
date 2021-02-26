@@ -48,9 +48,12 @@ class PostmanPortTest {
 	}
 	
 	/**
-	 * Wrap the regDomain/getRegisteredDomain function
+	 * 	 * Wrap the regDomain/getRegisteredDomain function
+	 * 	 *
 	 *
 	 * @param mixed $domain
+	 * @param string $hostname
+	 *
 	 * @return mixed
 	 */
 	private function getRegisteredDomain($hostname) {
@@ -60,18 +63,18 @@ class PostmanPortTest {
 		}
 		return $registeredDomain;
 	}
-	public function setConnectionTimeout($timeout): void {
+	public function setConnectionTimeout(int $timeout): void {
 		$this->connectionTimeout = $timeout;
 		$this->logger->trace ( $this->connectionTimeout );
 	}
-	public function setReadTimeout($timeout): void {
+	public function setReadTimeout(int $timeout): void {
 		$this->readTimeout = $timeout;
 		$this->logger->trace ( $this->readTimeout );
 	}
 	/**
 	 * @return false|resource
 	 */
-	private function createStream($connectionString) {
+	private function createStream(string $connectionString) {
 		$stream = @stream_socket_client ( $connectionString, $errno, $errstr, $this->connectionTimeout );
 		if ($stream) {
 			$this->trace ( sprintf ( 'connected to %s', $connectionString ) );
@@ -177,7 +180,7 @@ class PostmanPortTest {
 	 *
 	 * @return bool
 	 */
-	private function talkToMailServer($connectionString): bool {
+	private function talkToMailServer(string $connectionString): bool {
 		$this->logger->trace ( 'talkToMailServer()' );
 		$stream = $this->createStream ( $connectionString, $this->connectionTimeout );
 		if ($stream) {
@@ -227,12 +230,17 @@ class PostmanPortTest {
 			return false;
 		}
 	}
-	private function sendSmtpCommand($stream, $message): void {
+	/**
+	 * @param resource $stream
+	 */
+	private function sendSmtpCommand($stream, string $message): void {
 		$this->trace ( 'tx: ' . $message );
 		fputs ( $stream, $message . "\r\n" );
 	}
 	/**
 	 * @return false|string
+	 *
+	 * @param resource $stream
 	 */
 	private function readSmtpResponse($stream) {
 		$result = '';
@@ -282,12 +290,21 @@ class PostmanPortTest {
 	public function getErrorMessage() {
 		return $this->errstr;
 	}
+	/**
+	 * @param string $message
+	 */
 	private function trace($message): void {
 		$this->logger->trace ( sprintf ( '%s:%s => %s', $this->hostname, $this->port, $message ) );
 	}
+	/**
+	 * @param string $message
+	 */
 	private function debug($message): void {
 		$this->logger->debug ( sprintf ( '%s:%s => %s', $this->hostname, $this->port, $message ) );
 	}
+	/**
+	 * @param string $message
+	 */
 	private function error($message): void {
 		$this->logger->error ( sprintf ( '%s:%s => %s', $this->hostname, $this->port, $message ) );
 	}

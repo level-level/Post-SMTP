@@ -31,20 +31,23 @@ if (! class_exists ( 'PostmanEmailAddress' )) {
 				return sprintf ( '%s', $this->getEmail () );
 			}
 		}
-		public function setName($name): void {
+		public function setName(string $name): void {
 			$this->name = $name;
 		}
-		public function setEmail($email): void {
+		public function setEmail(string $email): void {
 			$this->email = $email;
 		}
 		
 		/**
-		 * 		 * Validate the email address
+		 * 		 * 		 * Validate the email address
+		 * 		 * 		 *
 		 * 		 *
 		 *
 		 * @throws Exception
 		 *
 		 * @return void
+		 *
+		 * @param string $desc
 		 */
 		public function validate($desc = ''): void {
 			if (! PostmanUtils::validateEmail ( $this->email )) {
@@ -88,6 +91,9 @@ if (! class_exists ( 'PostmanEmailAddress' )) {
 			}
 			return $emails;
 		}
+		/**
+		 * @param string $desc
+		 */
 		public function log(PostmanLogger $log, $desc): void {
 			$message = $desc . ' email=' . $this->getEmail ();
 			if (! empty ( $this->name )) {

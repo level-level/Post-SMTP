@@ -188,7 +188,10 @@ if ( ! class_exists( 'PostmanMandrillMailEngine' ) ) {
 				throw $e;
 			}
 		}
-		private function addHeader( $key, $value, $append = false ): void {
+		/**
+		 * @param string $value
+		 */
+		private function addHeader( string $key, $value, bool $append = false ): void {
 			$this->logger->debug( 'Adding header: ' . $key . ' = ' . $value );
 			$header = &$this->mandrillMessage ['headers'];
 			if ( $append && ! empty( $header [ $key ] ) ) {

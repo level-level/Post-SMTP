@@ -519,6 +519,9 @@ class PostmanSettingsRegistry {
 
 	}
 
+	/**
+	 * @param int|string $optionKey
+	 */
 	private function printSelectOption( $label, $optionKey, $currentKey ): void {
 		$optionPattern = '<option value="%1$s" %2$s>%3$s</option>';
 		printf( $optionPattern, $optionKey, $optionKey == $currentKey ? 'selected="selected"' : '', $label );

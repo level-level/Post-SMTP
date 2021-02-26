@@ -772,14 +772,17 @@ class PostmanManageConfigurationAjaxHandler extends PostmanAbstractAjaxHandler {
 	}
 
 	/**
-	 * // for each successful host/port combination
-	 * // ask a transport if they support it, and if they do at what priority is it
-	 * // configure for the highest priority you find
+	 * 	 * // for each successful host/port combination
+	 * 	 * // ask a transport if they support it, and if they do at what priority is it
+	 * 	 * // configure for the highest priority you find
+	 * 	 *
 	 *
 	 * @param mixed $queryHostData
+	 * @param PostmanWizardSocket[] $sockets
+	 *
 	 * @return mixed
 	 */
-	private function getWinningRecommendation( $sockets, $userSocketOverride, $userAuthOverride, $originalSmtpServer ) {
+	private function getWinningRecommendation( array $sockets, $userSocketOverride, $userAuthOverride, $originalSmtpServer ) {
 		foreach ( $sockets as $socket ) {
 			$winningRecommendation = $this->getWin( $socket, $userSocketOverride, $userAuthOverride, $originalSmtpServer );
 			$this->logger->error( $socket->label );
@@ -820,15 +823,17 @@ class PostmanManageConfigurationAjaxHandler extends PostmanAbstractAjaxHandler {
 	}
 
 	/**
+	 * 	 * 	 *
 	 * 	 *
 	 *
 	 * @param mixed $queryHostData
+	 * @param PostmanWizardSocket[] $sockets
 	 *
 	 * @return array
 	 *
 	 * @psalm-return list<mixed>
 	 */
-	private function createOverrideMenus( $sockets, $winningRecommendation, $userSocketOverride, $userAuthOverride ): array {
+	private function createOverrideMenus( array $sockets, $winningRecommendation, $userSocketOverride, $userAuthOverride ): array {
 		$overrideMenu = array();
 		foreach ( $sockets as $socket ) {
 			$overrideItem = $this->createOverrideMenu( $socket, $winningRecommendation, $userSocketOverride, $userAuthOverride );
