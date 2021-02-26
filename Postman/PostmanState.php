@@ -1,6 +1,6 @@
 <?php
 if (! class_exists ( "PostmanState" )) {
-	
+
 	/**
 	 * http://stackoverflow.com/questions/23880928/use-oauth-refresh-token-to-obtain-new-access-token-google-api
 	 * http://pastebin.com/jA9sBNTk
@@ -8,23 +8,23 @@ if (! class_exists ( "PostmanState" )) {
 	 * Make sure these emails are permitted (see http://en.wikipedia.org/wiki/E-mail_address#Internationalization):
 	 */
 	class PostmanState {
-		
+
 		private $logger;
-		
+
 		// the option database name
 		const SLUG = 'postman_state';
 		const TOO_LONG_SEC = 2592000; // 30 days
-		                              
+
 		// the options fields
 		const VERSION = 'version';
 		const INSTALL_DATE = 'install_date';
 		const FILE_LOCKING_ENABLED = 'locking_enabled';
 		const DELIVERY_SUCCESS_TOTAL = 'delivery_success_total';
 		const DELIVERY_FAILURE_TOTAL = 'delivery_fail_total';
-		
+
 		// options data
 		private $options;
-		
+
 		// singleton instance
 		public static function getInstance() {
 			static $inst = null;
@@ -33,7 +33,7 @@ if (! class_exists ( "PostmanState" )) {
 			}
 			return $inst;
 		}
-		
+
 		/**
 		 * private constructor
 		 */
@@ -54,7 +54,6 @@ if (! class_exists ( "PostmanState" )) {
 		/**
 		 * Shows the review feature of Postman up to thirty days after install
 		 *
-		 * @return boolean
 		 */
 		public function isTimeToReviewPostman() {
 			if (! empty ( $this->options [self::INSTALL_DATE] )) {
