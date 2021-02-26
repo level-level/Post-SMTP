@@ -1,33 +1,29 @@
 <?php
 if (! class_exists ( 'PostmanMessageHandler' )) {
-	
+
 	require_once ('PostmanSession.php');
 	class PostmanMessageHandler {
-		
+
 		// The Session variables that carry messages
 		const ERROR_CLASS = 'error';
 		const WARNING_CLASS = 'update-nag';
 		const SUCCESS_CLASS = 'updated';
 		private $logger;
-		
-		/**
-		 *
-		 * @param mixed $options        	
-		 */
+
 		function __construct() {
 			$this->logger = new PostmanLogger ( get_class ( $this ) );
-			
+
 			// we'll let the 'init' functions run first; some of them may end the request
 			add_action ( 'admin_notices', Array (
 					$this,
-					'displayAllMessages' 
+					'displayAllMessages'
 			) );
 		}
-		
+
 		/**
 		 * 		 *
 		 *
-		 * @param mixed $message        	
+		 * @param mixed $message
 		 *
 		 * @return void
 		 */
@@ -37,7 +33,7 @@ if (! class_exists ( 'PostmanMessageHandler' )) {
 		/**
 		 * 		 *
 		 *
-		 * @param mixed $message        	
+		 * @param mixed $message
 		 *
 		 * @return void
 		 */
@@ -47,20 +43,20 @@ if (! class_exists ( 'PostmanMessageHandler' )) {
 		/**
 		 * 		 *
 		 *
-		 * @param mixed $message        	
+		 * @param mixed $message
 		 *
 		 * @return void
 		 */
 		public function addMessage($message): void {
 			$this->storeMessage ( $message, 'notify' );
 		}
-		
+
 		/**
 		 * 		 * store messages for display later
 		 * 		 *
 		 *
-		 * @param mixed $message        	
-		 * @param mixed $type        	
+		 * @param mixed $message
+		 * @param mixed $type
 		 *
 		 * @return void
 		 */
@@ -79,7 +75,7 @@ if (! class_exists ( 'PostmanMessageHandler' )) {
 			if (! $weGotIt) {
 				$m = array (
 						'type' => $type,
-						'message' => $message 
+						'message' => $message
 				);
 				array_push ( $messageArray, $m );
 				PostmanSession::getInstance ()->setMessage ( $messageArray );
@@ -112,13 +108,13 @@ if (! class_exists ( 'PostmanMessageHandler' )) {
 				}
 			}
 		}
-		
+
 		/**
 		 * 		 * putput message
 		 * 		 *
 		 *
-		 * @param mixed $message        	
-		 * @param mixed $className        	
+		 * @param mixed $message
+		 * @param mixed $className
 		 *
 		 * @return void
 		 */
