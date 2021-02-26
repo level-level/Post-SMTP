@@ -131,7 +131,7 @@ if (! class_exists ( "PostmanDashboardWidgetController" )) {
 		 * http://coffeecupweb.com/how-to-add-custom-post-types-to-at-a-glance-dashboard-widget-in-wordpress/
 		 *
 		 * @param mixed $items        	
-		 * @return string
+		 * @return string[]
 		 */
 		function customizeAtAGlanceDashboardWidget($items = array()) {
 			// only modify the At-a-Glance for administrators
@@ -159,9 +159,8 @@ if (! class_exists ( "PostmanDashboardWidgetController" )) {
 						$items [] = sprintf ( '<a class="%1$s-count" href="%3$s">%2$s</a>', $type, $text, PostmanUtils::getEmailLogPageUrl () ) . "\n";
 					}
 				}
-				
-				return $items;
 			}
+			return $items;
 		}
 	}
 }
