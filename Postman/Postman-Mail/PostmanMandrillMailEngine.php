@@ -1,8 +1,6 @@
 <?php
 if ( ! class_exists( 'PostmanMandrillMailEngine' ) ) {
 
-	require_once 'mailchimp-mandrill-api-php-da3adc10042e/src/Mandrill.php';
-
 	/**
 	 * Sends mail with Mandrill API
 	 * https://mandrillapp.com/api/docs/messages.php.html

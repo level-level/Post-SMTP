@@ -21,24 +21,6 @@
  */
 
 /**
- *
- * @see Zend_Mime
- */
-// require_once 'Zend/Mime.php';
-
-/**
- *
- * @see Zend_Mail_Protocol_Smtp
- */
-// require_once 'Zend/Mail/Protocol/Smtp.php';
-
-/**
- *
- * @see Zend_Mail_Transport_Abstract
- */
-// require_once 'Zend/Mail/Transport/Abstract.php';
-
-/**
  * SMTP connection object
  *
  * Loads an instance of Zend_Mail_Protocol_Smtp and forwards smtp transactions
@@ -256,11 +238,6 @@ if (! class_exists ( 'PostmanGmailApiModuleZendMailTransport' )) {
 		 */
 		protected function _prepareHeaders($headers) {
 			if (! $this->_mail) {
-				/**
-				 *
-				 * @see Zend_Mail_Transport_Exception
-				 */
-				// require_once 'Zend/Mail/Transport/Exception.php';
 				throw new Zend_Mail_Transport_Exception ( '_prepareHeaders requires a registered Zend_Mail object' );
 			}
 			

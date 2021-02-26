@@ -1,31 +1,6 @@
 <?php
 if ( ! class_exists( 'PostmanZendMailEngine' ) ) {
 
-	require_once 'Zend-1.12.10/Loader.php';
-	require_once 'Zend-1.12.10/Registry.php';
-	require_once 'Zend-1.12.10/Mime/Message.php';
-	require_once 'Zend-1.12.10/Mime/Part.php';
-	require_once 'Zend-1.12.10/Mime.php';
-	require_once 'Zend-1.12.10/Validate/Interface.php';
-	require_once 'Zend-1.12.10/Validate/Abstract.php';
-	require_once 'Zend-1.12.10/Validate.php';
-	require_once 'Zend-1.12.10/Validate/Ip.php';
-	require_once 'Zend-1.12.10/Validate/Hostname.php';
-	require_once 'Zend-1.12.10/Mail.php';
-	require_once 'Zend-1.12.10/Exception.php';
-	require_once 'Zend-1.12.10/Mail/Exception.php';
-	require_once 'Zend-1.12.10/Mail/Transport/Exception.php';
-	require_once 'Zend-1.12.10/Mail/Transport/Abstract.php';
-	require_once 'Zend-1.12.10/Mail/Transport/Smtp.php';
-	require_once 'Zend-1.12.10/Mail/Transport/Sendmail.php';
-	require_once 'Zend-1.12.10/Mail/Protocol/Abstract.php';
-	require_once 'Zend-1.12.10/Mail/Protocol/Exception.php';
-	require_once 'Zend-1.12.10/Mail/Protocol/Smtp.php';
-	require_once 'Zend-1.12.10/Mail/Protocol/Smtp/Auth/Oauth2.php';
-	require_once 'Zend-1.12.10/Mail/Protocol/Smtp/Auth/Login.php';
-	require_once 'Zend-1.12.10/Mail/Protocol/Smtp/Auth/Crammd5.php';
-	require_once 'Zend-1.12.10/Mail/Protocol/Smtp/Auth/Plain.php';
-
 	/**
 	 * This class knows how to interface with Wordpress
 	 * including loading/saving to the database.

@@ -1,5 +1,4 @@
 <?php
-require_once 'mailgun/mailgun.php';
 
 use Mailgun\Mailgun;
 use Mailgun\HttpClientConfigurator;
