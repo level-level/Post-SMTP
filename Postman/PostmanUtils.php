@@ -103,7 +103,6 @@ class PostmanUtils {
 	/**
 	 * Detect if the host is NOT a domain name
 	 *
-	 * @param mixed $ipAddress
 	 * @return bool
 	 */
 	public static function isHostAddressNotADomainName( string $host ) {
@@ -121,7 +120,6 @@ class PostmanUtils {
 	 * 	 *
 	 *
 	 * @param mixed $url
-	 * @param mixed $args
 	 * @param (false|mixed|string)[] $parameters
 	 *
 	 * @return string the HTML body
@@ -138,7 +136,6 @@ class PostmanUtils {
 	 * Outside WordPress, not so much.
 	 *
 	 * @param mixed $url
-	 * @param mixed $args
 	 * @return array|WP_Error the HTTP response
 	 */
 	static function remotePost( $url, $parameters = array(), array $headers = array() ) {
@@ -410,7 +407,6 @@ class PostmanUtils {
 	 * 	 * 	 *
 	 * 	 *
 	 *
-	 * @param mixed $actionName
 	 * @param mixed $callbackName
 	 * @param PostmanConfigurationController|PostmanConnectivityTestController|PostmanDiagnosticTestController|PostmanSendTestEmailController|PostmanViewController $viewController
 	 *
@@ -421,7 +417,7 @@ class PostmanUtils {
 		if ( $logger->isTrace() ) {
 			$logger->trace( 'Registering admin menu ' . $callbackName );
 		}
-		
+
 		add_action( 'admin_menu', array(
 				$viewController,
 				$callbackName,
@@ -477,7 +473,7 @@ class PostmanUtils {
 
 	public static function getServerName(): string {
         $host = 'localhost';
-        
+
         if (array_key_exists('SERVER_NAME', $_SERVER)) {
             $host = $_SERVER['SERVER_NAME'];
         } elseif (function_exists('gethostname') and gethostname() !== false) {
