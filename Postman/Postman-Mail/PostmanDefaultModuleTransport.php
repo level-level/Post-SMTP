@@ -70,17 +70,12 @@ if (! class_exists ( 'PostmanSmtpModuleTransport' )) {
 		}
 		
 		/**
-		 * 		 * (non-PHPdoc)
-		 * 		 *
-		 *
 		 * @see PostmanAbstractZendModuleTransport::validateTransportConfiguration()
 		 *
 		 * @return array
-		 *
-		 * @psalm-return array<empty, empty>
 		 */
 		protected function validateTransportConfiguration() {
-			return array ();
+			return array();
 			// no-op, always valid
 		}
 		
@@ -211,11 +206,9 @@ if (! class_exists ( 'PostmanSmtpModuleTransport' )) {
 		 * @see PostmanModuleTransport::getSocketsForSetupWizardToProbe()
 		 *
 		 * @return array
-		 *
-		 * @psalm-return array<empty, empty>
 		 */
 		public function getSocketsForSetupWizardToProbe($hostname, $smtpServerGuess) {
-			return array ();
+			return array();
 		}
 	}
 }
