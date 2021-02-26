@@ -172,7 +172,7 @@ class PostmanSmtpModuleTransport extends PostmanAbstractZendModuleTransport impl
 	 *
 	 * @param int $port
 	 */
-	protected function createSocketDefinition( $hostname, int $port ) {
+	protected function createSocketDefinition( $hostname, $port ) {
 		$socket = parent::createSocketDefinition( $hostname, $port );
 		$socket ['smtp'] = true;
 		return $socket;
@@ -599,7 +599,7 @@ class PostmanSmtpModuleTransport extends PostmanAbstractZendModuleTransport impl
 		printf( '<p>%s</p>', __( 'This is the Outgoing (SMTP) Mail Server, or Mail Submission Agent (MSA), which Postman delegates mail delivery to. This server is specific to your email account, and if you don\'t know what to use, ask your email service provider.', 'post-smtp' ) );
 		printf( '<p>%s</p>', __( 'Note that many WordPress hosts, such as GoDaddy, Bluehost and Dreamhost, require that you use their mail accounts with their mail servers, and prevent you from using others.', 'post-smtp' ) );
 		printf( '<label for="hostname">%s</label>', __( 'Outgoing Mail Server Hostname', 'post-smtp' ) );
-		print $this->hostname_callback();
+		$this->hostname_callback();
 		printf( '<p class="ajax-loader" style="display:none"><img src="%s"/></p>', plugins_url( 'post-smtp/style/ajax-loader.gif' ) );
 		$warning = __( 'Warning', 'post-smtp' );
 		/* Translators: Where (%s) is the name of the web host */
@@ -619,19 +619,19 @@ class PostmanSmtpModuleTransport extends PostmanAbstractZendModuleTransport impl
 		print '<p id="wizard_oauth2_help"></p>';
 		printf( '<label id="callback_domain" for="callback_domain">%s</label>', $this->getScribe()->getCallbackDomainLabel() );
 		print '<br />';
-		print $this->callback_domain_callback();
+		$this->callback_domain_callback();
 		print '<br />';
 		printf( '<label id="redirect_url" for="redirect_uri">%s</label>', $this->getScribe()->getCallbackUrlLabel() );
 		print '<br />';
-		print $this->redirect_url_callback();
+		$this->redirect_url_callback();
 		print '<br />';
 		printf( '<label id="client_id" for="client_id">%s</label>', $this->getScribe()->getClientIdLabel() );
 		print '<br />';
-		print $this->oauth_client_id_callback();
+		$this->oauth_client_id_callback();
 		print '<br />';
 		printf( '<label id="client_secret" for="client_secret">%s</label>', $this->getScribe()->getClientSecretLabel() );
 		print '<br />';
-		print $this->oauth_client_secret_callback();
+		$this->oauth_client_secret_callback();
 		print '<br />';
 		print '</section>';
 
@@ -639,11 +639,11 @@ class PostmanSmtpModuleTransport extends PostmanAbstractZendModuleTransport impl
 		printf( '<p class="port-explanation-ssl">%s</p>', __( 'Enter the account credentials.', 'post-smtp' ) );
 		printf( '<label for="username">%s</label>', __( 'Username', 'post-smtp' ) );
 		print '<br />';
-		print $this->basic_auth_username_callback();
+		$this->basic_auth_username_callback();
 		print '<br />';
 		printf( '<label for="password">%s</label>', __( 'Password', 'post-smtp' ) );
 		print '<br />';
-		print $this->basic_auth_password_callback();
+		$this->basic_auth_password_callback();
 		print '</section>';
 	}
 }

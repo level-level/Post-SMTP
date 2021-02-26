@@ -64,10 +64,10 @@ class PostmanSendTestEmailController {
 	/**
 	 * 	 * Get the settings option array and print one of its values
 	 *
-	 * @return void
+	 *
 	 */
-	public function test_email_callback(): void {
-		printf( '<input type="text" id="%s" name="postman_test_options[test_email]" value="%s" class="required email" size="40"/>', self::RECIPIENT_EMAIL_FIELD_NAME, wp_get_current_user()->user_email );
+	public function test_email_callback(): string {
+		return sprintf( '<input type="text" id="%s" name="postman_test_options[test_email]" value="%s" class="required email" size="40"/>', self::RECIPIENT_EMAIL_FIELD_NAME, wp_get_current_user()->user_email );
 	}
 
 	/**
