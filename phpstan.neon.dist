@@ -6,3 +6,7 @@ parameters:
     paths:
         - postman-smtp.php
         - Postman/
+    ignoreErrors:
+        - '#Constant WP_PLUGIN_DIR not found\.#'
+        - '#Constant POST_URL not found\.#'
+        - '#Constant WPINC not found\.#'
