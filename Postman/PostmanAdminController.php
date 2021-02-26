@@ -269,7 +269,6 @@ if ( ! class_exists( 'PostmanAdminController' ) ) {
 		/**
 		 * 		 *
 		 *
-		 * @param mixed $actionName
 		 * @param mixed $callbackName
 		 *
 		 * @return void
@@ -305,7 +304,6 @@ if ( ! class_exists( 'PostmanAdminController' ) ) {
 		 *
 		 * @param mixed $links
 		 *
-		 * @return array|null
 		 */
 		public function postmanModifyLinksOnPluginsListPage( $links ) {
 			// only administrators should be able to trigger this
