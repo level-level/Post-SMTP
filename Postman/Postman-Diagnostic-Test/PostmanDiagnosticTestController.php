@@ -129,8 +129,6 @@ class PostmanGetDiagnosticsViaAjax {
 	private $authorizationToken;
 	/**
 	 * Constructor
-	 *
-	 * @param PostmanOptions $options
 	 */
 	function __construct() {
 		$this->options = PostmanOptions::getInstance();
@@ -186,11 +184,11 @@ class PostmanGetDiagnosticsViaAjax {
 	 * @return string
 	 */
 	private function testConnectivity( PostmanModuleTransport $transport ) {
-		$hostname = $transport->getHostname( $this->options );
-		$port = $transport->getPort( $this->options );
+		$hostname = $transport->getHostname();
+		$port = $transport->getPort();
 		if ( ! empty( $hostname ) && ! empty( $port ) ) {
-			$portTest = new PostmanPortTest( $transport->getHostname( $this->options ), $transport->getPort( $this->options ) );
-			$result = $portTest->genericConnectionTest( $this->options->getConnectionTimeout() );
+			$portTest = new PostmanPortTest( $transport->getHostname(), $transport->getPort() );
+			$result = $portTest->genericConnectionTest();
 			if ( $result ) {
 				return 'Yes';
 			} else {
