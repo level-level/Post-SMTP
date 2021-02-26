@@ -34,8 +34,9 @@ if ($_SERVER["argc"]<2) {
 // strip subdomains from every signing domain
 // char dom[] = "sub2.sub.registered.nom.ad";
 
-$argc = $_SERVER["argc"];
-$argv = $_SERVER["argv"];
+$argc    = $_SERVER["argc"];
+$argv    = $_SERVER["argv"];
+$tldTree = '';
 
 for ($i=1; $i<$argc; $i++) {
 

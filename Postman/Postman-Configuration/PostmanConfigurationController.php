@@ -783,6 +783,7 @@ class PostmanManageConfigurationAjaxHandler extends PostmanAbstractAjaxHandler {
 	 * @return mixed
 	 */
 	private function getWinningRecommendation( array $sockets, $userSocketOverride, $userAuthOverride, $originalSmtpServer ) {
+		$winningRecommendation = '';
 		foreach ( $sockets as $socket ) {
 			$winningRecommendation = $this->getWin( $socket, $userSocketOverride, $userAuthOverride, $originalSmtpServer );
 			$this->logger->error( $socket->label );
