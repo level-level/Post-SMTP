@@ -136,7 +136,7 @@ if (! class_exists ( 'PostmanGmailApiModuleZendMailTransport' )) {
 		/**
 		 * Sets the connection protocol instance
 		 *
-		 * @param Zend_Mail_Protocol_Abstract $client        	
+		 * @param Zend_Mail_Protocol_Abstract $connection        	
 		 *
 		 * @return void
 		 */
@@ -234,7 +234,7 @@ if (! class_exists ( 'PostmanGmailApiModuleZendMailTransport' )) {
 		 * @access protected
 		 * @param array $headers        	
 		 * @return void
-		 * @throws Zend_Transport_Exception
+		 * @throws Zend_Mail_Transport_Exception
 		 */
 		protected function _prepareHeaders($headers) {
 			if (! $this->_mail) {
