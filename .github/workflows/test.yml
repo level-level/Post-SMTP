@@ -1,0 +1,27 @@
+name: Build & test
+
+on: [push, pull_request]
+
+jobs:
+  php:
+    strategy:
+      matrix:
+        php: ['7.2', '7.3', '7.4', '8.0']
+      fail-fast: false
+    name: PHP test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+      - uses: actions/checkout@v2
+      - name: Debugging
+        run: |
+          php --version
+          php -m
+          composer --version
+      - name: Composer validate
+        run: composer validate --strict
+      - name: Composer install
+        run: composer install --no-suggest
