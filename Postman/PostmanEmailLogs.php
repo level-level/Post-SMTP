@@ -86,9 +86,9 @@ class PostmanEmailLogs {
         foreach ( $logs->posts as $log ) {
 
             foreach ($this->fields as $key ) {
-                $value = $logs->get_meta( $log->ID, $key, true );
+                $value = $log->get_meta( $log->ID, $key, true );
 
-                if ( $logs->add_meta( $log->ID, $key, $value ) ) {
+                if ( $log->add_meta( $log->ID, $key, $value ) ) {
                     delete_post_meta( $log->ID, $key );
                 } else {
                     $failed_records++;
