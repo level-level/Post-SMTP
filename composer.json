@@ -12,7 +12,12 @@
     "config": {
         "sort-packages": true
     },
-    "require": {},
+    "require": {
+        "google/apiclient": "^2",
+        "mailgun/mailgun-php": "^2.3",
+        "sendgrid/sendgrid": "^7.9",
+        "zf1/zend-mail": "^1.12"
+    },
     "require-dev": {
         "phpmailer/phpmailer": "^6.3",
         "szepeviktor/phpstan-wordpress": "^0.7.3"

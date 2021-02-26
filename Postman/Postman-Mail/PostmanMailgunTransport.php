@@ -274,14 +274,14 @@ class PostmanMailgunTransport extends PostmanAbstractModuleTransport implements 
 		$this->printMailgunAuthSectionInfo();
 		printf( '<label for="api_key">%s</label>', __( 'API Key', 'post-smtp' ) );
 		print '<br />';
-		print $this->mailgun_api_key_callback();
+		$this->mailgun_api_key_callback();
 		printf( '<label for="domain_name">%s</label>', __( 'Domain Name', 'post-smtp' ) );
 		print '<br />';
-		print $this->mailgun_domain_name_callback();
+		$this->mailgun_domain_name_callback();
 		print '<br />';
 		printf( '<label for="mailgun_region">%s</label>', __( 'Mailgun Europe Region?', 'post-smtp' ) );
 		print '<br />';
-		print $this->mailgun_region_callback();
+		$this->mailgun_region_callback();
 		print '</section>';
 	}
 }

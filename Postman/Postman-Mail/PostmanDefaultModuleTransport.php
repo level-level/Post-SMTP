@@ -103,13 +103,13 @@ if (! class_exists ( 'PostmanSmtpModuleTransport' )) {
 		 *
 		 * @see PostmanZendModuleTransport::createZendMailTransport()
 		 *
-		 * @return Postman_Zend_Mail_Transport_Smtp
+		 * @return Zend_Mail_Transport_Smtp
 		 */
 		public function createZendMailTransport($fakeHostname, $fakeConfig) {
 			$config = array (
 					'port' => $this->getPort () 
 			);
-			return new Postman_Zend_Mail_Transport_Smtp ( $this->getHostname (), $config );
+			return new Zend_Mail_Transport_Smtp ( $this->getHostname (), $config );
 		}
 		
 		/**

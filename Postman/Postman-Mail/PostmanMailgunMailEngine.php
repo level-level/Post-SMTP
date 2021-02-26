@@ -242,7 +242,7 @@ if ( ! class_exists( 'PostmanMailgunMailEngine' ) ) {
 		 * 		 * Add attachments to the message
 		 * 		 *
 		 *
-		 * @param Postman_Zend_Mail $mail
+		 * @param Zend_Mail $mail
 		 *
 		 * @return void
 		 */

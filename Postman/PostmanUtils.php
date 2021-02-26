@@ -354,16 +354,8 @@ class PostmanUtils {
 		if ( PostmanOptions::getInstance()->isEmailValidationDisabled() ) {
 			return true;
 		}
-		require_once 'Postman-Mail/Zend-1.12.10/Exception.php';
-		require_once 'Postman-Mail/Zend-1.12.10/Registry.php';
-		require_once 'Postman-Mail/Zend-1.12.10/Validate/Exception.php';
-		require_once 'Postman-Mail/Zend-1.12.10/Validate/Interface.php';
-		require_once 'Postman-Mail/Zend-1.12.10/Validate/Abstract.php';
-		require_once 'Postman-Mail/Zend-1.12.10/Validate/Ip.php';
-		require_once 'Postman-Mail/Zend-1.12.10/Validate/Hostname.php';
-		require_once 'Postman-Mail/Zend-1.12.10/Validate/EmailAddress.php';
 		if ( ! isset( PostmanUtils::$emailValidator ) ) {
-			PostmanUtils::$emailValidator = new Postman_Zend_Validate_EmailAddress();
+			PostmanUtils::$emailValidator = new Zend_Validate_EmailAddress();
 		}
 		return PostmanUtils::$emailValidator->isValid( $email );
 	}

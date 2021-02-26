@@ -36,7 +36,7 @@ class PostmanSmtpModuleTransport extends PostmanAbstractZendModuleTransport impl
 	 *
 	 * @see PostmanZendModuleTransport::createZendMailTransport()
 	 *
-	 * @return Postman_Zend_Mail_Transport_Smtp
+	 * @return Zend_Mail_Transport_Smtp
 	 */
 	public function createZendMailTransport( $fakeHostname, $fakeConfig ) {
 		if ( PostmanOptions::AUTHENTICATION_TYPE_OAUTH2 == $this->getAuthenticationType() ) {
@@ -44,7 +44,7 @@ class PostmanSmtpModuleTransport extends PostmanAbstractZendModuleTransport impl
 		} else {
 			$config = PostmanBasicAuthConfigurationFactory::createConfig( $this );
 		}
-		return new Postman_Zend_Mail_Transport_Smtp( $this->getHostname(), $config );
+		return new Zend_Mail_Transport_Smtp( $this->getHostname(), $config );
 	}
 
 	/**

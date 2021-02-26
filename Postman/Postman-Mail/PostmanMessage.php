@@ -427,7 +427,7 @@ if ( ! class_exists( 'PostmanMessage' ) ) {
 		 *
 		 * @param mixed           $name
 		 * @param mixed           $value
-		 * @param Postman_Zend_Mail $mail
+		 * @param Zend_Mail $mail
 		 *
 		 * @return void
 		 */
@@ -528,11 +528,11 @@ if ( ! class_exists( 'PostmanMessage' ) ) {
 		 * 		 * Add attachments to the message
 		 * 		 *
 		 *
-		 * @param Postman_Zend_Mail $mail
+		 * @param Zend_Mail $mail
 		 *
 		 * @return void
 		 */
-		public function addAttachmentsToMail( Postman_Zend_Mail $mail ): void {
+		public function addAttachmentsToMail( Zend_Mail $mail ): void {
 			$attachments = $this->attachments;
 			if ( ! is_array( $attachments ) ) {
 				// WordPress may a single filename or a newline-delimited string list of multiple filenames
@@ -544,10 +544,10 @@ if ( ! class_exists( 'PostmanMessage' ) ) {
 			foreach ( $attArray as $file ) {
 				if ( ! empty( $file ) ) {
 					$this->logger->debug( 'Adding attachment: ' . $file );
-					$at = new Postman_Zend_Mime_Part( file_get_contents( $file ) );
+					$at = new Zend_Mime_Part( file_get_contents( $file ) );
 					// $at->type = 'image/gif';
-					$at->disposition = Postman_Zend_Mime::DISPOSITION_ATTACHMENT;
-					$at->encoding = Postman_Zend_Mime::ENCODING_BASE64;
+					$at->disposition = Zend_Mime::DISPOSITION_ATTACHMENT;
+					$at->encoding = Zend_Mime::ENCODING_BASE64;
 					$at->filename = basename( $file );
 					$mail->addAttachment( $at );
 				}
