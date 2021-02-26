@@ -9,5 +9,11 @@
             "email": "info@level-level.com"
         }
     ],
-    "require": {}
+    "config": {
+        "sort-packages": true
+    },
+    "require": {},
+    "require-dev": {
+        "szepeviktor/phpstan-wordpress": "^0.7.3"
+    }
 }
