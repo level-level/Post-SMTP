@@ -126,7 +126,7 @@ class PostmanSmtpModuleTransport extends PostmanAbstractZendModuleTransport impl
 		}
 		if ( empty( $messages ) ) {
 			$this->setReadyForOAuthGrant();
-			if ( $this->isPermissionNeeded( $this->options, $this->getOAuthToken() ) ) {
+			if ( $this->isPermissionNeeded() ) {
 				/* translators: %1$s is the Client ID label, and %2$s is the Client Secret label */
 				$message = sprintf( __( 'You have configured OAuth 2.0 authentication, but have not received permission to use it.', 'post-smtp' ), $this->getScribe()->getClientIdLabel(), $this->getScribe()->getClientSecretLabel() );
 				$message .= sprintf( ' <a href="%s">%s</a>.', PostmanUtils::getGrantOAuthPermissionUrl(), $this->getScribe()->getRequestPermissionLinkText() );

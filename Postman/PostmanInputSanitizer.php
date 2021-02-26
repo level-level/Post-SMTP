@@ -71,7 +71,7 @@ if ( ! class_exists( 'PostmanInputSanitizer' ) ) {
 			$this->sanitizeString( 'Temporary Directory', PostmanOptions::TEMPORARY_DIRECTORY, $input, $new_input );
 
 			// Notifications
-			$this->sanitizeString( 'Pushover Service', PostmanOptions::NOTIFICATION_SERVICE, $input, $new_input, $this->options->getNotificationService() );
+			$this->sanitizeString( 'Pushover Service', PostmanOptions::NOTIFICATION_SERVICE, $input, $new_input );
 			$this->sanitizePassword( 'Pushover Username', PostmanOptions::PUSHOVER_USER, $input, $new_input, $this->options->getPushoverUser() );
 			$this->sanitizePassword( 'Pushover Token', PostmanOptions::PUSHOVER_TOKEN, $input, $new_input, $this->options->getPushoverToken() );
 			$this->sanitizePassword( 'Slack Token', PostmanOptions::SLACK_TOKEN, $input, $new_input, $this->options->getSlackToken() );
