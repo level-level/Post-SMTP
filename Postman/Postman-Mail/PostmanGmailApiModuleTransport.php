@@ -184,11 +184,6 @@ class PostmanGmailApiModuleTransport extends PostmanAbstractZendModuleTransport 
 		return sprintf ( __ ( 'Postman will send mail via the <b>%1$s %2$s</b>.', 'post-smtp' ), '🔐', $this->getName () );
 	}
 	
-	/**
-	 * (non-PHPdoc)
-	 *
-	 * @see PostmanAbstractZendModuleTransport::validateTransportConfiguration()
-	 */
 	protected function validateTransportConfiguration() {
 		$messages = parent::validateTransportConfiguration ();
 		if (empty ( $messages )) {
@@ -222,12 +217,10 @@ class PostmanGmailApiModuleTransport extends PostmanAbstractZendModuleTransport 
 	}
 	
 	/**
-	 * 	 * Postman Gmail API supports delivering mail with these parameters:
-	 * 	 *
-	 * 	 * 70 gmail api on port 465 to www.googleapis.com
-	 * 	 *
+	 * Postman Gmail API supports delivering mail with these parameters:
 	 *
-	 * @param mixed $hostData        	
+	 * 70 gmail api on port 465 to www.googleapis.com
+	 *
 	 *
 	 * @return (int|mixed|null|string)[]
 	 *
