@@ -37,7 +37,6 @@ if ( ! class_exists( 'PostmanWpMail' ) ) {
 		 *
 		 * @param mixed $to
 		 * @param mixed $subject
-		 * @param mixed $body
 		 * @param mixed $headers
 		 * @param mixed $attachments
 		 * @param string $message
@@ -65,7 +64,6 @@ if ( ! class_exists( 'PostmanWpMail' ) ) {
 
         /**
          * @param PostmanMessage $message
-         * @return PostmanMessage
          */
 		private function apply_default_headers( $message ) {
             $headers[] = 'Message-ID: ' . $this->createMessageId();
@@ -415,7 +413,6 @@ if ( ! class_exists( 'PostmanWpMail' ) ) {
 		 *
 		 * @param mixed $to
 		 * @param mixed $subject
-		 * @param mixed $body
 		 * @param mixed $headers
 		 * @param mixed $attachments
 		 *
