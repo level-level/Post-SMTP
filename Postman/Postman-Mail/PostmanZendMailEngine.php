@@ -26,7 +26,6 @@ if ( ! class_exists( 'PostmanZendMailEngine' ) ) {
 		 * @param mixed $accessToken
 		 */
 		function __construct( PostmanZendModuleTransport $transport ) {
-			assert( isset( $transport ) );
 			$this->transport = $transport;
 
 			// create the logger

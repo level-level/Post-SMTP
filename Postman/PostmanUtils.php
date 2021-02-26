@@ -478,7 +478,7 @@ class PostmanUtils {
 	public static function getServerName(): string {
         $host = 'localhost';
         
-        if (isset($_SERVER) and array_key_exists('SERVER_NAME', $_SERVER)) {
+        if (array_key_exists('SERVER_NAME', $_SERVER)) {
             $host = $_SERVER['SERVER_NAME'];
         } elseif (function_exists('gethostname') and gethostname() !== false) {
             $host = gethostname();
