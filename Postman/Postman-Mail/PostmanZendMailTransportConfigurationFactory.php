@@ -7,6 +7,11 @@ if (! interface_exists ( 'PostmanZendMailTransportConfigurationFactory' )) {
 
 if (! class_exists ( 'PostmanBasicAuthConfigurationFactory' )) {
 	class PostmanBasicAuthConfigurationFactory implements PostmanZendMailTransportConfigurationFactory {
+		/**
+		 * @return array
+		 *
+		 * @psalm-return array{port: mixed, ssl?: mixed, auth?: mixed, username?: mixed, password?: mixed}
+		 */
 		public static function createConfig(PostmanTransport $transport) {
 			
 			// create Logger
@@ -75,17 +80,21 @@ if (! class_exists ( 'PostmanOAuth2ConfigurationFactory' )) {
 		}
 		
 		/**
-		 *
-		 * Create the Configuration structure for Zend_Mail
+		 * 		 *
+		 * 		 * Create the Configuration structure for Zend_Mail
+		 * 		 *
 		 *
 		 * @param mixed $hostname        	
 		 * @param mixed $port        	
 		 * @param mixed $securityType        	
 		 * @param mixed $authenticationType        	
 		 * @param mixed $initClientRequestEncoded        	
-		 * @return multitype:unknown NULL
+		 *
+		 * @return array NULL
+		 *
+		 * @psalm-return array{ssl: mixed, port: mixed, auth: mixed, xoauth2_request: mixed}
 		 */
-		private static function createConfiguration($logger, $hostname, $port, $securityType, $authenticationType, $initClientRequestEncoded) {
+		private static function createConfiguration($logger, $hostname, $port, $securityType, $authenticationType, $initClientRequestEncoded): array {
 			$config = array (
 					'ssl' => $securityType,
 					'port' => $port,

@@ -36,18 +36,20 @@ if (! class_exists ( "PostmanMicrosoftAuthenticationManager" )) {
 		}
 		
 		/**
-		 * **********************************************
-		 * Request Verification Code
-		 * https://msdn.microsoft.com/en-us/library/ff749592.aspx
+		 * 		 * **********************************************
+		 * 		 * Request Verification Code
+		 * 		 * https://msdn.microsoft.com/en-us/library/ff749592.aspx
+		 * 		 *
+		 * 		 * The following example shows a URL that enables
+		 * 		 * a user to provide consent to an application by
+		 * 		 * using a Windows Live ID.
+		 * 		 *
+		 * 		 * When successful, this URL returns the user to
+		 * 		 * your application, along with a verification
+		 * 		 * code.
+		 * 		 * **********************************************
 		 *
-		 * The following example shows a URL that enables
-		 * a user to provide consent to an application by
-		 * using a Windows Live ID.
-		 *
-		 * When successful, this URL returns the user to
-		 * your application, along with a verification
-		 * code.
-		 * **********************************************
+		 * @return void
 		 */
 		public function requestVerificationCode($transactionId) {
 			$params = array (
@@ -67,12 +69,14 @@ if (! class_exists ( "PostmanMicrosoftAuthenticationManager" )) {
 		}
 		
 		/**
-		 * **********************************************
-		 * If we have a code back from the OAuth 2.0 flow,
-		 * we need to exchange that for an access token.
-		 * We store the resultant access token
-		 * bundle in the session, and redirect to ourself.
-		 * **********************************************
+		 * 		 * **********************************************
+		 * 		 * If we have a code back from the OAuth 2.0 flow,
+		 * 		 * we need to exchange that for an access token.
+		 * 		 * We store the resultant access token
+		 * 		 * bundle in the session, and redirect to ourself.
+		 * 		 * **********************************************
+		 *
+		 * @return bool
 		 */
 		public function processAuthorizationGrantCode($transactionId) {
 			if (isset ( $_GET ['code'] )) {
@@ -94,9 +98,15 @@ if (! class_exists ( "PostmanMicrosoftAuthenticationManager" )) {
 				return false;
 			}
 		}
+		/**
+		 * @return string
+		 */
 		public function getAuthorizationUrl() {
 			return self::WINDOWS_LIVE_ENDPOINT;
 		}
+		/**
+		 * @return string
+		 */
 		public function getTokenUrl() {
 			return self::WINDOWS_LIVE_REFRESH;
 		}

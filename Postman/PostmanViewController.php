@@ -45,19 +45,19 @@ if ( ! class_exists( 'PostmanViewController' ) ) {
 		}
 
 
-		function dismiss_version_notify() {
+		function dismiss_version_notify(): void {
 			check_ajax_referer( 'postsmtp', 'security' );
 
 			$result = update_option('postman_release_version', true );
 		}
 
-        function dismiss_donation_notify() {
+        function dismiss_donation_notify(): void {
             check_ajax_referer( 'postsmtp', 'security' );
 
             $result = update_option('postman_dismiss_donation', true );
         }
 
-		function delete_lock_file() {
+		function delete_lock_file(): void {
 			check_ajax_referer( 'postman', 'security' );
 
 			if ( ! PostmanUtils::lockFileExists() ) {
@@ -69,6 +69,9 @@ if ( ! class_exists( 'PostmanViewController' ) ) {
 			die();
 		}
 
+		/**
+		 * @return void
+		 */
 		function do_activation_redirect() {
 
 			// Bail if no activation redirect
@@ -93,14 +96,19 @@ if ( ! class_exists( 'PostmanViewController' ) ) {
 			wp_safe_redirect( add_query_arg( array( 'page' => 'post-about' ), admin_url( 'index.php' ) ) );
 		}
 
+		/**
+		 * @return string
+		 */
 		public static function getPageUrl( $slug ) {
 			return PostmanUtils::getPageUrl( $slug );
 		}
 
 		/**
-		 * Add options page
+		 * 		 * Add options page
+		 *
+		 * @return void
 		 */
-		public function generateDefaultContent() {
+		public function generateDefaultContent(): void {
 			// This page will be under "Settings"
 			$pageTitle = sprintf( __( '%s Setup', 'post-smtp' ), __( 'Post SMTP', 'post-smtp' ) );
 			$pluginName = __( 'Post SMTP', 'post-smtp' );
@@ -116,15 +124,17 @@ if ( ! class_exists( 'PostmanViewController' ) ) {
 					'enqueueHomeScreenStylesheet',
 			) );
 		}
-		function enqueueHomeScreenStylesheet() {
+		function enqueueHomeScreenStylesheet(): void {
 			wp_enqueue_style( PostmanViewController::POSTMAN_STYLE );
 			wp_enqueue_script( 'postman_script' );
 		}
 
 		/**
-		 * Register the Email Test screen
+		 * 		 * Register the Email Test screen
+		 *
+		 * @return void
 		 */
-		public function addPurgeDataSubmenu() {
+		public function addPurgeDataSubmenu(): void {
 			$page = add_submenu_page( null, sprintf( __( '%s Setup', 'post-smtp' ), __( 'Post SMTP', 'post-smtp' ) ), __( 'Post SMTP', 'post-smtp' ), Postman::MANAGE_POSTMAN_CAPABILITY_NAME, PostmanAdminController::MANAGE_OPTIONS_PAGE_SLUG, array(
 					$this,
 					'outputPurgeDataContent',
@@ -137,9 +147,11 @@ if ( ! class_exists( 'PostmanViewController' ) ) {
 		}
 
 		/**
-		 * Register and add settings
+		 * 		 * Register and add settings
+		 *
+		 * @return void
 		 */
-		public function registerStylesAndScripts() {
+		public function registerStylesAndScripts(): void {
 			if ( $this->logger->isTrace() ) {
 				$this->logger->trace( 'registerStylesAndScripts()' );
 			}
@@ -176,9 +188,11 @@ if ( ! class_exists( 'PostmanViewController' ) ) {
 		}
 
 		/**
-		 * Options page callback
+		 * 		 * Options page callback
+		 *
+		 * @return void
 		 */
-		public function outputDefaultContent() {
+		public function outputDefaultContent(): void {
 			// Set class property
 			print '<div class="wrap">';
 			$this->displayTopNavigation();
@@ -228,19 +242,23 @@ if ( ! class_exists( 'PostmanViewController' ) ) {
 		}
 
 		/**
+		 * @return void
 		 */
-		private function printDeliveryDetails() {
+		private function printDeliveryDetails(): void {
 			$currentTransport = PostmanTransportRegistry::getInstance()->getActiveTransport();
 			$deliveryDetails = $currentTransport->getDeliveryDetails( $this->options );
 			printf( '<p style="margin:0 10px"><span>%s</span></p>', $deliveryDetails );
 		}
 
 		/**
+		 * 		 *
 		 *
 		 * @param mixed $title
 		 * @param string  $slug
+		 *
+		 * @return void
 		 */
-		public static function outputChildPageHeader( $title, $slug = '' ) {
+		public static function outputChildPageHeader( $title, $slug = '' ): void {
 			printf( '<h2>%s</h2>', sprintf( __( '%s Setup', 'post-smtp' ), __( 'Post SMTP', 'post-smtp' ) ) );
 			printf( '<div id="postman-main-menu" class="welcome-panel %s">', $slug );
 			print '<div class="welcome-panel-content">';
@@ -253,8 +271,9 @@ if ( ! class_exists( 'PostmanViewController' ) ) {
 		}
 
 		/**
+		 * @return void
 		 */
-		public function outputPurgeDataContent() {
+		public function outputPurgeDataContent(): void {
 			$importTitle = __( 'Import', 'post-smtp' );
 			$exportTile = __( 'Export', 'post-smtp' );
 			$resetTitle = __( 'Reset Plugin', 'post-smtp' );
@@ -310,8 +329,9 @@ if ( ! class_exists( 'PostmanViewController' ) ) {
 		}
 
 		/**
+		 * @return void
 		 */
-		private function displayTopNavigation() {
+		private function displayTopNavigation(): void {
 			$version = PostmanState::getInstance()->getVersion();
 			$show = get_option('postman_release_version' );
 			printf( '<h2>%s</h2>', sprintf( __( '%s Setup', 'post-smtp' ), __( 'Post SMTP', 'post-smtp' ) ) );

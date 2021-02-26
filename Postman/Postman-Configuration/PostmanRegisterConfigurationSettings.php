@@ -8,16 +8,20 @@ class PostmanSettingsRegistry {
 	}
 
 	/**
-	 * Fires on the admin_init method
+	 * 	 * Fires on the admin_init method
+	 *
+	 * @return void
 	 */
-	public function on_admin_init() {
+	public function on_admin_init(): void {
 				$this->registerSettings();
 	}
 
 	/**
-	 * Register and add settings
+	 * 	 * Register and add settings
+	 *
+	 * @return void
 	 */
-	private function registerSettings() {
+	private function registerSettings(): void {
 
 		// only administrators should be able to trigger this
 		if ( PostmanUtils::isAdmin() ) {
@@ -234,66 +238,84 @@ class PostmanSettingsRegistry {
 	}
 
 	/**
-	 * Print the Transport section info
+	 * 	 * Print the Transport section info
+	 *
+	 * @return void
 	 */
-	public function printTransportSectionInfo() {
+	public function printTransportSectionInfo(): void {
 		print __( 'Choose SMTP or a vendor-specific API:', 'post-smtp' );
 	}
-	public function printLoggingSectionInfo() {
+	public function printLoggingSectionInfo(): void {
 		print __( 'Configure the delivery audit log:', 'post-smtp' );
 	}
 
 	/**
-	 * Print the Section text
+	 * 	 * Print the Section text
+	 *
+	 * @return void
 	 */
-	public function printMessageFromSectionInfo() {
+	public function printMessageFromSectionInfo(): void {
 		print sprintf( __( 'This address, like the <b>letterhead</b> printed on a letter, identifies the sender to the recipient. Change this when you are sending on behalf of someone else, for example to use Google\'s <a href="%s">Send Mail As</a> feature. Other plugins, especially Contact Forms, may override this field to be your visitor\'s address.', 'post-smtp' ), 'https://support.google.com/mail/answer/22370?hl=en' );
 	}
 
 	/**
-	 * Print the Section text
+	 * 	 * Print the Section text
+	 *
+	 * @return void
 	 */
-	public function printMessageSectionInfo() {
+	public function printMessageSectionInfo(): void {
 		print __( 'Separate multiple <b>to</b>/<b>cc</b>/<b>bcc</b> recipients with commas.', 'post-smtp' );
 	}
 
 	/**
-	 * Print the Section text
+	 * 	 * Print the Section text
+	 *
+	 * @return void
 	 */
-	public function printNetworkSectionInfo() {
+	public function printNetworkSectionInfo(): void {
 		print __( 'Increase the timeouts if your host is intermittenly failing to send mail. Be careful, this also correlates to how long your user must wait if the mail server is unreachable.', 'post-smtp' );
 	}
 
 	/**
-	 * Print the Section text
+	 * 	 * Print the Section text
+	 *
+	 * @return void
 	 */
-	public function printAdvancedSectionInfo() {
+	public function printAdvancedSectionInfo(): void {
 	}
 
 	/**
-	 * Print the Section text
+	 * 	 * Print the Section text
+	 *
+	 * @return void
 	 */
-	public function printNotificationsSectionInfo() {
+	public function printNotificationsSectionInfo(): void {
 	}
 
 	/**
-	 * Print the Section text
+	 * 	 * Print the Section text
+	 *
+	 * @return void
 	 */
-	public function printAdditionalHeadersSectionInfo() {
+	public function printAdditionalHeadersSectionInfo(): void {
 		print __( 'Specify custom headers (e.g. <code>X-MC-Tags: wordpress-site-A</code>), one per line. Use custom headers with caution as they can negatively affect your Spam score.', 'post-smtp' );
 	}
 
 	/**
-	 * Print the Email Validation Description
+	 * 	 * Print the Email Validation Description
+	 *
+	 * @return void
 	 */
-	public function printEmailValidationSectionInfo() {
+	public function printEmailValidationSectionInfo(): void {
 		print __( 'E-mail addresses can be validated before sending e-mail, however this may fail with some newer domains.', 'post-smtp' );
 	}
 
 	/**
-	 * Get the settings option array and print one of its values
+	 * 	 * Get the settings option array and print one of its values
+	 *
+	 * @return void
 	 */
-	public function transport_type_callback() {
+	public function transport_type_callback(): void {
 		$transportType = $this->options->getTransportType();
 		printf( '<select id="input_%2$s" class="input_%2$s" name="%1$s[%2$s]">', PostmanOptions::POSTMAN_OPTIONS, PostmanOptions::TRANSPORT_TYPE );
 		foreach ( PostmanTransportRegistry::getInstance()->getTransports() as $transport ) {
@@ -304,8 +326,10 @@ class PostmanSettingsRegistry {
 
     /**
      * Get the settings option array and print one of its values
+     *
+     * @return void
      */
-    public function smtp_mailer_callback() {
+    public function smtp_mailer_callback(): void {
         $smtp_mailers = PostmanOptions::SMTP_MAILERS;
         $current_smtp_mailer = $this->options->getSmtpMailer();
         printf( '<select id="input_%2$s" class="input_%2$s" name="%1$s[%2$s]">', PostmanOptions::POSTMAN_OPTIONS, 'smtp_mailers' );
@@ -319,45 +343,56 @@ class PostmanSettingsRegistry {
     }
 
 	/**
-	 * Get the settings option array and print one of its values
+	 * 	 * Get the settings option array and print one of its values
+	 *
+	 * @return void
 	 */
-	public function sender_name_callback() {
+	public function sender_name_callback(): void {
 		printf( '<input type="text" id="input_sender_name" name="postman_options[sender_name]" value="%s" size="40" />', null !== $this->options->getMessageSenderName() ? esc_attr( $this->options->getMessageSenderName() ) : '' );
 	}
 
 	/**
+	 * @return void
 	 */
-	public function prevent_from_name_override_callback() {
+	public function prevent_from_name_override_callback(): void {
 		$enforced = $this->options->isPluginSenderNameEnforced();
 		printf( '<input type="checkbox" id="input_prevent_sender_name_override" name="postman_options[prevent_sender_name_override]" %s /> %s', $enforced ? 'checked="checked"' : '', __( 'Prevent <b>plugins</b> and <b>themes</b> from changing this', 'post-smtp' ) );
 	}
 
 	/**
-	 * Get the settings option array and print one of its values
+	 * 	 * Get the settings option array and print one of its values
+	 *
+	 * @return void
 	 */
-	public function from_email_callback() {
+	public function from_email_callback(): void {
 		printf( '<input type="email" id="input_sender_email" name="postman_options[sender_email]" value="%s" size="40" class="required" placeholder="%s"/>', null !== $this->options->getMessageSenderEmail() ? esc_attr( $this->options->getMessageSenderEmail() ) : '', __( 'Required', 'post-smtp' ) );
 	}
 
 	/**
-	 * Print the Section text
+	 * 	 * Print the Section text
+	 *
+	 * @return void
 	 */
-	public function printMessageSenderSectionInfo() {
+	public function printMessageSenderSectionInfo(): void {
 		print sprintf( __( 'This address, like the <b>return address</b> printed on an envelope, identifies the account owner to the SMTP server.', 'post-smtp' ), 'https://support.google.com/mail/answer/22370?hl=en' );
 	}
 
 	/**
-	 * Get the settings option array and print one of its values
+	 * 	 * Get the settings option array and print one of its values
+	 *
+	 * @return void
 	 */
-	public function prevent_from_email_override_callback() {
+	public function prevent_from_email_override_callback(): void {
 		$enforced = $this->options->isPluginSenderEmailEnforced();
 		printf( '<input type="checkbox" id="input_prevent_sender_email_override" name="postman_options[prevent_sender_email_override]" %s /> %s', $enforced ? 'checked="checked"' : '', __( 'Prevent <b>plugins</b> and <b>themes</b> from changing this', 'post-smtp' ) );
 	}
 
 	/**
-	 * Shows the Mail Logging enable/disabled option
+	 * 	 * Shows the Mail Logging enable/disabled option
+	 *
+	 * @return void
 	 */
-	public function loggingStatusInputField() {
+	public function loggingStatusInputField(): void {
 		// isMailLoggingAllowed
 		$disabled = '';
 		if ( ! $this->options->isMailLoggingAllowed() ) {
@@ -368,10 +403,10 @@ class PostmanSettingsRegistry {
 		printf( '<option value="%s" %s>%s</option>', PostmanOptions::MAIL_LOG_ENABLED_OPTION_NO, ! $this->options->isMailLoggingEnabled() ? 'selected="selected"' : '', __( 'No', 'post-smtp' ) );
 		printf( '</select>' );
 	}
-	public function loggingMaxEntriesInputField() {
+	public function loggingMaxEntriesInputField(): void {
 		printf( '<input type="text" id="input_logging_max_entries" name="postman_options[%s]" value="%s"/>', PostmanOptions::MAIL_LOG_MAX_ENTRIES, $this->options->getMailLoggingMaxEntries() );
 	}
-	public function transcriptSizeInputField() {
+	public function transcriptSizeInputField(): void {
 		$inputOptionsSlug = PostmanOptions::POSTMAN_OPTIONS;
 		$inputTranscriptSlug = PostmanOptions::TRANSCRIPT_SIZE;
 		$inputValue = $this->options->getTranscriptSize();
@@ -380,51 +415,64 @@ class PostmanSettingsRegistry {
 	}
 
 	/**
-	 * Get the settings option array and print one of its values
+	 * 	 * Get the settings option array and print one of its values
+	 *
+	 * @return void
 	 */
-	public function reply_to_callback() {
+	public function reply_to_callback(): void {
 		printf( '<input type="text" id="input_reply_to" name="%s[%s]" value="%s" size="40" />', PostmanOptions::POSTMAN_OPTIONS, PostmanOptions::REPLY_TO, null !== $this->options->getReplyTo() ? esc_attr( $this->options->getReplyTo() ) : '' );
 	}
 
 	/**
-	 * Get the settings option array and print one of its values
+	 * 	 * Get the settings option array and print one of its values
+	 *
+	 * @return void
 	 */
-	public function to_callback() {
+	public function to_callback(): void {
 		printf( '<input type="text" id="input_to" name="%s[%s]" value="%s" size="60" />', PostmanOptions::POSTMAN_OPTIONS, PostmanOptions::FORCED_TO_RECIPIENTS, null !== $this->options->getForcedToRecipients() ? esc_attr( $this->options->getForcedToRecipients() ) : '' );
 	}
 
 	/**
-	 * Get the settings option array and print one of its values
+	 * 	 * Get the settings option array and print one of its values
+	 *
+	 * @return void
 	 */
-	public function cc_callback() {
+	public function cc_callback(): void {
 		printf( '<input type="text" id="input_cc" name="%s[%s]" value="%s" size="60" />', PostmanOptions::POSTMAN_OPTIONS, PostmanOptions::FORCED_CC_RECIPIENTS, null !== $this->options->getForcedCcRecipients() ? esc_attr( $this->options->getForcedCcRecipients() ) : '' );
 	}
 
 	/**
-	 * Get the settings option array and print one of its values
+	 * 	 * Get the settings option array and print one of its values
+	 *
+	 * @return void
 	 */
-	public function bcc_callback() {
+	public function bcc_callback(): void {
 		printf( '<input type="text" id="input_bcc" name="%s[%s]" value="%s" size="60" />', PostmanOptions::POSTMAN_OPTIONS, PostmanOptions::FORCED_BCC_RECIPIENTS, null !== $this->options->getForcedBccRecipients() ? esc_attr( $this->options->getForcedBccRecipients() ) : '' );
 	}
 
 	/**
-	 * Get the settings option array and print one of its values
+	 * 	 * Get the settings option array and print one of its values
+	 *
+	 * @return void
 	 */
-	public function headers_callback() {
+	public function headers_callback(): void {
 		printf( '<textarea id="input_headers" name="%s[%s]" cols="60" rows="5" >%s</textarea>', PostmanOptions::POSTMAN_OPTIONS, PostmanOptions::ADDITIONAL_HEADERS, null !== $this->options->getAdditionalHeaders() ? esc_attr( $this->options->getAdditionalHeaders() ) : '' );
 	}
 
 	/**
+	 * @return void
 	 */
-	public function disable_email_validation_callback() {
+	public function disable_email_validation_callback(): void {
 		$disabled = $this->options->isEmailValidationDisabled();
 		printf( '<input type="checkbox" id="%2$s" name="%1$s[%2$s]" %3$s /> %4$s', PostmanOptions::POSTMAN_OPTIONS, PostmanOptions::DISABLE_EMAIL_VALIDAITON, $disabled ? 'checked="checked"' : '', __( 'Disable e-mail validation', 'post-smtp' ) );
 	}
 
 	/**
-	 * Get the settings option array and print one of its values
+	 * 	 * Get the settings option array and print one of its values
+	 *
+	 * @return void
 	 */
-	public function log_level_callback() {
+	public function log_level_callback(): void {
 		$inputDescription = sprintf( __( 'Log Level specifies the level of detail written to the <a target="_blank" href="%s">WordPress Debug log</a> - view the log with <a target-"_new" href="%s">Debug</a>.', 'post-smtp' ), 'https://codex.wordpress.org/Debugging_in_WordPress', 'https://wordpress.org/plugins/debug/' );
 		printf( '<select id="input_%2$s" class="input_%2$s" name="%1$s[%2$s]">', PostmanOptions::POSTMAN_OPTIONS, PostmanOptions::LOG_LEVEL );
 		$currentKey = $this->options->getLogLevel();
@@ -437,7 +485,7 @@ class PostmanSettingsRegistry {
 		printf( '</select><br/><span class="postman_input_description">%s</span>', $inputDescription );
 	}
 
-	public function notification_service_callback() {
+	public function notification_service_callback(): void {
 		$inputDescription =  __( 'Select the notification service you want to recieve alerts about failed emails.' );
 		printf( '<select id="input_%2$s" class="input_%2$s" name="%1$s[%2$s]">', PostmanOptions::POSTMAN_OPTIONS, PostmanOptions::NOTIFICATION_SERVICE );
 		$currentKey = $this->options->getNotificationService();
@@ -448,34 +496,34 @@ class PostmanSettingsRegistry {
 		printf( '</select><br/><span class="postman_input_description">%s</span>', $inputDescription );
 	}
 
-	public function notification_use_chrome_callback() {
+	public function notification_use_chrome_callback(): void {
         $value = $this->options->useChromeExtension();
         printf( '<input type="checkbox" id="input_%2$s" class="input_%2$s" name="%1$s[%2$s]" %3$s />', PostmanOptions::POSTMAN_OPTIONS, PostmanOptions::NOTIFICATION_USE_CHROME, $value ? 'checked="checked"' : '' );
     }
 
-    public function notification_chrome_uid_callback() {
+    public function notification_chrome_uid_callback(): void {
         printf( '<input type="password" id="input_%2$s" class="input_%2$s" name="%1$s[%2$s]" value="%3$s" />', PostmanOptions::POSTMAN_OPTIONS, PostmanOptions::NOTIFICATION_CHROME_UID, PostmanUtils::obfuscatePassword( $this->options->getNotificationChromeUid() ) );
     }
 
-	public function pushover_user_callback() {
+	public function pushover_user_callback(): void {
 		printf( '<input type="password" id="pushover_user" name="%s[%s]" value="%s" />', PostmanOptions::POSTMAN_OPTIONS, PostmanOptions::PUSHOVER_USER, $this->options->getPushoverUser() );
 	}
 
-	public function pushover_token_callback() {
+	public function pushover_token_callback(): void {
 		printf( '<input type="password" id="pushover_token" name="%s[%s]" value="%s" />', PostmanOptions::POSTMAN_OPTIONS, PostmanOptions::PUSHOVER_TOKEN, $this->options->getPushoverToken() );
 	}
 
-	public function slack_token_callback() {
+	public function slack_token_callback(): void {
 		printf( '<input type="password" id="slack_token" name="%s[%s]" value="%s" />', PostmanOptions::POSTMAN_OPTIONS, PostmanOptions::SLACK_TOKEN, $this->options->getSlackToken() );
 		echo '<a target="_blank" href="https://slack.postmansmtp.com/">' . __( 'Get your webhook URL here', 'post-smtp' ) . '</a>';
 
 	}
 
-	private function printSelectOption( $label, $optionKey, $currentKey ) {
+	private function printSelectOption( $label, $optionKey, $currentKey ): void {
 		$optionPattern = '<option value="%1$s" %2$s>%3$s</option>';
 		printf( $optionPattern, $optionKey, $optionKey == $currentKey ? 'selected="selected"' : '', $label );
 	}
-	public function runModeCallback() {
+	public function runModeCallback(): void {
 		$inputDescription = __( 'Delivery mode offers options useful for developing or testing.', 'post-smtp' );
 		printf( '<select id="input_%2$s" class="input_%2$s" name="%1$s[%2$s]">', PostmanOptions::POSTMAN_OPTIONS, PostmanOptions::RUN_MODE );
 		$currentKey = $this->options->getRunMode();
@@ -485,11 +533,11 @@ class PostmanSettingsRegistry {
 		printf( '</select><br/><span class="postman_input_description">%s</span>', $inputDescription );
 	}
 
-	public function stealthModeCallback() {
+	public function stealthModeCallback(): void {
 		printf( '<input type="checkbox" id="input_%2$s" class="input_%2$s" name="%1$s[%2$s]" %3$s /> %4$s', PostmanOptions::POSTMAN_OPTIONS, PostmanOptions::STEALTH_MODE, $this->options->isStealthModeEnabled() ? 'checked="checked"' : '', __( 'Remove the Postman X-Header signature from messages', 'post-smtp' ) );
 	}
 
-	public function temporaryDirectoryCallback() {
+	public function temporaryDirectoryCallback(): void {
 		$inputDescription = __( 'Lockfiles are written here to prevent users from triggering an OAuth 2.0 token refresh at the same time.' );
 		printf( '<input type="text" id="input_%2$s" name="%1$s[%2$s]" value="%3$s" />', PostmanOptions::POSTMAN_OPTIONS, PostmanOptions::TEMPORARY_DIRECTORY, $this->options->getTempDirectory() );
 		if ( PostmanState::getInstance()->isFileLockingEnabled() ) {
@@ -500,23 +548,29 @@ class PostmanSettingsRegistry {
 	}
 
 	/**
-	 * Get the settings option array and print one of its values
+	 * 	 * Get the settings option array and print one of its values
+	 *
+	 * @return void
 	 */
-	public function connection_timeout_callback() {
+	public function connection_timeout_callback(): void {
 		printf( '<input type="text" id="input_connection_timeout" name="%s[%s]" value="%s" />', PostmanOptions::POSTMAN_OPTIONS, PostmanOptions::CONNECTION_TIMEOUT, $this->options->getConnectionTimeout() );
 	}
 
 	/**
-	 * Get the settings option array and print one of its values
+	 * 	 * Get the settings option array and print one of its values
+	 *
+	 * @return void
 	 */
-	public function read_timeout_callback() {
+	public function read_timeout_callback(): void {
 		printf( '<input type="text" id="input_read_timeout" name="%s[%s]" value="%s" />', PostmanOptions::POSTMAN_OPTIONS, PostmanOptions::READ_TIMEOUT, $this->options->getReadTimeout() );
 	}
 
 	/**
-	 * Get the settings option array and print one of its values
+	 * 	 * Get the settings option array and print one of its values
+	 *
+	 * @return void
 	 */
-	public function port_callback( $args ) {
+	public function port_callback( $args ): void {
 		printf( '<input type="text" id="input_port" name="postman_options[port]" value="%s" %s placeholder="%s"/>', null !== $this->options->getPort() ? esc_attr( $this->options->getPort() ) : '', isset( $args ['style'] ) ? $args ['style'] : '', __( 'Required', 'post-smtp' ) );
 	}
 }

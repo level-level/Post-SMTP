@@ -60,14 +60,17 @@ class PostmanPortTest {
 		}
 		return $registeredDomain;
 	}
-	public function setConnectionTimeout($timeout) {
+	public function setConnectionTimeout($timeout): void {
 		$this->connectionTimeout = $timeout;
 		$this->logger->trace ( $this->connectionTimeout );
 	}
-	public function setReadTimeout($timeout) {
+	public function setReadTimeout($timeout): void {
 		$this->readTimeout = $timeout;
 		$this->logger->trace ( $this->readTimeout );
 	}
+	/**
+	 * @return false|resource
+	 */
 	private function createStream($connectionString) {
 		$stream = @stream_socket_client ( $connectionString, $errno, $errstr, $this->connectionTimeout );
 		if ($stream) {
@@ -92,9 +95,12 @@ class PostmanPortTest {
 	}
 	
 	/**
-	 * Given a hostname, test if it has open ports
+	 * 	 * Given a hostname, test if it has open ports
+	 * 	 *
 	 *
 	 * @param string $hostname        	
+	 *
+	 * @return null|true
 	 */
 	public function testHttpPorts() {
 		$this->trace ( 'testHttpPorts()' );
@@ -164,11 +170,14 @@ class PostmanPortTest {
 	}
 	
 	/**
-	 * Given a hostname, test if it has open ports
+	 * 	 * Given a hostname, test if it has open ports
+	 * 	 *
 	 *
 	 * @param string $hostname        	
+	 *
+	 * @return bool
 	 */
-	private function talkToMailServer($connectionString) {
+	private function talkToMailServer($connectionString): bool {
 		$this->logger->trace ( 'talkToMailServer()' );
 		$stream = $this->createStream ( $connectionString, $this->connectionTimeout );
 		if ($stream) {
@@ -218,10 +227,13 @@ class PostmanPortTest {
 			return false;
 		}
 	}
-	private function sendSmtpCommand($stream, $message) {
+	private function sendSmtpCommand($stream, $message): void {
 		$this->trace ( 'tx: ' . $message );
 		fputs ( $stream, $message . "\r\n" );
 	}
+	/**
+	 * @return false|string
+	 */
 	private function readSmtpResponse($stream) {
 		$result = '';
 		while ( ($line = fgets ( $stream )) !== false ) {
@@ -270,13 +282,13 @@ class PostmanPortTest {
 	public function getErrorMessage() {
 		return $this->errstr;
 	}
-	private function trace($message) {
+	private function trace($message): void {
 		$this->logger->trace ( sprintf ( '%s:%s => %s', $this->hostname, $this->port, $message ) );
 	}
-	private function debug($message) {
+	private function debug($message): void {
 		$this->logger->debug ( sprintf ( '%s:%s => %s', $this->hostname, $this->port, $message ) );
 	}
-	private function error($message) {
+	private function error($message): void {
 		$this->logger->error ( sprintf ( '%s:%s => %s', $this->hostname, $this->port, $message ) );
 	}
 }

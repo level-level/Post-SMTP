@@ -13,7 +13,7 @@ class PostmanWelcomeController {
 		add_action( 'admin_head', array( $this, 'admin_head' ) );
 	}
 
-	public function add_menus() {
+	public function add_menus(): void {
 
 		if ( current_user_can( 'manage_options' ) ) {
 
@@ -39,17 +39,17 @@ class PostmanWelcomeController {
 		}
 	}
 
-	public function admin_head() {
+	public function admin_head(): void {
 		remove_submenu_page( 'index.php', 'post-about' );
 		remove_submenu_page( 'index.php', 'post-credits' );
 	}
 
-	public function postman_about_enqueue_resources() {
+	public function postman_about_enqueue_resources(): void {
 		// wp_enqueue_style( 'font-awsome', '' );
 	}
 
 
-	public function about_screen() {
+	public function about_screen(): void {
 		?>
 		<style type="text/css">
 			.post-badge {
@@ -151,7 +151,7 @@ class PostmanWelcomeController {
 		<?php
 	}
 
-	public function credits_screen() {
+	public function credits_screen(): void {
 		?>
 		<style type="text/css">
 			.post-badge {

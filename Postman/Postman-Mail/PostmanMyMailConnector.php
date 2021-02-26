@@ -33,9 +33,11 @@ if ( ! class_exists( 'PostmanMyMailConnector' ) ) {
 		}
 
 		/**
-		 * Initialize the Connector
+		 * 		 * Initialize the Connector
+		 *
+		 * @return void
 		 */
-		public function init() {
+		public function init(): void {
 			if ( ! defined( 'MAILSTER_VERSION' ) || version_compare( MAILSTER_POSTMAN_REQUIRED_VERSION, MAILSTER_VERSION, '>' ) ) {
 				// no-op
 			} else {
@@ -149,14 +151,18 @@ if ( ! class_exists( 'PostmanMyMailConnector' ) ) {
 		}
 
 		/**
-		 * reset function.
-		 *
-		 * resets the current time
+		 * 		 * reset function.
+		 * 		 *
+		 * 		 * resets the current time
+		 * 		 *
 		 *
 		 * @access public
+		 *
 		 * @param mixed $message
+		 *
+		 * @return void
 		 */
-		public function reset() {
+		public function reset(): void {
 			update_option( '_transient__mailster_send_period_timeout', false );
 			update_option( '_transient__mailster_send_period', 0 );
 		}

@@ -5,5 +5,5 @@
 */
 
 if ( !function_exists( 'wp_mail' ) ) :
-    function wp_mail() {} // KILL EMAILS IN LOCALHOST
+    function wp_mail(): void {} // KILL EMAILS IN LOCALHOST
 endif;

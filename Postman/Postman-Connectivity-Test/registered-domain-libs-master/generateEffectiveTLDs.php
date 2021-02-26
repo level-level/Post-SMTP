@@ -25,19 +25,19 @@ if ($_SERVER['argc']>1) {
 /*
  * Does $search start with $startstring?
  */
-function startsWith($search, $startstring) {
+function startsWith($search, $startstring): bool {
 	return (substr($search, 0, strlen($startstring))==$startstring);
 }
 
 /*
  * Does $search end with $endstring?
  */
-function endsWith($search, $endstring) {
+function endsWith($search, $endstring): bool {
 	return (substr($search, -strlen($endstring))==$endstring);
 }
 
 
-function buildSubdomain(&$node, $tldParts) {
+function buildSubdomain(&$node, $tldParts): void {
 
 	$dom = trim(array_pop($tldParts));
 
@@ -60,6 +60,9 @@ function buildSubdomain(&$node, $tldParts) {
 	}
 }
 
+/**
+ * @return void
+ */
 function printNode($key, $valueTree, $isAssignment = false) {
 
 	global $format;
@@ -111,7 +114,7 @@ function printNode($key, $valueTree, $isAssignment = false) {
 
 // sample: root(3:ac(5:com,edu,gov,net,ad(3:nom,co!,*)),de,com)
 
-function printNode_C($key, $valueTree) {
+function printNode_C($key, $valueTree): void {
 
 	echo "$key";
 

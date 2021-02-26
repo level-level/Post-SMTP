@@ -24,9 +24,11 @@ class PostmanUtils {
 		const NO_ECHO = false;
 
 	/**
-	 * Initialize the Logger
+	 * 	 * Initialize the Logger
+	 *
+	 * @return void
 	 */
-	public static function staticInit() {
+	public static function staticInit(): void {
 		PostmanUtils::$logger = new PostmanLogger( 'PostmanUtils' );
 	}
 
@@ -44,9 +46,11 @@ class PostmanUtils {
 	}
 
 	/**
-	 * Returns an escaped URL
+	 * 	 * Returns an escaped URL
+	 *
+	 * @return string
 	 */
-	public static function getGrantOAuthPermissionUrl() {
+	public static function getGrantOAuthPermissionUrl(): string {
 		return get_admin_url() . self::ADMIN_POST_OAUTH2_GRANT_URL_PART;
 	}
 
@@ -64,7 +68,7 @@ class PostmanUtils {
 		return menu_page_url( self::POSTMAN_SETTINGS_PAGE_STUB, self::NO_ECHO );
 	}
 
-	public static function isCurrentPagePostmanAdmin( $page = 'postman' ) {
+	public static function isCurrentPagePostmanAdmin( $page = 'postman' ): bool {
 		$result = (isset( $_REQUEST ['page'] ) && substr( $_REQUEST ['page'], 0, strlen( $page ) ) == $page);
 		return $result;
 	}
@@ -93,7 +97,7 @@ class PostmanUtils {
 		}
 		return (substr( $haystack, - $length ) === $needle);
 	}
-	public static function obfuscatePassword( $password ) {
+	public static function obfuscatePassword( $password ): string {
 		return str_repeat( '*', strlen( $password ) );
 	}
 	/**
@@ -158,12 +162,15 @@ class PostmanUtils {
 		}
 	}
 	/**
-	 * A facade function that handles redirects.
-	 * Inside WordPress we can use wp_redirect(). Outside WordPress, not so much. **Load it before postman-core.php**
+	 * 	 * A facade function that handles redirects.
+	 * 	 * Inside WordPress we can use wp_redirect(). Outside WordPress, not so much. **Load it before postman-core.php**
+	 * 	 *
 	 *
 	 * @param mixed $url
+	 *
+	 * @return void
 	 */
-	static function redirect( $url ) {
+	static function redirect( $url ): void {
 		// redirections back to THIS SITE should always be relative because of IIS bug
 		if ( PostmanUtils::$logger->isTrace() ) {
 			PostmanUtils::$logger->trace( sprintf( "Redirecting to '%s'", $url ) );
@@ -171,10 +178,13 @@ class PostmanUtils {
 		wp_redirect( $url );
 		exit();
 	}
+	/**
+	 * @return bool|false
+	 */
 	static function parseBoolean( $var ) {
 		return filter_var( $var, FILTER_VALIDATE_BOOLEAN );
 	}
-	static function logMemoryUse( $startingMemory, $description ) {
+	static function logMemoryUse( $startingMemory, $description ): void {
 		PostmanUtils::$logger->trace( sprintf( $description . ' memory used: %s', PostmanUtils::roundBytes( memory_get_usage() - $startingMemory ) ) );
 	}
 
@@ -198,19 +208,24 @@ class PostmanUtils {
 	}
 
 	/**
-	 * Unblock threads waiting on lock()
+	 * 	 * Unblock threads waiting on lock()
+	 *
+	 * @return void
 	 */
-	static function unlock() {
+	static function unlock(): void {
 		if ( PostmanState::getInstance()->isFileLockingEnabled() ) {
 			PostmanUtils::deleteLockFile();
 		}
 	}
 
 	/**
-	 * Processes will block on this method until unlock() is called
-	 * Inspired by http://cubicspot.blogspot.ca/2010/10/forget-flock-and-system-v-semaphores.html
+	 * 	 * Processes will block on this method until unlock() is called
+	 * 	 * Inspired by http://cubicspot.blogspot.ca/2010/10/forget-flock-and-system-v-semaphores.html
+	 * 	 *
 	 *
 	 * @throws Exception
+	 *
+	 * @return void
 	 */
 	static function lock() {
 		if ( PostmanState::getInstance()->isFileLockingEnabled() ) {
@@ -232,13 +247,13 @@ class PostmanUtils {
 		}
 	}
 
-	static function lockFileExists() {
+	static function lockFileExists(): bool {
 		$path = PostmanUtils::calculateTemporaryLockPath( null );
 
 		return file_exists($path);
 	}
 
-	static function deleteLockFile( $tempDirectory = null ) {
+	static function deleteLockFile( $tempDirectory = null ): bool {
 		$path = PostmanUtils::calculateTemporaryLockPath( $tempDirectory );
 		$success = @unlink( $path );
 		if ( PostmanUtils::$logger->isTrace() ) {
@@ -246,6 +261,9 @@ class PostmanUtils {
 		}
 		return $success;
 	}
+	/**
+	 * @return false|resource
+	 */
 	static function createLockFile( $tempDirectory = null ) {
 		if ( self::lockFileExists() ) {
 			self::deleteLockFile();
@@ -299,9 +317,11 @@ class PostmanUtils {
 	}
 
 	/**
-	 * Warning! This can only be called on hook 'init' or later
+	 * 	 * Warning! This can only be called on hook 'init' or later
+	 *
+	 * @return bool
 	 */
-	public static function isAdmin() {
+	public static function isAdmin(): bool {
 		/**
 		 * is_admin() will return false when trying to access wp-login.php.
 		 * is_admin() will return true when trying to make an ajax request.
@@ -346,10 +366,14 @@ class PostmanUtils {
 	}
 
 	/**
-	 * From http://stackoverflow.com/questions/13430120/str-getcsv-alternative-for-older-php-version-gives-me-an-empty-array-at-the-e
+	 * 	 * From http://stackoverflow.com/questions/13430120/str-getcsv-alternative-for-older-php-version-gives-me-an-empty-array-at-the-e
+	 * 	 *
 	 *
 	 * @param mixed $string
-	 * @return multitype:
+	 *
+	 * @return (null|string)[]|false|null
+	 *
+	 * @psalm-return false|non-empty-list<null|string>|null
 	 */
 	static function postman_strgetcsv_impl( $string ) {
 		$fh = fopen( 'php://temp', 'r+' );
@@ -388,11 +412,14 @@ class PostmanUtils {
 	}
 
 	/**
+	 * 	 *
 	 *
 	 * @param mixed $actionName
 	 * @param mixed $callbackName
+	 *
+	 * @return void
 	 */
-	public static function registerAdminMenu( $viewController, $callbackName ) {
+	public static function registerAdminMenu( $viewController, $callbackName ): void {
 		$logger = PostmanUtils::$logger;
 		if ( $logger->isTrace() ) {
 			$logger->trace( 'Registering admin menu ' . $callbackName );
@@ -405,11 +432,14 @@ class PostmanUtils {
 	}
 
 	/**
+	 * 	 *
 	 *
 	 * @param mixed $actionName
 	 * @param mixed $callbackName
+	 *
+	 * @return void
 	 */
-	public static function registerAjaxHandler( $actionName, $class, $callbackName ) {
+	public static function registerAjaxHandler( $actionName, $class, $callbackName ): void {
 		if ( is_admin() ) {
 			$fullname = 'wp_ajax_' . $actionName;
 			// $this->logger->debug ( 'Registering ' . 'wp_ajax_' . $fullname . ' Ajax handler' );
@@ -446,7 +476,7 @@ class PostmanUtils {
 		}
 	}
 
-	public static function getServerName() {
+	public static function getServerName(): string {
         $host = 'localhost';
         
         if (isset($_SERVER) and array_key_exists('SERVER_NAME', $_SERVER)) {
@@ -460,7 +490,7 @@ class PostmanUtils {
         return str_replace('www.', '', $host );
 	}
 
-	public static function getHost( $url ) {
+	public static function getHost( $url ): string {
 		$host = parse_url( trim( $url ), PHP_URL_HOST );
 
 		return str_replace('www.', '', $host );

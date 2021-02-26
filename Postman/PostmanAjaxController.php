@@ -14,11 +14,14 @@ if (! class_exists ( 'PostmanAbstractAjaxHandler' )) {
 			$this->logger = new PostmanLogger ( get_class ( $this ) );
 		}
 		/**
+		 * 		 *
 		 *
 		 * @param mixed $actionName        	
 		 * @param mixed $callbackName        	
+		 *
+		 * @return void
 		 */
-		protected function registerAjaxHandler($actionName, $class, $callbackName) {
+		protected function registerAjaxHandler($actionName, $class, $callbackName): void {
 			if (is_admin ()) {
 				$fullname = 'wp_ajax_' . $actionName;
 				// $this->logger->debug ( 'Registering ' . 'wp_ajax_' . $fullname . ' Ajax handler' );

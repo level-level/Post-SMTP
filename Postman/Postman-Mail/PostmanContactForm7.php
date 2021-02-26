@@ -8,7 +8,7 @@ class Postsmtp_ContactForm7 {
         add_filter( 'wpcf7_ajax_json_echo', array( $this, 'change_rest_response' ), 10, 2 );
     }
 
-    public function save_error($contact_form) {
+    public function save_error($contact_form): void {
         $this->result_error = apply_filters( 'postman_wp_mail_result', null );
     }
 

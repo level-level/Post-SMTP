@@ -79,20 +79,25 @@ if ( ! class_exists( 'PostmanMessage' ) ) {
 		}
 
 		/**
+		 * 		 *
 		 *
 		 * @param PostmanModuleTransport $transport
+		 *
+		 * @return void
 		 */
-		public function validate( PostmanModuleTransport $transport ) {
+		public function validate( PostmanModuleTransport $transport ): void {
 			if ( $transport->isEmailValidationSupported() ) {
 				$this->internalValidate();
 			}
 		}
 
 		/**
-		 * Create body parts based on content type
-		 * MyMail creates its own body parts
+		 * 		 * Create body parts based on content type
+		 * 		 * MyMail creates its own body parts
+		 *
+		 * @return void
 		 */
-		public function createBodyParts() {
+		public function createBodyParts(): void {
 
 			// modify the content-type to include the boundary
 			if ( false !== stripos( $this->contentType, 'multipart' ) && ! empty( $this->boundary ) ) {
@@ -146,9 +151,11 @@ if ( ! class_exists( 'PostmanMessage' ) ) {
 		}
 
 		/**
-		 * Apply the WordPress filters to the email
+		 * 		 * Apply the WordPress filters to the email
+		 *
+		 * @return void
 		 */
-		public function applyFilters() {
+		public function applyFilters(): void {
 			if ( $this->logger->isDebug() ) {
 				$this->logger->debug( 'Applying WordPress filters' );
 			}
@@ -243,10 +250,12 @@ if ( ! class_exists( 'PostmanMessage' ) ) {
 		}
 
 		/**
-		 * Check all email headers for errors
-		 * Throw an exception if an error is found
+		 * 		 * Check all email headers for errors
+		 * 		 * Throw an exception if an error is found
+		 *
+		 * @return void
 		 */
-		private function internalValidate() {
+		private function internalValidate(): void {
 			// check the reply-to address for errors
 			if ( isset( $this->replyTo ) ) {
 				$this->getReplyTo()->validate( 'Reply-To' );
@@ -289,11 +298,14 @@ if ( ! class_exists( 'PostmanMessage' ) ) {
 		}
 
 		/**
-		 * Set the charset
+		 * 		 * Set the charset
+		 * 		 *
 		 *
 		 * @param mixed $charset
+		 *
+		 * @return void
 		 */
-		public function setCharset( $charset ) {
+		public function setCharset( $charset ): void {
 			$this->charset = $charset;
 		}
 
@@ -305,43 +317,59 @@ if ( ! class_exists( 'PostmanMessage' ) ) {
 		public function getContentType() {
 			return $this->contentType;
 		}
-		public function setContentType( $contentType ) {
+		public function setContentType( $contentType ): void {
 			$this->contentType = $contentType;
 		}
 		/**
+		 * 		 *
 		 *
 		 * @param mixed $recipients
 		 *        	Array or comma-separated list of email addresses to send message.
+		 *
 		 * @throws Exception
+		 *
+		 * @return void
 		 */
-		public function addTo( $to ) {
+		public function addTo( $to ): void {
 			$this->addRecipients( $this->toRecipients, $to );
 		}
 		/**
+		 * 		 *
 		 *
 		 * @param mixed $recipients
 		 *        	Array or comma-separated list of email addresses to send message.
+		 *
 		 * @throws Exception
+		 *
+		 * @return void
 		 */
-		public function addCc( $cc ) {
+		public function addCc( $cc ): void {
 			$this->addRecipients( $this->ccRecipients, $cc );
 		}
 		/**
+		 * 		 *
 		 *
 		 * @param mixed $recipients
 		 *        	Array or comma-separated list of email addresses to send message.
+		 *
 		 * @throws Exception
+		 *
+		 * @return void
 		 */
-		public function addBcc( $bcc ) {
+		public function addBcc( $bcc ): void {
 			$this->addRecipients( $this->bccRecipients, $bcc );
 		}
 		/**
+		 * 		 *
 		 *
 		 * @param mixed $recipients
 		 *        	Array or comma-separated list of email addresses to send message.
+		 *
 		 * @throws Exception
+		 *
+		 * @return void
 		 */
-		private function addRecipients( &$recipientList, $recipients ) {
+		private function addRecipients( &$recipientList, $recipients ): void {
 			if ( ! empty( $recipients ) ) {
 				$recipients = PostmanEmailAddress::convertToArray( $recipients );
 				foreach ( $recipients as $recipient ) {
@@ -354,9 +382,11 @@ if ( ! class_exists( 'PostmanMessage' ) ) {
 		}
 
 		/**
-		 * For the string version, each header line (beginning with From:, Cc:, etc.) is delimited with a newline ("\r\n")
+		 * 		 * For the string version, each header line (beginning with From:, Cc:, etc.) is delimited with a newline ("\r\n")
+		 *
+		 * @return void
 		 */
-		public function addHeaders( $headers ) {
+		public function addHeaders( $headers ): void {
 			if ( ! is_array( $headers ) ) {
 				// WordPress may send a string where "each header line (beginning with From:, Cc:, etc.) is delimited with a newline ("\r\n") (advanced)"
 				// this converts that string to an array
@@ -388,14 +418,17 @@ if ( ! class_exists( 'PostmanMessage' ) ) {
 		}
 
 		/**
-		 * Add the headers that were processed in processHeaders()
-		 * Zend requires that several headers are specially handled.
+		 * 		 * Add the headers that were processed in processHeaders()
+		 * 		 * Zend requires that several headers are specially handled.
+		 * 		 *
 		 *
 		 * @param mixed           $name
 		 * @param mixed           $value
 		 * @param Postman_Zend_Mail $mail
+		 *
+		 * @return void
 		 */
-		private function processHeader( $name, $content ) {
+		private function processHeader( $name, $content ): void {
 			$name = trim( $name );
 			$content = trim( $content );
 			switch ( strtolower( $name ) ) {
@@ -476,21 +509,27 @@ if ( ! class_exists( 'PostmanMessage' ) ) {
 		}
 
 		/**
+		 * 		 *
 		 *
 		 * @param mixed $desc
 		 * @param mixed $name
 		 * @param mixed $content
+		 *
+		 * @return void
 		 */
-		private function logProcessHeader( $desc, $name, $content ) {
+		private function logProcessHeader( $desc, $name, $content ): void {
 			$this->logger->debug( 'Processing ' . $desc . ' Header - ' . $name . ': ' . $content );
 		}
 
 		/**
-		 * Add attachments to the message
+		 * 		 * Add attachments to the message
+		 * 		 *
 		 *
 		 * @param Postman_Zend_Mail $mail
+		 *
+		 * @return void
 		 */
-		public function addAttachmentsToMail( Postman_Zend_Mail $mail ) {
+		public function addAttachmentsToMail( Postman_Zend_Mail $mail ): void {
 			$attachments = $this->attachments;
 			if ( ! is_array( $attachments ) ) {
 				// WordPress may a single filename or a newline-delimited string list of multiple filenames
@@ -511,35 +550,35 @@ if ( ! class_exists( 'PostmanMessage' ) ) {
 				}
 			}
 		}
-		function setBody( $body ) {
+		function setBody( $body ): void {
 			$this->body = $body;
 		}
-		function setBodyTextPart( $bodyTextPart ) {
+		function setBodyTextPart( $bodyTextPart ): void {
 			$this->bodyTextPart = $bodyTextPart;
 		}
-		function setBodyHtmlPart( $bodyHtmlPart ) {
+		function setBodyHtmlPart( $bodyHtmlPart ): void {
 			$this->bodyHtmlPart = $bodyHtmlPart;
 		}
-		function setSubject( $subject ) {
+		function setSubject( $subject ): void {
 			$this->subject = $subject;
 		}
-		function setAttachments( $attachments ) {
+		function setAttachments( $attachments ): void {
 			$this->attachments = $attachments;
 		}
-		function setFrom( $email, $name = null ) {
+		function setFrom( $email, $name = null ): void {
 			if ( ! empty( $email ) ) {
 				$this->from = new PostmanEmailAddress( $email, $name );
 			}
 		}
-		function setReplyTo( $replyTo ) {
+		function setReplyTo( $replyTo ): void {
 			if ( ! empty( $replyTo ) ) {
 				$this->replyTo = new PostmanEmailAddress( $replyTo );
 			}
 		}
-		function setMessageId( $messageId ) {
+		function setMessageId( $messageId ): void {
 			$this->messageId = $messageId;
 		}
-		function setDate( $date ) {
+		function setDate( $date ): void {
 			$this->date = $date;
 		}
 

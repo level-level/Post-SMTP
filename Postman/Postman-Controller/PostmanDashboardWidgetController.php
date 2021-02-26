@@ -47,11 +47,13 @@ if (! class_exists ( "PostmanDashboardWidgetController" )) {
 		}
 		
 		/**
-		 * Add a widget to the dashboard.
+		 * 		 * Add a widget to the dashboard.
+		 * 		 *
+		 * 		 * This function is hooked into the 'wp_dashboard_setup' action below.
 		 *
-		 * This function is hooked into the 'wp_dashboard_setup' action below.
+		 * @return void
 		 */
-		public function addDashboardWidget() {
+		public function addDashboardWidget(): void {
 			// only display to the widget to administrator
 			if (PostmanUtils::isAdmin ()) {
 				wp_add_dashboard_widget ( 'example_dashboard_widget', __ ( 'Postman SMTP', 'post-smtp' ), array (
@@ -62,9 +64,11 @@ if (! class_exists ( "PostmanDashboardWidgetController" )) {
 		}
 		
 		/**
-		 * Add a widget to the network dashboard
+		 * 		 * Add a widget to the network dashboard
+		 *
+		 * @return void
 		 */
-		public function addNetworkDashboardWidget() {
+		public function addNetworkDashboardWidget(): void {
 			// only display to the widget to administrator
 			if (PostmanUtils::isAdmin ()) {
 				wp_add_dashboard_widget ( 'example_dashboard_widget', __ ( 'Postman SMTP', 'post-smtp' ), array (
@@ -75,9 +79,11 @@ if (! class_exists ( "PostmanDashboardWidgetController" )) {
 		}
 		
 		/**
-		 * Create the function to output the contents of our Dashboard Widget.
+		 * 		 * Create the function to output the contents of our Dashboard Widget.
+		 *
+		 * @return void
 		 */
-		public function printDashboardWidget() {
+		public function printDashboardWidget(): void {
 			$goToSettings = sprintf ( '<a href="%s">%s</a>', PostmanUtils::getSettingsPageUrl (), __ ( 'Settings', 'post-smtp' ) );
 			$goToEmailLog = sprintf ( '%s', _x ( 'Email Log', 'The log of Emails that have been delivered', 'post-smtp' ) );
 			if ($this->options->isMailLoggingEnabled ()) {
@@ -88,9 +94,11 @@ if (! class_exists ( "PostmanDashboardWidgetController" )) {
 		}
 		
 		/**
-		 * Print the human-readable plugin state
+		 * 		 * Print the human-readable plugin state
+		 *
+		 * @return void
 		 */
-		public function print_postman_status() {
+		public function print_postman_status(): void {
 			if (! PostmanPreRequisitesCheck::isReady ()) {
 				printf ( '<p><span style="color:red">%s</span></p>', __ ( 'Error: Postman is missing a required PHP library.', 'post-smtp' ) );
 			} else if ($this->wpMailBinder->isUnboundDueToException ()) {
@@ -110,9 +118,11 @@ if (! class_exists ( "PostmanDashboardWidgetController" )) {
 		}
 		
 		/**
-		 * Create the function to output the contents of our Dashboard Widget.
+		 * 		 * Create the function to output the contents of our Dashboard Widget.
+		 *
+		 * @return void
 		 */
-		public function printNetworkDashboardWidget() {
+		public function printNetworkDashboardWidget(): void {
 			printf ( '<p class="wp-menu-image dashicons-before dashicons-email"> %s</p>', __ ( 'Postman is operating in per-site mode.', 'post-smtp' ) );
 		}
 		

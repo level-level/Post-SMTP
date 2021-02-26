@@ -25,34 +25,46 @@ if (! class_exists ( 'PostmanMessageHandler' )) {
 		}
 		
 		/**
+		 * 		 *
 		 *
 		 * @param mixed $message        	
+		 *
+		 * @return void
 		 */
-		public function addError($message) {
+		public function addError($message): void {
 			$this->storeMessage ( $message, 'error' );
 		}
 		/**
+		 * 		 *
 		 *
 		 * @param mixed $message        	
+		 *
+		 * @return void
 		 */
-		public function addWarning($message) {
+		public function addWarning($message): void {
 			$this->storeMessage ( $message, 'warning' );
 		}
 		/**
+		 * 		 *
 		 *
 		 * @param mixed $message        	
+		 *
+		 * @return void
 		 */
-		public function addMessage($message) {
+		public function addMessage($message): void {
 			$this->storeMessage ( $message, 'notify' );
 		}
 		
 		/**
-		 * store messages for display later
+		 * 		 * store messages for display later
+		 * 		 *
 		 *
 		 * @param mixed $message        	
 		 * @param mixed $type        	
+		 *
+		 * @return void
 		 */
-		private function storeMessage($message, $type) {
+		private function storeMessage($message, $type): void {
 			$messageArray = array ();
 			$oldMessageArray = PostmanSession::getInstance ()->getMessage ();
 			if ($oldMessageArray) {
@@ -74,9 +86,11 @@ if (! class_exists ( 'PostmanMessageHandler' )) {
 			}
 		}
 		/**
-		 * Retrieve the messages and show them
+		 * 		 * Retrieve the messages and show them
+		 *
+		 * @return void
 		 */
-		public function displayAllMessages() {
+		public function displayAllMessages(): void {
 			$messageArray = PostmanSession::getInstance ()->getMessage ();
 			if ($messageArray) {
 				PostmanSession::getInstance ()->unsetMessage ();
@@ -100,12 +114,15 @@ if (! class_exists ( 'PostmanMessageHandler' )) {
 		}
 		
 		/**
-		 * putput message
+		 * 		 * putput message
+		 * 		 *
 		 *
 		 * @param mixed $message        	
 		 * @param mixed $className        	
+		 *
+		 * @return void
 		 */
-		public function printMessage($message, $className) {
+		public function printMessage($message, $className): void {
 			printf ( '<div class="%s"><p>%s</p></div>', $className, $message );
 		}
 	}

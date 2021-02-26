@@ -45,9 +45,12 @@ if ( ! class_exists( 'PostmanMailgunMailEngine' ) ) {
 		}
 
 		/**
-		 * (non-PHPdoc)
+		 * 		 * (non-PHPdoc)
+		 * 		 *
 		 *
 		 * @see PostmanSmtpEngine::send()
+		 *
+		 * @return void
 		 */
 		public function send( PostmanMessage $message ) {
 			$options = PostmanOptions::getInstance();
@@ -213,6 +216,9 @@ if ( ! class_exists( 'PostmanMailgunMailEngine' ) ) {
 			}
 		}
 
+		/**
+		 * @return false|string
+		 */
 		private function getRecipientVariables( $emails ) {
 			$recipient_variables = array();
 			foreach ( $emails as $key => $email ) {
@@ -222,18 +228,21 @@ if ( ! class_exists( 'PostmanMailgunMailEngine' ) ) {
 			return json_encode( $recipient_variables );
 		}
 
-		private function addHeader( $name, $value, $deprecated = '' ) {
+		private function addHeader( $name, $value, $deprecated = '' ): void {
 			if ( $value && ! empty( $value ) ) {
 				$this->mailgunMessage['h:' . $name] = preg_replace('/.*:\s?/', '', $value);
 			}
 		}
 
 		/**
-		 * Add attachments to the message
+		 * 		 * Add attachments to the message
+		 * 		 *
 		 *
 		 * @param Postman_Zend_Mail $mail
+		 *
+		 * @return void
 		 */
-		private function addAttachmentsToMail( PostmanMessage $message ) {
+		private function addAttachmentsToMail( PostmanMessage $message ): void {
 			$attachments = $message->getAttachments();
 			if ( ! is_array( $attachments ) ) {
 				// WordPress may a single filename or a newline-delimited string list of multiple filenames

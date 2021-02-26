@@ -40,27 +40,33 @@ class PostmanDiagnosticTestController {
 	}
 
 	/**
-	 * Functions to execute on the init event
+	 * 	 * Functions to execute on the init event
+	 * 	 *
+	 * 	 * "Typically used by plugins to initialize. The current user is already authenticated by this time."
+	 * 	 * ref: http://codex.wordpress.org/Plugin_API/Action_Reference#Actions_Run_During_a_Typical_Request
 	 *
-	 * "Typically used by plugins to initialize. The current user is already authenticated by this time."
-	 * ref: http://codex.wordpress.org/Plugin_API/Action_Reference#Actions_Run_During_a_Typical_Request
+	 * @return void
 	 */
-	public function on_init() {
+	public function on_init(): void {
 		// register Ajax handlers
 		new PostmanGetDiagnosticsViaAjax();
 	}
 
 	/**
-	 * Fires on the admin_init method
+	 * 	 * Fires on the admin_init method
+	 *
+	 * @return void
 	 */
-	public function on_admin_init() {
+	public function on_admin_init(): void {
 				$this->registerStylesAndScripts();
 	}
 
 	/**
-	 * Register and add settings
+	 * 	 * Register and add settings
+	 *
+	 * @return void
 	 */
-	private function registerStylesAndScripts() {
+	private function registerStylesAndScripts(): void {
 		if ( $this->logger->isTrace() ) {
 			$this->logger->trace( 'registerStylesAndScripts()' );
 		}
@@ -74,9 +80,11 @@ class PostmanDiagnosticTestController {
 	}
 
 	/**
-	 * Register the Diagnostics screen
+	 * 	 * Register the Diagnostics screen
+	 *
+	 * @return void
 	 */
-	public function addDiagnosticsSubmenu() {
+	public function addDiagnosticsSubmenu(): void {
 		$page = add_submenu_page( null, sprintf( __( '%s Setup', 'post-smtp' ), __( 'Postman SMTP', 'post-smtp' ) ), __( 'Postman SMTP', 'post-smtp' ), Postman::MANAGE_POSTMAN_CAPABILITY_NAME, PostmanDiagnosticTestController::DIAGNOSTICS_SLUG, array(
 				$this,
 				'outputDiagnosticsContent',
@@ -87,14 +95,15 @@ class PostmanDiagnosticTestController {
 				'enqueueDiagnosticsScreenStylesheet',
 		) );
 	}
-	function enqueueDiagnosticsScreenStylesheet() {
+	function enqueueDiagnosticsScreenStylesheet(): void {
 		wp_enqueue_style( PostmanViewController::POSTMAN_STYLE );
 		wp_enqueue_script( 'postman_diagnostics_script' );
 	}
 
 	/**
+	 * @return void
 	 */
-	public function outputDiagnosticsContent() {
+	public function outputDiagnosticsContent(): void {
 		// test features
 		print '<div class="wrap">';
 
@@ -129,11 +138,14 @@ class PostmanGetDiagnosticsViaAjax {
 		$this->diagnostics = '';
 		PostmanUtils::registerAjaxHandler( 'postman_diagnostics', $this, 'getDiagnostics' );
 	}
-	private function addToDiagnostics( $header, $data ) {
+	private function addToDiagnostics( $header, $data ): void {
 		if ( isset( $data ) ) {
 			$this->diagnostics .= sprintf( '%s: %s%s', $header, $data, PHP_EOL );
 		}
 	}
+	/**
+	 * @return string
+	 */
 	private function getActivePlugins() {
 		// from http://stackoverflow.com/questions/20488264/how-do-i-get-activated-plugin-list-in-wordpress-plugin-development
 		$apl = get_option( 'active_plugins' );
@@ -146,6 +158,9 @@ class PostmanGetDiagnosticsViaAjax {
 		}
 		return implode( ', ', $pluginText );
 	}
+	/**
+	 * @return string
+	 */
 	private function getPhpDependencies() {
 		$apl = PostmanPreRequisitesCheck::getState();
 		$pluginText = array();
@@ -154,7 +169,7 @@ class PostmanGetDiagnosticsViaAjax {
 		}
 		return implode( ', ', $pluginText );
 	}
-	private function getTransports() {
+	private function getTransports(): string {
 		$transports = '';
 		foreach ( PostmanTransportRegistry::getInstance()->getTransports() as $transport ) {
 			$transports .= ' : ' . $transport->getName();
@@ -183,8 +198,10 @@ class PostmanGetDiagnosticsViaAjax {
 	}
 
 	/**
-	 * Inspects the $wp_filter variable and returns the plugins attached to it
-	 * From: http://stackoverflow.com/questions/5224209/wordpress-how-do-i-get-all-the-registered-functions-for-the-content-filter
+	 * 	 * Inspects the $wp_filter variable and returns the plugins attached to it
+	 * 	 * From: http://stackoverflow.com/questions/5224209/wordpress-how-do-i-get-all-the-registered-functions-for-the-content-filter
+	 *
+	 * @return null|string
 	 */
 	private function getFilters( $hook = '' ) {
 		global $wp_filter;
@@ -206,8 +223,9 @@ class PostmanGetDiagnosticsViaAjax {
 	}
 
 	/**
+	 * @return void
 	 */
-	public function getDiagnostics() {
+	public function getDiagnostics(): void {
 	    $curl = curl_version();
 		$transportRegistry = PostmanTransportRegistry::getInstance();
         $this->addToDiagnostics( 'Mailer', PostmanOptions::getInstance()->getSmtpMailer() );

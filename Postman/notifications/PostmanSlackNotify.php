@@ -2,6 +2,9 @@
 
 class PostmanSlackNotify implements Postman_Notify {
 
+    /**
+     * @return void
+     */
     public function send_message($message)
     {
         $options = PostmanOptions::getInstance();

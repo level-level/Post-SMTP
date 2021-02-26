@@ -37,7 +37,7 @@ class PostmanEmailLogs {
         $this->db = $wpdb;
     }
 
-    function install_table() {
+    function install_table(): void {
 
         global $wpdb;
 
@@ -56,7 +56,12 @@ class PostmanEmailLogs {
         dbDelta( $sql );
     }
 
-    public static function get_data( $post_id ) {
+    /**
+     * @return array[]
+     *
+     * @psalm-return array<array-key, array{0: mixed}>
+     */
+    public static function get_data( $post_id ): array {
         $fields = array();
         foreach ( self::$fields as $field ) {
             $fields[$field][0] = get_post_meta( $post_id, $field, true );
@@ -69,7 +74,7 @@ class PostmanEmailLogs {
         return self::$fields;
     }
 
-    function migrate_data() {
+    function migrate_data(): void {
         $args = array(
             'post_type' => 'postman_sent_mail',
             'posts_per_page' => -1,
@@ -92,14 +97,16 @@ class PostmanEmailLogs {
         }
     }
 
-    function load() {
+    function load(): void {
         $this->db->select();
     }
 
     /**
      * @param array $data
+     *
+     * @return void
      */
-    function save( $data ) {
+    function save( $data ): void {
         $this->db->query( $this->db->prepare(
             "
 		INSERT INTO $this->db_name 

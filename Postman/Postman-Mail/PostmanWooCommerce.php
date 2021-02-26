@@ -10,11 +10,11 @@ if ( ! class_exists( 'PostmanWoocommerce' ) ) {
 			$this->hooks();
 		}
 
-		public function set_vars() {
+		public function set_vars(): void {
 			$this->options = PostmanOptions::getInstance ();
 		}
 
-		public function hooks() {
+		public function hooks(): void {
 			add_filter( 'option_woocommerce_email_from_address', array( $this, 'set_postman_from_address' ), 10, 2 );
 			add_filter( 'woocommerce_email_from_address', array( $this, 'set_postman_from_address' ), 10, 2 );
 			add_filter( 'woocommerce_get_settings_email', array( $this, 'overide_email_settings' ) );
@@ -24,7 +24,12 @@ if ( ! class_exists( 'PostmanWoocommerce' ) ) {
 			return $this->options->getMessageSenderEmail();
 		}
 
-		public function overide_email_settings( $settings ) {
+		/**
+		 * @return (bool|mixed|string|string[])[][]
+		 *
+		 * @psalm-return array{0: array{title: mixed, desc: mixed, type: string, id: string}, 1: array{type: string}, 2: array{type: string, id: string}, 3: array{type: string, id: string}, 4: array{title: mixed, type: string, desc: string, id: string}, 5: array{title: mixed, desc: mixed, id: string, type: string, css: string, default: mixed, autoload: false, desc_tip: true}, 6: array{title: mixed, desc: mixed, id: string, type: string, custom_attributes: array{multiple: string, disabled: string}, css: string, default: mixed, autoload: false, desc_tip: true}, 7: array{type: string, id: string}, 8: array{title: mixed, type: string, desc: string, id: string}, 9: array{title: mixed, desc: mixed, id: string, type: string, css: string, placeholder: mixed, default: string, autoload: false, desc_tip: true}, 10: array{title: mixed, desc: mixed, id: string, css: string, placeholder: mixed, type: string, default: mixed, autoload: false, desc_tip: true}, 11: array{title: mixed, desc: string, id: string, type: string, css: string, default: string, autoload: false, desc_tip: true}, 12: array{title: mixed, desc: string, id: string, type: string, css: string, default: string, autoload: false, desc_tip: true}, 13: array{title: mixed, desc: string, id: string, type: string, css: string, default: string, autoload: false, desc_tip: true}, 14: array{title: mixed, desc: string, id: string, type: string, css: string, default: string, autoload: false, desc_tip: true}, 15: array{type: string, id: string}}
+		 */
+		public function overide_email_settings( $settings ): array {
 
 			return array(
 

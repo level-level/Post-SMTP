@@ -46,15 +46,18 @@ if (! class_exists ( "PostmanGoogleAuthenticationManager" )) {
 		}
 		
 		/**
-		 * The authorization sequence begins when your application redirects a browser to a Google URL;
-		 * the URL includes query parameters that indicate the type of access being requested.
-		 *
-		 * As in other scenarios, Google handles user authentication, session selection, and user consent.
-		 * The result is an authorization code, which Google returns to your application in a query string.
-		 *
-		 * (non-PHPdoc)
+		 * 		 * The authorization sequence begins when your application redirects a browser to a Google URL;
+		 * 		 * the URL includes query parameters that indicate the type of access being requested.
+		 * 		 *
+		 * 		 * As in other scenarios, Google handles user authentication, session selection, and user consent.
+		 * 		 * The result is an authorization code, which Google returns to your application in a query string.
+		 * 		 *
+		 * 		 * (non-PHPdoc)
+		 * 		 *
 		 *
 		 * @see PostmanAuthenticationManager::requestVerificationCode()
+		 *
+		 * @return void
 		 */
 		public function requestVerificationCode($transactionId) {
 			$params = array (
@@ -75,13 +78,16 @@ if (! class_exists ( "PostmanGoogleAuthenticationManager" )) {
 		}
 		
 		/**
-		 * After receiving the authorization code, your application can exchange the code
-		 * (along with a client ID and client secret) for an access token and, in some cases,
-		 * a refresh token.
-		 *
-		 * This code is identical for Google and Hotmail
+		 * 		 * After receiving the authorization code, your application can exchange the code
+		 * 		 * (along with a client ID and client secret) for an access token and, in some cases,
+		 * 		 * a refresh token.
+		 * 		 *
+		 * 		 * This code is identical for Google and Hotmail
+		 * 		 *
 		 *
 		 * @see PostmanAuthenticationManager::processAuthorizationGrantCode()
+		 *
+		 * @return bool
 		 */
 		public function processAuthorizationGrantCode($transactionId) {
 			if (isset ( $_GET ['code'] )) {
@@ -109,9 +115,15 @@ if (! class_exists ( "PostmanGoogleAuthenticationManager" )) {
 				return false;
 			}
 		}
+		/**
+		 * @return string
+		 */
 		public function getAuthorizationUrl() {
 			return self::GOOGLE_ENDPOINT;
 		}
+		/**
+		 * @return string
+		 */
 		public function getTokenUrl() {
 			return self::GOOGLE_REFRESH;
 		}

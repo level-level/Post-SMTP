@@ -37,9 +37,13 @@ if (! class_exists ( 'PostmanWpMailBinder' )) {
 		}
 		
 		/**
-		 * Returns the bind result
+		 * 		 * Returns the bind result
+		 *
+		 * @return array
+		 *
+		 * @psalm-return array{bound: mixed, bind_error: mixed}
 		 */
-		public function postman_wp_mail_bind_status() {
+		public function postman_wp_mail_bind_status(): array {
 			$result = array (
 					'bound' => $this->bound,
 					'bind_error' => $this->bindError 
@@ -48,15 +52,17 @@ if (! class_exists ( 'PostmanWpMailBinder' )) {
 		}
 		
 		/**
-		 * Important: bind() may be called multiple times
+		 * 		 * Important: bind() may be called multiple times
+		 * 		 *
+		 * 		 * Replace wp_mail() after making sure:
+		 * 		 * 1) the plugin has not already bound to wp_mail and
+		 * 		 * 2) wp_mail is available for use
+		 * 		 * 3) the plugin is properly configured.
+		 * 		 * 4) the plugin's prerequisites are met.
 		 *
-		 * Replace wp_mail() after making sure:
-		 * 1) the plugin has not already bound to wp_mail and
-		 * 2) wp_mail is available for use
-		 * 3) the plugin is properly configured.
-		 * 4) the plugin's prerequisites are met.
+		 * @return void
 		 */
-		function bind() {
+		function bind(): void {
 			if (! $this->bound) {
 				$ready = true;
 				if (function_exists ( 'wp_mail' )) {
@@ -86,12 +92,14 @@ if (! class_exists ( 'PostmanWpMailBinder' )) {
 		}
 		
 		/**
-		 * The code to replace the pluggable wp_mail()
+		 * 		 * The code to replace the pluggable wp_mail()
+		 * 		 *
+		 * 		 * If the function does not exist, then the replacement was successful
+		 * 		 * and we set a success flag.
 		 *
-		 * If the function does not exist, then the replacement was successful
-		 * and we set a success flag.
+		 * @return void
 		 */
-		private function replacePluggableFunctionWpMail() {
+		private function replacePluggableFunctionWpMail(): void {
 			/**
 			 * The Postman drop-in replacement for the WordPress wp_mail() function
 			 *

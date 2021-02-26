@@ -27,11 +27,17 @@ class PostmanSendGridTransport extends PostmanAbstractModuleTransport implements
 				'on_admin_init' 
 		) );
 	}
+	/**
+	 * @return string
+	 */
 	public function getProtocol() {
 		return 'https';
 	}
 	
 	// this should be standard across all transports
+	/**
+	 * @return string
+	 */
 	public function getSlug() {
 		return self::SLUG;
 	}
@@ -64,9 +70,12 @@ class PostmanSendGridTransport extends PostmanAbstractModuleTransport implements
 	}
 	
 	/**
-	 * (non-PHPdoc)
+	 * 	 * (non-PHPdoc)
+	 * 	 *
 	 *
 	 * @see PostmanModuleTransport::createMailEngine()
+	 *
+	 * @return PostmanSendGridMailEngine
 	 */
 	public function createMailEngine() {
 		$apiKey = $this->options->getSendGridApiKey ();
@@ -74,6 +83,9 @@ class PostmanSendGridTransport extends PostmanAbstractModuleTransport implements
 		$engine = new PostmanSendGridMailEngine ( $apiKey );
 		return $engine;
 	}
+	/**
+	 * @return string
+	 */
 	public function getDeliveryDetails() {
 		/* translators: where (1) is the secure icon and (2) is the transport name */
 		return sprintf ( __ ( 'Postman will send mail via the <b>%1$s %2$s</b>.', 'post-smtp' ), '🔐', $this->getName () );
@@ -109,9 +121,14 @@ class PostmanSendGridTransport extends PostmanAbstractModuleTransport implements
 	}
 	
 	/**
-	 * (non-PHPdoc)
+	 * 	 * (non-PHPdoc)
+	 * 	 *
 	 *
 	 * @see PostmanModuleTransport::getConfigurationBid()
+	 *
+	 * @return (int|mixed|null|string)[]
+	 *
+	 * @psalm-return array{priority: 0|8000, transport: string, hostname: null, label: mixed, message?: string}
 	 */
 	public function getConfigurationBid(PostmanWizardSocket $hostData, $userAuthOverride, $originalSmtpServer) {
 		$recommendation = array ();
@@ -153,12 +170,14 @@ class PostmanSendGridTransport extends PostmanAbstractModuleTransport implements
 	}
 	
 	/**
-	 * Functions to execute on the admin_init event
+	 * 	 * Functions to execute on the admin_init event
+	 * 	 *
+	 * 	 * "Runs at the beginning of every admin page before the page is rendered."
+	 * 	 * ref: http://codex.wordpress.org/Plugin_API/Action_Reference#Actions_Run_During_an_Admin_Page_Request
 	 *
-	 * "Runs at the beginning of every admin page before the page is rendered."
-	 * ref: http://codex.wordpress.org/Plugin_API/Action_Reference#Actions_Run_During_an_Admin_Page_Request
+	 * @return void
 	 */
-	public function on_admin_init() {
+	public function on_admin_init(): void {
 		// only administrators should be able to trigger this
 		if (PostmanUtils::isAdmin ()) {
 			$this->addSettings ();
@@ -171,8 +190,9 @@ class PostmanSendGridTransport extends PostmanAbstractModuleTransport implements
 	 */
 	
 	/**
+	 * @return void
 	 */
-	public function addSettings() {
+	public function addSettings(): void {
 		// the SendGrid Auth section
 		add_settings_section ( PostmanSendGridTransport::SENDGRID_AUTH_SECTION, __ ( 'Authentication', 'post-smtp' ), array (
 				$this,
@@ -184,21 +204,23 @@ class PostmanSendGridTransport extends PostmanAbstractModuleTransport implements
 				'sendgrid_api_key_callback' 
 		), PostmanSendGridTransport::SENDGRID_AUTH_OPTIONS, PostmanSendGridTransport::SENDGRID_AUTH_SECTION );
 	}
-	public function printSendGridAuthSectionInfo() {
+	public function printSendGridAuthSectionInfo(): void {
 		/* Translators: Where (1) is the service URL and (2) is the service name and (3) is a api key URL */
 		printf ( '<p id="wizard_sendgrid_auth_help">%s</p>', sprintf ( __ ( 'Create an account at <a href="%1$s" target="_blank">%2$s</a> and enter <a href="%3$s" target="_blank">an API key</a> below.', 'post-smtp' ), 'https://sendgrid.com', 'SendGrid.com', 'https://app.sendgrid.com/settings/api_keys' ) );
 	}
 	
 	/**
+	 * @return void
 	 */
-	public function sendgrid_api_key_callback() {
+	public function sendgrid_api_key_callback(): void {
 		printf ( '<input type="password" autocomplete="off" id="sendgrid_api_key" name="postman_options[sendgrid_api_key]" value="%s" size="60" class="required" placeholder="%s"/>', null !== $this->options->getSendGridApiKey () ? esc_attr ( PostmanUtils::obfuscatePassword ( $this->options->getSendGridApiKey () ) ) : '', __ ( 'Required', 'post-smtp' ) );
 		print ' <input type="button" id="toggleSendGridApiKey" value="Show Password" class="button button-secondary" style="visibility:hidden" />';
 	}
 	
 	/**
+	 * @return void
 	 */
-	public function registerStylesAndScripts() {
+	public function registerStylesAndScripts(): void {
 		// register the stylesheet and javascript external resources
 		$pluginData = apply_filters ( 'postman_get_plugin_metadata', null );
 		wp_register_script ( 'postman_sendgrid_script', plugins_url ( 'Postman/Postman-Mail/postman_sendgrid.js', $this->rootPluginFilenameAndPath ), array (
@@ -209,12 +231,14 @@ class PostmanSendGridTransport extends PostmanAbstractModuleTransport implements
 	}
 	
 	/**
+	 * @return void
 	 */
 	public function enqueueScript() {
 		wp_enqueue_script ( 'postman_sendgrid_script' );
 	}
 	
 	/**
+	 * @return void
 	 */
 	public function printWizardAuthenticationStep() {
 		print '<section class="wizard_sendgrid">';

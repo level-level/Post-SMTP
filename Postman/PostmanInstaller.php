@@ -21,9 +21,11 @@ class PostmanInstaller {
 	}
 
 	/**
-	 * Handle activation of the plugin
+	 * 	 * Handle activation of the plugin
+	 *
+	 * @return void
 	 */
-	public function activatePostman() {
+	public function activatePostman(): void {
         delete_option( 'postman_release_version' );
         delete_option( 'postman_dismiss_donation' );
 
@@ -69,6 +71,9 @@ class PostmanInstaller {
 		//$this->add_activation_redirect();
 	}
 
+	/**
+	 * @return void
+	 */
 	function add_activation_redirect() {
 
 		// Bail if activating from network, or bulk
@@ -80,9 +85,11 @@ class PostmanInstaller {
 	}
 
 	/**
-	 * Handle deactivation of the plugin
+	 * 	 * Handle deactivation of the plugin
+	 *
+	 * @return void
 	 */
-	public function deactivatePostman() {
+	public function deactivatePostman(): void {
 		if ( function_exists( 'is_multisite' ) && is_multisite() ) {
 			// handle network deactivation
 			// from https://wordpress.org/support/topic/new-function-wp_get_sites?replies=11
@@ -103,9 +110,11 @@ class PostmanInstaller {
 	}
 
 	/**
-	 * Add the capability to manage postman
+	 * 	 * Add the capability to manage postman
+	 *
+	 * @return void
 	 */
-	public function addCapability() {
+	public function addCapability(): void {
 		if ( $this->logger->isDebug() ) {
 			$this->logger->debug( 'Adding admin capability' );
 		}
@@ -118,9 +127,11 @@ class PostmanInstaller {
 	}
 
 	/**
-	 * Remove the capability to manage postman
+	 * 	 * Remove the capability to manage postman
+	 *
+	 * @return void
 	 */
-	public function removeCapability() {
+	public function removeCapability(): void {
 		if ( $this->logger->isDebug() ) {
 			$this->logger->debug( 'Removing admin capability' );
 		}
@@ -133,9 +144,11 @@ class PostmanInstaller {
 	}
 
 	/**
-	 * Handle activation of plugin
+	 * 	 * Handle activation of plugin
+	 *
+	 * @return void
 	 */
-	private function handleOptionUpdates() {
+	private function handleOptionUpdates(): void {
 		$this->logger->debug( 'Activating plugin' );
 		// prior to version 0.2.5, $authOptions did not exist
 		$authOptions = get_option( 'postman_auth_token' );

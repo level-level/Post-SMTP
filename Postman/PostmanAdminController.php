@@ -157,7 +157,7 @@ if ( ! class_exists( 'PostmanAdminController' ) ) {
 		}
 
 
-		function wpmu_options() {
+		function wpmu_options(): void {
 		    $options = get_site_option( PostmanOptions::POSTMAN_NETWORK_OPTIONS );
 		    ?>
             <input type="hidden" name="<?php echo PostmanOptions::POSTMAN_NETWORK_OPTIONS; ?>[post_smtp_global_settings]" value="null">
@@ -201,7 +201,7 @@ if ( ! class_exists( 'PostmanAdminController' ) ) {
             <?php
         }
 
-        function update_wpmu_options() {
+        function update_wpmu_options(): void {
             $options = get_site_option( PostmanOptions::POSTMAN_NETWORK_OPTIONS );
 		    if ( isset( $_POST[ PostmanOptions::POSTMAN_NETWORK_OPTIONS ] ) ) {
 		        foreach ( $_POST[ PostmanOptions::POSTMAN_NETWORK_OPTIONS ] as $key => $value ) {
@@ -219,12 +219,14 @@ if ( ! class_exists( 'PostmanAdminController' ) ) {
         }
 
 		/**
-		 * Functions to execute on the init event
+		 * 		 * Functions to execute on the init event
+		 * 		 *
+		 * 		 * "Typically used by plugins to initialize. The current user is already authenticated by this time."
+		 * 		 * ref: http://codex.wordpress.org/Plugin_API/Action_Reference#Actions_Run_During_a_Typical_Request
 		 *
-		 * "Typically used by plugins to initialize. The current user is already authenticated by this time."
-		 * ref: http://codex.wordpress.org/Plugin_API/Action_Reference#Actions_Run_During_a_Typical_Request
+		 * @return void
 		 */
-		public function on_init() {
+		public function on_init(): void {
 			// only administrators should be able to trigger this
 			if ( PostmanUtils::isAdmin() ) {
 								$transport = PostmanTransportRegistry::getInstance()->getCurrentTransport();
@@ -245,9 +247,11 @@ if ( ! class_exists( 'PostmanAdminController' ) ) {
 		}
 
 		/**
+		 * 		 *
 		 *
+		 * @return void
 		 */
-		private function checkPreRequisites() {
+		private function checkPreRequisites(): void {
 			$states = PostmanPreRequisitesCheck::getState();
 			foreach ( $states as $state ) {
 				if ( ! $state ['ready'] ) {
@@ -263,11 +267,14 @@ if ( ! class_exists( 'PostmanAdminController' ) ) {
 		}
 
 		/**
+		 * 		 *
 		 *
 		 * @param mixed $actionName
 		 * @param mixed $callbackName
+		 *
+		 * @return void
 		 */
-		private function registerInitFunction( $callbackName ) {
+		private function registerInitFunction( $callbackName ): void {
 			$this->logger->debug( 'Registering init function ' . $callbackName );
 			add_action( 'init', array(
 					$this,
@@ -276,12 +283,15 @@ if ( ! class_exists( 'PostmanAdminController' ) ) {
 		}
 
 		/**
-		 * Registers actions posted by am HTML FORM with the WordPress 'action' parameter
+		 * 		 * Registers actions posted by am HTML FORM with the WordPress 'action' parameter
+		 * 		 *
 		 *
 		 * @param mixed $actionName
 		 * @param mixed $callbankName
+		 *
+		 * @return void
 		 */
-		private function registerAdminPostAction( $actionName, $callbankName ) {
+		private function registerAdminPostAction( $actionName, $callbankName ): void {
 			// $this->logger->debug ( 'Registering ' . $actionName . ' Action Post handler' );
 			add_action( 'admin_post_' . $actionName, array(
 					$this,
@@ -290,10 +300,12 @@ if ( ! class_exists( 'PostmanAdminController' ) ) {
 		}
 
 		/**
-		 * Add "Settings" link to the plugin action page
+		 * 		 * Add "Settings" link to the plugin action page
+		 * 		 *
 		 *
 		 * @param mixed $links
-		 * @return multitype:
+		 *
+		 * @return array|null
 		 */
 		public function postmanModifyLinksOnPluginsListPage( $links ) {
 			// only administrators should be able to trigger this
@@ -308,9 +320,11 @@ if ( ! class_exists( 'PostmanAdminController' ) ) {
 		}
 
 		/**
-		 * This function runs after a successful, error-free save
+		 * 		 * This function runs after a successful, error-free save
+		 *
+		 * @return void
 		 */
-		public function handleSuccessfulSave() {
+		public function handleSuccessfulSave(): void {
 			// WordPress likes to keep GET parameters around for a long time
 			// (something in the call to settings_fields() does this)
 			// here we redirect after a successful save to clear those parameters
@@ -318,9 +332,11 @@ if ( ! class_exists( 'PostmanAdminController' ) ) {
 		}
 
 		/**
-		 * This function handle the request to import plugin data
+		 * 		 * This function handle the request to import plugin data
+		 *
+		 * @return void
 		 */
-		public function importSettingsAction() {
+		public function importSettingsAction(): void {
 			$this->logger->debug( 'is wpnonce import-settings?' );
 			$success = true;
 			if ( wp_verify_nonce( $_REQUEST ['_wpnonce'], PostmanAdminController::IMPORT_SETTINGS_SLUG ) ) {
@@ -335,9 +351,11 @@ if ( ! class_exists( 'PostmanAdminController' ) ) {
 			PostmanUtils::redirect( PostmanUtils::POSTMAN_HOME_PAGE_RELATIVE_URL );
 		}
 		/**
-		 * This function handle the request to purge plugin data
+		 * 		 * This function handle the request to purge plugin data
+		 *
+		 * @return void
 		 */
-		public function handlePurgeDataAction() {
+		public function handlePurgeDataAction(): void {
 			$this->logger->debug( 'is wpnonce purge-data?' );
 			if ( wp_verify_nonce( $_REQUEST ['_wpnonce'], PostmanAdminController::PURGE_DATA_SLUG ) ) {
 				$this->logger->debug( 'Purging stored data' );
@@ -352,9 +370,11 @@ if ( ! class_exists( 'PostmanAdminController' ) ) {
 		}
 
 		/**
-		 * Handles the authorization grant
+		 * 		 * Handles the authorization grant
+		 *
+		 * @return void
 		 */
-		function handleAuthorizationGrant() {
+		function handleAuthorizationGrant(): void {
 			$logger = $this->logger;
 			$options = $this->options;
 			$authorizationToken = $this->authorizationToken;
@@ -391,11 +411,13 @@ if ( ! class_exists( 'PostmanAdminController' ) ) {
 		}
 
 		/**
-		 * This method is called when a user clicks on a "Request Permission from Google" link.
-		 * This link will create a remote API call for Google and redirect the user from WordPress to Google.
-		 * Google will redirect back to WordPress after the user responds.
+		 * 		 * This method is called when a user clicks on a "Request Permission from Google" link.
+		 * 		 * This link will create a remote API call for Google and redirect the user from WordPress to Google.
+		 * 		 * Google will redirect back to WordPress after the user responds.
+		 *
+		 * @return void
 		 */
-		public function handleOAuthPermissionRequestAction() {
+		public function handleOAuthPermissionRequestAction(): void {
 			$this->logger->debug( 'handling OAuth Permission request' );
 			$authenticationManager = PostmanAuthenticationManagerFactory::getInstance()->createAuthenticationManager();
 			$transactionId = $authenticationManager->generateRequestTransactionId();

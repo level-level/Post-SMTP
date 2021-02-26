@@ -14,7 +14,7 @@ if (! class_exists ( 'PostmanEmailAddress' )) {
 			$this->setEmail ( trim ( $email ) );
 			$this->setName ( trim ( $name ) );
 		}
-		public static function copy(PostmanEmailAddress $orig) {
+		public static function copy(PostmanEmailAddress $orig): self {
 			return new PostmanEmailAddress ( $orig->getEmail (), $orig->getName () );
 		}
 		public function getName() {
@@ -23,7 +23,7 @@ if (! class_exists ( 'PostmanEmailAddress' )) {
 		public function getEmail() {
 			return $this->email;
 		}
-		public function format() {
+		public function format(): string {
 			$name = $this->getName ();
 			if (! empty ( $name )) {
 				return sprintf ( '%s <%s>', $this->getName (), $this->getEmail () );
@@ -31,19 +31,22 @@ if (! class_exists ( 'PostmanEmailAddress' )) {
 				return sprintf ( '%s', $this->getEmail () );
 			}
 		}
-		public function setName($name) {
+		public function setName($name): void {
 			$this->name = $name;
 		}
-		public function setEmail($email) {
+		public function setEmail($email): void {
 			$this->email = $email;
 		}
 		
 		/**
-		 * Validate the email address
+		 * 		 * Validate the email address
+		 * 		 *
 		 *
 		 * @throws Exception
+		 *
+		 * @return void
 		 */
-		public function validate($desc = '') {
+		public function validate($desc = ''): void {
 			if (! PostmanUtils::validateEmail ( $this->email )) {
 				if (empty ( $desc )) {
 					/* Translators: Where %s is the email address */
@@ -59,12 +62,17 @@ if (! class_exists ( 'PostmanEmailAddress' )) {
 		}
 		
 		/**
-		 * Accept a String of addresses or an array and return an array
+		 * 		 * Accept a String of addresses or an array and return an array
+		 * 		 *
 		 *
 		 * @param mixed $recipientList        	
 		 * @param mixed $recipients        	
+		 *
+		 * @return (mixed|string)[]
+		 *
+		 * @psalm-return array<array-key, mixed|string>
 		 */
-		public static function convertToArray($emails) {
+		public static function convertToArray($emails): array {
 			assert ( ! empty ( $emails ) );
 			if (! is_array ( $emails )) {
 				// http://tiku.io/questions/955963/splitting-comma-separated-email-addresses-in-a-string-with-commas-in-quotes-in-p
@@ -80,7 +88,7 @@ if (! class_exists ( 'PostmanEmailAddress' )) {
 			}
 			return $emails;
 		}
-		public function log(PostmanLogger $log, $desc) {
+		public function log(PostmanLogger $log, $desc): void {
 			$message = $desc . ' email=' . $this->getEmail ();
 			if (! empty ( $this->name )) {
 				$message .= ' name=' . $this->getName ();

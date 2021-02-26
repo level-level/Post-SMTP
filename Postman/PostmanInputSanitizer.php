@@ -112,7 +112,7 @@ if ( ! class_exists( 'PostmanInputSanitizer' ) ) {
 
 			return $new_input;
 		}
-		private function sanitizeString( $desc, $key, $input, &$new_input ) {
+		private function sanitizeString( $desc, $key, $input, &$new_input ): void {
 			if ( isset( $input [ $key ] ) ) {
 				$this->logSanitize( $desc, $input [ $key ] );
 				$new_input [ $key ] = trim( $input [ $key ] );
@@ -120,14 +120,17 @@ if ( ! class_exists( 'PostmanInputSanitizer' ) ) {
 		}
 
 		/**
-		 * Sanitize a Basic Auth password, and base64-encode it
+		 * 		 * Sanitize a Basic Auth password, and base64-encode it
+		 * 		 *
 		 *
 		 * @param mixed $desc
 		 * @param mixed $key
 		 * @param mixed $input
 		 * @param mixed $new_input
+		 *
+		 * @return void
 		 */
-		private function sanitizePassword( $desc, $key, $input, &$new_input, $existingPassword ) {
+		private function sanitizePassword( $desc, $key, $input, &$new_input, $existingPassword ): void {
 			// WordPress calling Sanitize twice is a known issue
 			// https://core.trac.wordpress.org/ticket/21989
 			$action = PostmanSession::getInstance()->getAction();
@@ -152,7 +155,7 @@ if ( ! class_exists( 'PostmanInputSanitizer' ) ) {
 			}
 			$this->logger->debug( sprintf( 'Encoding %s as %s', $desc, $new_input [ $key ] ) );
 		}
-		private function sanitizeLogMax( $desc, $key, $input, &$new_input ) {
+		private function sanitizeLogMax( $desc, $key, $input, &$new_input ): void {
 			if ( isset( $input [ $key ] ) ) {
 				$value = absint( $input [ $key ] );
 				if ( $value <= 0 ) {
@@ -165,13 +168,13 @@ if ( ! class_exists( 'PostmanInputSanitizer' ) ) {
 				}
 			}
 		}
-		private function sanitizeInt( $desc, $key, $input, &$new_input ) {
+		private function sanitizeInt( $desc, $key, $input, &$new_input ): void {
 			if ( isset( $input [ $key ] ) ) {
 				$this->logSanitize( $desc, $input [ $key ] );
 				$new_input [ $key ] = absint( $input [ $key ] );
 			}
 		}
-		private function logSanitize( $desc, $value ) {
+		private function logSanitize( $desc, $value ): void {
 			$this->logger->trace( 'Sanitize ' . $desc . ' ' . $value );
 		}
 	}

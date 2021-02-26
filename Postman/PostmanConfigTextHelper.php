@@ -27,6 +27,9 @@ if ( ! class_exists( 'PostmanAbstractConfigTextHelper' ) ) {
 	 * @author jasonhendriks
 	 */
 	abstract class PostmanAbstractConfigTextHelper implements PostmanConfigTextHelper {
+		/**
+		 * @return string
+		 */
 		public function getOAuthHelp() {
 			$attention = __( 'Attention', 'post-smtp' );
 			$errorMessage = sprintf( __('Check this article how to configure Gmail/Gsuite OAuth:<a href="%1$s" target="_blank">Read Here</a>', 'post-smtp' ), 'https://postmansmtp.com/how-to-configure-post-smtp-with-gmailgsuite-using-oauth/' );
@@ -34,18 +37,33 @@ if ( ! class_exists( 'PostmanAbstractConfigTextHelper' ) ) {
 			
 			return $text;
 		}
+		/**
+		 * @return false
+		 */
 		function isOauthHost() {
 			return false;
 		}
+		/**
+		 * @return false
+		 */
 		function isGoogle() {
 			return false;
 		}
+		/**
+		 * @return false
+		 */
 		function isMicrosoft() {
 			return false;
 		}
+		/**
+		 * @return false
+		 */
 		function isYahoo() {
 			return false;
 		}
+		/**
+		 * @return string
+		 */
 		public function getRequestPermissionLinkText() {
 			/* translators: where %s is the Email Service Owner (e.g. Google, Microsoft or Yahoo) */
 			return sprintf( _x( 'Grant permission with %s', 'Command to initiate OAuth authentication', 'post-smtp' ), $this->getOwnerName() );
@@ -54,16 +72,28 @@ if ( ! class_exists( 'PostmanAbstractConfigTextHelper' ) ) {
 }
 if ( ! class_exists( 'PostmanGoogleOAuthScribe' ) ) {
 	class PostmanGoogleOAuthScribe extends PostmanAbstractConfigTextHelper {
+		/**
+		 * @return true
+		 */
 		public function isGoogle() {
 			return true;
 		}
+		/**
+		 * @return true
+		 */
 		function isOauthHost() {
 			return true;
 		}
+		/**
+		 * @return string
+		 */
 		public function getCallbackUrl() {
 			// see https://codex.wordpress.org/Function_Reference/admin_url#Related
 			return admin_url( 'options-general.php' ) . '?page=postman';
 		}
+		/**
+		 * @return string
+		 */
 		function getCallbackDomain() {
 			$urlParts = parse_url( $this->getCallbackUrl() );
 			if ( isset( $urlParts ['scheme'] ) && isset( $urlParts ['host'] ) ) {
@@ -104,12 +134,21 @@ if ( ! class_exists( 'PostmanGoogleOAuthScribe' ) ) {
 			/* Translators: This description is specific to Google */
 			return _x( 'Google Developers Console Gmail Wizard', 'Name of the email service portal', 'post-smtp' );
 		}
+		/**
+		 * @return string
+		 */
 		public function getApplicationPortalUrl() {
 			return 'https://www.google.com/accounts/Logout?continue=https://console.developers.google.com/start/api?id=gmail';
 		}
+		/**
+		 * @return int
+		 */
 		public function getOAuthPort() {
 			return 465;
 		}
+		/**
+		 * @return string
+		 */
 		public function getEncryptionType() {
 			return PostmanOptions::SECURITY_TYPE_SMTPS;
 		}
@@ -117,15 +156,24 @@ if ( ! class_exists( 'PostmanGoogleOAuthScribe' ) ) {
 }
 if ( ! class_exists( 'PostmanMicrosoftOAuthScribe' ) ) {
 	class PostmanMicrosoftOAuthScribe extends PostmanAbstractConfigTextHelper {
+		/**
+		 * @return true
+		 */
 		public function isMicrosoft() {
 			return true;
 		}
+		/**
+		 * @return true
+		 */
 		function isOauthHost() {
 			return true;
 		}
 		public function getCallbackUrl() {
 			return admin_url( 'options-general.php' );
 		}
+		/**
+		 * @return string
+		 */
 		function getCallbackDomain() {
 			$urlParts = parse_url( $this->getCallbackUrl() );
 			if ( isset( $urlParts ['host'] ) ) {
@@ -166,12 +214,21 @@ if ( ! class_exists( 'PostmanMicrosoftOAuthScribe' ) ) {
 			/* Translators: This description is specific to Microsoft */
 			return _x( 'Microsoft Developer Center', 'Name of the email service portal', 'post-smtp' );
 		}
+		/**
+		 * @return string
+		 */
 		public function getApplicationPortalUrl() {
 			return 'https://account.live.com/developers/applications/index';
 		}
+		/**
+		 * @return int
+		 */
 		public function getOAuthPort() {
 			return 587;
 		}
+		/**
+		 * @return string
+		 */
 		public function getEncryptionType() {
 			return PostmanOptions::SECURITY_TYPE_STARTTLS;
 		}
@@ -179,15 +236,27 @@ if ( ! class_exists( 'PostmanMicrosoftOAuthScribe' ) ) {
 }
 if ( ! class_exists( 'PostmanYahooOAuthScribe' ) ) {
 	class PostmanYahooOAuthScribe extends PostmanAbstractConfigTextHelper {
+		/**
+		 * @return true
+		 */
 		public function isYahoo() {
 			return true;
 		}
+		/**
+		 * @return true
+		 */
 		function isOauthHost() {
 			return true;
 		}
+		/**
+		 * @return string
+		 */
 		public function getCallbackUrl() {
 			return admin_url( 'options-general.php' ) . '?page=postman';
 		}
+		/**
+		 * @return string
+		 */
 		function getCallbackDomain() {
 			$urlParts = parse_url( $this->getCallbackUrl() );
 			if ( isset( $urlParts ['host'] ) ) {
@@ -228,12 +297,21 @@ if ( ! class_exists( 'PostmanYahooOAuthScribe' ) ) {
 			/* Translators: This description is specific to Yahoo */
 			return _x( 'Yahoo Developer Network', 'Name of the email service portal', 'post-smtp' );
 		}
+		/**
+		 * @return string
+		 */
 		public function getApplicationPortalUrl() {
 			return 'https://developer.yahoo.com/apps/';
 		}
+		/**
+		 * @return int
+		 */
 		public function getOAuthPort() {
 			return 465;
 		}
+		/**
+		 * @return string
+		 */
 		public function getEncryptionType() {
 			return PostmanOptions::SECURITY_TYPE_SMTPS;
 		}
@@ -245,22 +323,40 @@ if ( ! class_exists( 'PostmanNonOAuthScribe' ) ) {
 		public function __construct( $hostname ) {
 			$this->hostname = $hostname;
 		}
+		/**
+		 * @return bool
+		 */
 		public function isGoogle() {
 			return PostmanUtils::endsWith( $this->hostname, 'gmail.com' );
 		}
+		/**
+		 * @return bool
+		 */
 		public function isMicrosoft() {
 			return PostmanUtils::endsWith( $this->hostname, 'live.com' );
 		}
+		/**
+		 * @return bool
+		 */
 		public function isYahoo() {
 			return PostmanUtils::endsWith( $this->hostname, 'yahoo.com' );
 		}
+		/**
+		 * @return string
+		 */
 		public function getOAuthHelp() {
 			$text = __( 'Enter an Outgoing Mail Server with OAuth2 capabilities.', 'post-smtp' );
 			return sprintf( '<span style="color:red" class="normal">%s</span>', $text );
 		}
+		/**
+		 * @return string
+		 */
 		public function getCallbackUrl() {
 			return '';
 		}
+		/**
+		 * @return string
+		 */
 		function getCallbackDomain() {
 			return '';
 		}
@@ -276,24 +372,45 @@ if ( ! class_exists( 'PostmanNonOAuthScribe' ) ) {
 		public function getCallbackDomainLabel() {
 			return _x( 'Website Domain', 'Name of the Application Callback Domain', 'post-smtp' );
 		}
+		/**
+		 * @return string
+		 */
 		public function getOwnerName() {
 			return '';
 		}
+		/**
+		 * @return string
+		 */
 		public function getServiceName() {
 			return '';
 		}
+		/**
+		 * @return string
+		 */
 		public function getApplicationDescription() {
 			return '';
 		}
+		/**
+		 * @return string
+		 */
 		public function getApplicationPortalName() {
 			return '';
 		}
+		/**
+		 * @return string
+		 */
 		public function getApplicationPortalUrl() {
 			return '';
 		}
+		/**
+		 * @return string
+		 */
 		public function getOAuthPort() {
 			return '';
 		}
+		/**
+		 * @return string
+		 */
 		public function getEncryptionType() {
 			return '';
 		}

@@ -24,7 +24,7 @@ class PostmanTransportRegistry {
 		}
 		return $inst;
 	}
-	public function registerTransport( PostmanModuleTransport $instance ) {
+	public function registerTransport( PostmanModuleTransport $instance ): void {
 		$this->transports [ $instance->getSlug() ] = $instance;
 		$instance->init();
 	}
@@ -59,11 +59,14 @@ class PostmanTransportRegistry {
 	}
 
 	/**
-	 * Determine if a specific transport is registered in the directory.
+	 * 	 * Determine if a specific transport is registered in the directory.
+	 * 	 *
 	 *
 	 * @param mixed $slug
+	 *
+	 * @return bool
 	 */
-	public function isRegistered( $slug ) {
+	public function isRegistered( $slug ): bool {
 		$transports = $this->getTransports();
 		return isset( $transports [ $slug ] );
 	}
@@ -141,13 +144,15 @@ class PostmanTransportRegistry {
 	}
 
 	/**
-	 * Polls all the installed transports to get a complete list of sockets to probe for connectivity
+	 * 	 * Polls all the installed transports to get a complete list of sockets to probe for connectivity
+	 * 	 *
 	 *
 	 * @param mixed $hostname
 	 * @param mixed $isGmail
-	 * @return multitype:
+	 *
+	 * @return array
 	 */
-	public function getSocketsForSetupWizardToProbe( $hostname = 'localhost', $smtpServerGuess = null ) {
+	public function getSocketsForSetupWizardToProbe( $hostname = 'localhost', $smtpServerGuess = null ): array {
 		$hosts = array();
 		if ( $this->logger->isDebug() ) {
 			$this->logger->debug( sprintf( 'Getting sockets for Port Test given hostname %s and smtpServerGuess %s', $hostname, $smtpServerGuess ) );
@@ -225,8 +230,11 @@ class PostmanTransportRegistry {
 	}
 
 	/**
+	 * @return (bool|mixed)[]
+	 *
+	 * @psalm-return array{error: bool, message: mixed}
 	 */
-	public function getReadyMessage() {
+	public function getReadyMessage(): array {
 		if ( $this->getCurrentTransport()->isConfiguredAndReady() ) {
 			if ( PostmanOptions::getInstance()->getRunMode() != PostmanOptions::RUN_MODE_PRODUCTION ) {
 				return array(

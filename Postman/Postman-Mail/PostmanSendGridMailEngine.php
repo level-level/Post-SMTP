@@ -34,9 +34,12 @@ if ( ! class_exists( 'PostmanSendGridMailEngine' ) ) {
 		}
 
 		/**
-		 * (non-PHPdoc)
+		 * 		 * (non-PHPdoc)
+		 * 		 *
 		 *
 		 * @see PostmanSmtpEngine::send()
+		 *
+		 * @return void
 		 */
 		public function send( PostmanMessage $message ) {
 			$options = PostmanOptions::getInstance();
@@ -189,7 +192,7 @@ if ( ! class_exists( 'PostmanSendGridMailEngine' ) ) {
 		}
 		
 
-		private function errorCodesMap($error_code) {
+		private function errorCodesMap($error_code): string {
 			switch ($error_code) {
 				case 413:
 					$message = sprintf( __( 'ERROR: The JSON payload you have included in your request is too large. Status code is %1$s', 'post-smtp' ), $error_code );
@@ -214,11 +217,16 @@ if ( ! class_exists( 'PostmanSendGridMailEngine' ) ) {
 		}
 
 		/**
-		 * Add attachments to the message
+		 * 		 * Add attachments to the message
+		 * 		 *
 		 *
 		 * @param Postman_Zend_Mail $mail
+		 *
+		 * @return (mixed|string)[][]
+		 *
+		 * @psalm-return list<array{content: string, type: mixed, file_name: string, disposition: string, id: string}>
 		 */
-		private function addAttachmentsToMail( PostmanMessage $message ) {
+		private function addAttachmentsToMail( PostmanMessage $message ): array {
 			$attachments = $message->getAttachments();
 			if ( ! is_array( $attachments ) ) {
 				// WordPress may a single filename or a newline-delimited string list of multiple filenames

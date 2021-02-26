@@ -85,10 +85,12 @@ abstract class PostmanAbstractModuleTransport implements PostmanModuleTransport 
 	}
 	
 	/**
-	 * Initialize the Module
+	 * 	 * Initialize the Module
+	 * 	 *
+	 * 	 * Perform validation and create configuration error messages.
+	 * 	 * The module is not in a configured-and-ready state until initialization
 	 *
-	 * Perform validation and create configuration error messages.
-	 * The module is not in a configured-and-ready state until initialization
+	 * @return void
 	 */
 	public function init() {
 		// create the scribe
@@ -100,7 +102,11 @@ abstract class PostmanAbstractModuleTransport implements PostmanModuleTransport 
 	}
 	
 	/**
-	 * SendGrid API doesn't care what the hostname or guessed SMTP Server is; it runs it's port test no matter what
+	 * 	 * SendGrid API doesn't care what the hostname or guessed SMTP Server is; it runs it's port test no matter what
+	 *
+	 * @return array
+	 *
+	 * @psalm-return array{0: mixed}
 	 */
 	public function getSocketsForSetupWizardToProbe($hostname, $smtpServerGuess) {
 		$hosts = array (
@@ -110,7 +116,11 @@ abstract class PostmanAbstractModuleTransport implements PostmanModuleTransport 
 	}
 	
 	/**
-	 * Creates a single socket for the Wizard to test
+	 * 	 * Creates a single socket for the Wizard to test
+	 *
+	 * @return (false|mixed|string)[]
+	 *
+	 * @psalm-return array{host: mixed, port: mixed, id: string, transport_id: mixed, transport_name: mixed, smtp: false}
 	 */
 	protected function createSocketDefinition($hostname, $port) {
 		$socket = array ();
@@ -133,14 +143,18 @@ abstract class PostmanAbstractModuleTransport implements PostmanModuleTransport 
 	}
 	
 	/**
+	 * @return void
 	 */
 	public function printActionMenuItem() {
 		printf ( '<li><div class="welcome-icon send_test_email">%s</div></li>', $this->getScribe ()->getRequestPermissionLinkText () );
 	}
 	
 	/**
+	 * 	 *
 	 *
 	 * @param mixed $queryHostname        	
+	 *
+	 * @return PostmanNonOAuthScribe
 	 */
 	protected function createScribe($hostname) {
 		$scribe = new PostmanNonOAuthScribe ( $hostname );
@@ -148,13 +162,18 @@ abstract class PostmanAbstractModuleTransport implements PostmanModuleTransport 
 	}
 	
 	/**
+	 * @return void
 	 */
 	public function enqueueScript() {
 		// no-op, this for subclasses
 	}
 	
 	/**
-	 * This method is for internal use
+	 * 	 * This method is for internal use
+	 *
+	 * @return array
+	 *
+	 * @psalm-return array<empty, empty>
 	 */
 	protected function validateTransportConfiguration() {
 		$this->configuredAndReady = true;
@@ -163,8 +182,9 @@ abstract class PostmanAbstractModuleTransport implements PostmanModuleTransport 
 	}
 	
 	/**
+	 * @return void
 	 */
-	protected function setNotConfiguredAndReady() {
+	protected function setNotConfiguredAndReady(): void {
 		$this->configuredAndReady = false;
 	}
 	
@@ -198,6 +218,9 @@ abstract class PostmanAbstractModuleTransport implements PostmanModuleTransport 
 	public function getEnvelopeFromEmailAddress() {
 		return PostmanOptions::getInstance ()->getEnvelopeSender ();
 	}
+	/**
+	 * @return bool
+	 */
 	public function isEmailValidationSupported() {
 		return ! PostmanOptions::getInstance ()->isEmailValidationDisabled ();
 	}
@@ -240,34 +263,47 @@ abstract class PostmanAbstractModuleTransport implements PostmanModuleTransport 
 	}
 	
 	/**
-	 * Determines whether Mail Engine locking is needed
+	 * 	 * Determines whether Mail Engine locking is needed
+	 * 	 *
 	 *
 	 * @see PostmanModuleTransport::requiresLocking()
+	 *
+	 * @return false
 	 */
 	public function isLockingRequired() {
 		return false;
 	}
+	/**
+	 * @return bool
+	 */
 	public function isOAuthUsed($authType) {
 		return $authType == PostmanOptions::AUTHENTICATION_TYPE_OAUTH2;
 	}
 	
 	/**
-	 * (non-PHPdoc)
+	 * 	 * (non-PHPdoc)
+	 * 	 *
 	 *
 	 * @see PostmanModuleTransport::isWizardSupported()
+	 *
+	 * @return false
 	 */
 	public function isWizardSupported() {
 		return false;
 	}
 	
 	/**
-	 * This is for step 2 of the Wizard
+	 * 	 * This is for step 2 of the Wizard
+	 *
+	 * @return void
 	 */
 	public function printWizardMailServerHostnameStep() {
 	}
 	
 	/**
-	 * This is for step 4 of the Wizard
+	 * 	 * This is for step 4 of the Wizard
+	 *
+	 * @return void
 	 */
 	public function printWizardAuthenticationStep() {
 	}
@@ -281,18 +317,28 @@ abstract class PostmanAbstractModuleTransport implements PostmanModuleTransport 
 	}
 	
 	/**
+	 * 	 *
 	 *
 	 * @param mixed $hostname        	
 	 * @param mixed $response        	
+	 *
+	 * @return array
+	 *
+	 * @psalm-return array<empty, empty>
 	 */
 	public function populateConfiguration($hostname) {
 		$configuration = array ();
 		return $configuration;
 	}
 	/**
+	 * 	 *
 	 *
 	 * @param mixed $winningRecommendation        	
 	 * @param mixed $response        	
+	 *
+	 * @return array
+	 *
+	 * @psalm-return array{message: mixed, transport_type: mixed}
 	 */
 	public function populateConfigurationFromRecommendation($winningRecommendation) {
 		$configuration = array ();
@@ -302,6 +348,9 @@ abstract class PostmanAbstractModuleTransport implements PostmanModuleTransport 
 	}
 	
 	/**
+	 * @return (bool|mixed)[]
+	 *
+	 * @psalm-return array{secure: mixed, mitm: mixed, hostname_domain_only: mixed, reported_hostname_domain_only: mixed, value: mixed, description: mixed, selected: bool}
 	 */
 	public function createOverrideMenu(PostmanWizardSocket $socket, $winningRecommendation, $userSocketOverride, $userAuthOverride) {
 		$overrideItem = array ();
@@ -319,12 +368,23 @@ abstract class PostmanAbstractModuleTransport implements PostmanModuleTransport 
 	 * ******************************************************************
 	 * Not deprecated, but I wish they didn't live here on the superclass
 	 */
+	/**
+	 * @return bool
+	 */
 	public function isServiceProviderGoogle($hostname) {
 		return PostmanUtils::endsWith ( $hostname, 'gmail.com' ) || PostmanUtils::endsWith ( $hostname, 'googleapis.com' );
 	}
+	/**
+	 * @return bool
+	 */
 	public function isServiceProviderMicrosoft($hostname) {
 		return PostmanUtils::endsWith ( $hostname, 'live.com' );
 	}
+	/**
+	 * @return false|int
+	 *
+	 * @psalm-return 0|false|positive-int
+	 */
 	public function isServiceProviderYahoo($hostname) {
 		return strpos ( $hostname, 'yahoo' );
 	}
@@ -336,56 +396,84 @@ abstract class PostmanAbstractModuleTransport implements PostmanModuleTransport 
 	 */
 	
 	/**
+	 * 	 *
 	 *
 	 * @deprecated (non-PHPdoc)
+	 *
 	 * @see PostmanTransport::createZendMailTransport()
+	 *
+	 * @return void
 	 */
 	public function createZendMailTransport($hostname, $config) {
 	}
 	
 	/**
+	 * 	 *
 	 *
 	 * @deprecated (non-PHPdoc)
+	 *
 	 * @see PostmanTransport::isTranscriptSupported()
+	 *
+	 * @return false
 	 */
 	public function isTranscriptSupported() {
 		return false;
 	}
 	
 	/**
-	 * Only here because I can't remove it from the Interface
+	 * 	 * Only here because I can't remove it from the Interface
+	 *
+	 * @return void
 	 */
 	public final function getMisconfigurationMessage(PostmanConfigTextHelper $scribe, PostmanOptionsInterface $options, PostmanOAuthToken $token) {
 	}
+	/**
+	 * @return bool
+	 */
 	public final function isReady(PostmanOptionsInterface $options, PostmanOAuthToken $token) {
 		return ! ($this->isConfiguredAndReady ());
 	}
+	/**
+	 * @return bool
+	 */
 	public final function isConfigured(PostmanOptionsInterface $options, PostmanOAuthToken $token) {
 		return ! ($this->isConfiguredAndReady ());
 	}
 	/**
+	 * 	 *
 	 *
 	 * @deprecated (non-PHPdoc)
+	 *
 	 * @see PostmanTransport::getConfigurationRecommendation()
+	 *
+	 * @return void
 	 */
 	public final function getConfigurationRecommendation($hostData) {
 	}
 	/**
+	 * 	 *
 	 *
 	 * @deprecated (non-PHPdoc)
+	 *
 	 * @see PostmanTransport::getHostsToTest()
+	 *
+	 * @return void
 	 */
 	public final function getHostsToTest($hostname) {
 	}
-	protected final function isHostConfigured(PostmanOptions $options) {
+	protected final function isHostConfigured(PostmanOptions $options): bool {
 		$hostname = $options->getHostname ();
 		$port = $options->getPort ();
 		return ! (empty ( $hostname ) || empty ( $port ));
 	}
 	/**
+	 * 	 *
 	 *
 	 * @deprecated (non-PHPdoc)
+	 *
 	 * @see PostmanTransport::createPostmanMailAuthenticator()
+	 *
+	 * @return void
 	 */
 	public final function createPostmanMailAuthenticator(PostmanOptions $options, PostmanOAuthToken $authToken) {
 	}
@@ -410,6 +498,9 @@ abstract class PostmanAbstractZendModuleTransport extends PostmanAbstractModuleT
 	public function getOAuthToken() {
 		return $this->oauthToken;
 	}
+	/**
+	 * @return string
+	 */
 	public function getProtocol() {
 		if ($this->getSecurityType () == PostmanOptions::SECURITY_TYPE_SMTPS)
 			return 'smtps';
@@ -439,12 +530,14 @@ abstract class PostmanAbstractZendModuleTransport extends PostmanAbstractModuleT
 	}
 	
 	/**
+	 * @return void
 	 */
-	protected function setReadyForOAuthGrant() {
+	protected function setReadyForOAuthGrant(): void {
 		$this->readyForOAuthGrant = true;
 	}
 	
 	/**
+	 * @return void
 	 */
 	public function printActionMenuItem() {
 		if ($this->readyForOAuthGrant && $this->getAuthenticationType () == PostmanOptions::AUTHENTICATION_TYPE_OAUTH2) {
@@ -455,8 +548,11 @@ abstract class PostmanAbstractZendModuleTransport extends PostmanAbstractModuleT
 	}
 	
 	/**
+	 * 	 *
 	 *
 	 * @param mixed $queryHostname        	
+	 *
+	 * @return PostmanGoogleOAuthScribe|PostmanMicrosoftOAuthScribe|PostmanNonOAuthScribe|PostmanYahooOAuthScribe
 	 */
 	protected function createScribe($hostname) {
 		$scribe = null;
@@ -494,9 +590,12 @@ abstract class PostmanAbstractZendModuleTransport extends PostmanAbstractModuleT
 	}
 	
 	/**
-	 * (non-PHPdoc)
+	 * 	 * (non-PHPdoc)
+	 * 	 *
 	 *
 	 * @see PostmanModuleTransport::getDeliveryDetails()
+	 *
+	 * @return string
 	 */
 	public function getDeliveryDetails() {
 		$this->options = $this->options;

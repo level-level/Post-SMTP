@@ -22,23 +22,32 @@ class PostmanGmailApiModuleTransport extends PostmanAbstractZendModuleTransport 
 				'on_admin_init' 
 		) );
 	}
+	/**
+	 * @return string
+	 */
 	public function getProtocol() {
 		return 'https';
 	}
 	
 	/**
-	 * (non-PHPdoc)
+	 * 	 * (non-PHPdoc)
+	 * 	 *
 	 *
 	 * @see PostmanAbstractModuleTransport::isServiceProviderGoogle()
+	 *
+	 * @return true
 	 */
 	public function isServiceProviderGoogle($hostname) {
 		return true;
 	}
 	
 	/**
-	 * (non-PHPdoc)
+	 * 	 * (non-PHPdoc)
+	 * 	 *
 	 *
 	 * @see PostmanModuleTransport::createMailEngine()
+	 *
+	 * @return PostmanZendMailEngine
 	 */
 	public function createMailEngine() {
 		require_once 'PostmanZendMailEngine.php';
@@ -46,9 +55,12 @@ class PostmanGmailApiModuleTransport extends PostmanAbstractZendModuleTransport 
 	}
 	
 	/**
-	 * (non-PHPdoc)
+	 * 	 * (non-PHPdoc)
+	 * 	 *
 	 *
 	 * @see PostmanZendModuleTransport::createZendMailTransport()
+	 *
+	 * @return PostmanGmailApiModuleZendMailTransport
 	 */
 	public function createZendMailTransport($fakeHostname, $fakeConfig) {
 		if (PostmanOptions::AUTHENTICATION_TYPE_OAUTH2 == $this->getAuthenticationType ()) {
@@ -87,13 +99,19 @@ class PostmanGmailApiModuleTransport extends PostmanAbstractZendModuleTransport 
 	}
 	
 	/**
-	 * Determines whether Mail Engine locking is needed
+	 * 	 * Determines whether Mail Engine locking is needed
+	 * 	 *
 	 *
 	 * @see PostmanModuleTransport::requiresLocking()
+	 *
+	 * @return bool
 	 */
 	public function isLockingRequired() {
 		return PostmanOptions::AUTHENTICATION_TYPE_OAUTH2 == $this->getAuthenticationType ();
 	}
+	/**
+	 * @return string
+	 */
 	public function getSlug() {
 		return self::SLUG;
 	}
@@ -103,9 +121,15 @@ class PostmanGmailApiModuleTransport extends PostmanAbstractZendModuleTransport 
 	public function isEnvelopeFromValidationSupported() {
 		return false;
 	}
+	/**
+	 * @return string
+	 */
 	public function getHostname() {
 		return self::HOST;
 	}
+	/**
+	 * @return int
+	 */
 	public function getPort() {
 		return self::PORT;
 	}
@@ -131,20 +155,32 @@ class PostmanGmailApiModuleTransport extends PostmanAbstractZendModuleTransport 
 			return $this->options->getPassword ();
 		}
 	}
+	/**
+	 * @return false
+	 */
 	public function isServiceProviderMicrosoft($hostname) {
 		return false;
 	}
+	/**
+	 * @return false
+	 */
 	public function isServiceProviderYahoo($hostname) {
 		return false;
 	}
+	/**
+	 * @return true
+	 */
 	public function isOAuthUsed($authType) {
 		return true;
 	}
 	
 	/**
-	 * (non-PHPdoc)
+	 * 	 * (non-PHPdoc)
+	 * 	 *
 	 *
 	 * @see PostmanAbstractModuleTransport::getDeliveryDetails()
+	 *
+	 * @return string
 	 */
 	public function getDeliveryDetails() {
 		/* translators: where (1) is the secure icon and (2) is the transport name */
@@ -172,9 +208,13 @@ class PostmanGmailApiModuleTransport extends PostmanAbstractZendModuleTransport 
 	}
 	
 	/**
-	 * Given a hostname, what ports should we test?
+	 * 	 * Given a hostname, what ports should we test?
+	 * 	 *
+	 * 	 * May return an array of several combinations.
 	 *
-	 * May return an array of several combinations.
+	 * @return array
+	 *
+	 * @psalm-return list<mixed>
 	 */
 	public function getSocketsForSetupWizardToProbe($hostname, $smtpServerGuess) {
 		$hosts = array ();
@@ -185,11 +225,16 @@ class PostmanGmailApiModuleTransport extends PostmanAbstractZendModuleTransport 
 	}
 	
 	/**
-	 * Postman Gmail API supports delivering mail with these parameters:
-	 *
-	 * 70 gmail api on port 465 to www.googleapis.com
+	 * 	 * Postman Gmail API supports delivering mail with these parameters:
+	 * 	 *
+	 * 	 * 70 gmail api on port 465 to www.googleapis.com
+	 * 	 *
 	 *
 	 * @param mixed $hostData        	
+	 *
+	 * @return (int|mixed|null|string)[]
+	 *
+	 * @psalm-return array{priority: 0|27000, transport: string, enc: string, auth: string, hostname: null, label: mixed, display_auth: string, message?: string}
 	 */
 	public function getConfigurationBid(PostmanWizardSocket $hostData, $userAuthOverride, $originalSmtpServer) {
 		$recommendation = array ();
@@ -225,12 +270,14 @@ class PostmanGmailApiModuleTransport extends PostmanAbstractZendModuleTransport 
 	}
 	
 	/**
-	 * Functions to execute on the admin_init event
+	 * 	 * Functions to execute on the admin_init event
+	 * 	 *
+	 * 	 * "Runs at the beginning of every admin page before the page is rendered."
+	 * 	 * ref: http://codex.wordpress.org/Plugin_API/Action_Reference#Actions_Run_During_an_Admin_Page_Request
 	 *
-	 * "Runs at the beginning of every admin page before the page is rendered."
-	 * ref: http://codex.wordpress.org/Plugin_API/Action_Reference#Actions_Run_During_an_Admin_Page_Request
+	 * @return void
 	 */
-	public function on_admin_init() {
+	public function on_admin_init(): void {
 		// only administrators should be able to trigger this
 		if (PostmanUtils::isAdmin ()) {
 			$this->registerStylesAndScripts ();
@@ -238,8 +285,9 @@ class PostmanGmailApiModuleTransport extends PostmanAbstractZendModuleTransport 
 	}
 	
 	/**
+	 * @return void
 	 */
-	public function registerStylesAndScripts() {
+	public function registerStylesAndScripts(): void {
 		// register the stylesheet and javascript external resources
 		$pluginData = apply_filters ( 'postman_get_plugin_metadata', null );
 		wp_register_script ( 'postman_gmail_script', plugins_url ( 'Postman/Postman-Mail/postman_gmail.js', $this->rootPluginFilenameAndPath ), array (
@@ -250,6 +298,7 @@ class PostmanGmailApiModuleTransport extends PostmanAbstractZendModuleTransport 
 	}
 	
 	/**
+	 * @return void
 	 */
 	public function enqueueScript() {
 		wp_enqueue_script ( 'postman_gmail_script' );

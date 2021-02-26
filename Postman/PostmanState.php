@@ -42,13 +42,13 @@ if (! class_exists ( "PostmanState" )) {
 			$this->load();
 		}
 		//
-		public function save() {
+		public function save(): void {
 			update_option ( self::SLUG, $this->options );
 		}
-		public function reload() {
+		public function reload(): void {
 			$this->load ();
 		}
-		private function load() {
+		private function load(): void {
 			$this->options = get_option ( self::SLUG );
 		}
 		/**
@@ -69,7 +69,7 @@ if (! class_exists ( "PostmanState" )) {
 			else
 				return false;
 		}
-		public function setFileLockingEnabled($enabled) {
+		public function setFileLockingEnabled($enabled): void {
 			$this->options [self::FILE_LOCKING_ENABLED] = $enabled;
 			$this->save ();
 		}
@@ -84,10 +84,10 @@ if (! class_exists ( "PostmanState" )) {
 			else
 				return 0;
 		}
-		function setSuccessfulDelivery($total) {
+		function setSuccessfulDelivery($total): void {
 			$this->options [PostmanState::DELIVERY_SUCCESS_TOTAL] = $total;
 		}
-		function incrementSuccessfulDelivery() {
+		function incrementSuccessfulDelivery(): void {
 			$this->setSuccessfulDelivery ( $this->getSuccessfulDeliveries () + 1 );
 			$this->logger->debug ( 'incrementing success count: ' . $this->getSuccessfulDeliveries () );
 			$this->save ();
@@ -98,10 +98,10 @@ if (! class_exists ( "PostmanState" )) {
 			else
 				return 0;
 		}
-		function setFailedDelivery($total) {
+		function setFailedDelivery($total): void {
 			$this->options [PostmanState::DELIVERY_FAILURE_TOTAL] = $total;
 		}
-		function incrementFailedDelivery() {
+		function incrementFailedDelivery(): void {
 			$this->setFailedDelivery ( $this->getFailedDeliveries () + 1 );
 			$this->logger->debug ( 'incrementing failure count: ' . $this->getFailedDeliveries () );
 			$this->save ();

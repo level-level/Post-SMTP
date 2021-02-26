@@ -31,7 +31,7 @@ if (! class_exists ( 'PostmanImportableConfiguration' )) {
 		function __construct() {
 			$this->logger = new PostmanLogger ( get_class ( $this ) );
 		}
-		function init() {
+		function init(): void {
 			if (! $this->lazyInit) {
 				$this->queueIfAvailable ( new PostmanEasyWpSmtpOptions () );
 				$this->queueIfAvailable ( new PostmanWpSmtpOptions () );
@@ -42,7 +42,7 @@ if (! class_exists ( 'PostmanImportableConfiguration' )) {
 			}
 			$this->lazyInit = true;
 		}
-		private function queueIfAvailable(PostmanPluginOptions $options) {
+		private function queueIfAvailable(PostmanPluginOptions $options): void {
 			$slug = $options->getPluginSlug ();
 			if ($options->isImportable ()) {
 				$this->availableOptions [$slug] = $options;
@@ -75,7 +75,10 @@ if (! class_exists ( 'PostmanAbstractPluginOptions' )) {
 		public function __construct() {
 			$this->logger = new PostmanLogger ( get_class ( $this ) );
 		}
-		public function isValid() {
+		/**
+		 * @return true
+		 */
+		public function isValid(): bool {
 			$valid = true;
 			$host = $this->getHostname ();
 			$port = $this->getPort ();
@@ -127,9 +130,15 @@ if (! class_exists ( 'PostmanConfigureSmtpOptions' )) {
 			parent::__construct ();
 			$this->options = get_option ( 'c2c_configure_smtp' );
 		}
+		/**
+		 * @return string
+		 */
 		public function getPluginSlug() {
 			return self::SLUG;
 		}
+		/**
+		 * @return string
+		 */
 		public function getPluginName() {
 			return self::PLUGIN_NAME;
 		}
@@ -157,6 +166,9 @@ if (! class_exists ( 'PostmanConfigureSmtpOptions' )) {
 			if (isset ( $this->options [self::PASSWORD] ))
 				return $this->options [self::PASSWORD];
 		}
+		/**
+		 * @return null|string
+		 */
 		public function getAuthenticationType() {
 			if (isset ( $this->options [self::AUTHENTICATION_TYPE] )) {
 				if ($this->options [self::AUTHENTICATION_TYPE] == 1) {
@@ -166,6 +178,9 @@ if (! class_exists ( 'PostmanConfigureSmtpOptions' )) {
 				}
 			}
 		}
+		/**
+		 * @return null|string
+		 */
 		public function getEncryptionType() {
 			if (isset ( $this->options [self::ENCRYPTION_TYPE] )) {
 				switch ($this->options [self::ENCRYPTION_TYPE]) {
@@ -197,9 +212,15 @@ if (! class_exists ( 'PostmanCimySwiftSmtpOptions' )) {
 			parent::__construct ();
 			$this->options = get_option ( 'cimy_swift_smtp_options' );
 		}
+		/**
+		 * @return string
+		 */
 		public function getPluginSlug() {
 			return self::SLUG;
 		}
+		/**
+		 * @return string
+		 */
 		public function getPluginName() {
 			return self::PLUGIN_NAME;
 		}
@@ -227,6 +248,9 @@ if (! class_exists ( 'PostmanCimySwiftSmtpOptions' )) {
 			if (isset ( $this->options [self::PASSWORD] ))
 				return $this->options [self::PASSWORD];
 		}
+		/**
+		 * @return string
+		 */
 		public function getAuthenticationType() {
 			if (! empty ( $this->options [self::USERNAME] ) && ! empty ( $this->options [self::PASSWORD] )) {
 				return PostmanOptions::AUTHENTICATION_TYPE_PLAIN;
@@ -234,6 +258,9 @@ if (! class_exists ( 'PostmanCimySwiftSmtpOptions' )) {
 				return PostmanOptions::AUTHENTICATION_TYPE_NONE;
 			}
 		}
+		/**
+		 * @return null|string
+		 */
 		public function getEncryptionType() {
 			if (isset ( $this->options [self::ENCRYPTION_TYPE] )) {
 				switch ($this->options [self::ENCRYPTION_TYPE]) {
@@ -273,9 +300,15 @@ if (! class_exists ( 'PostmanEasyWpSmtpOptions' )) {
 			parent::__construct ();
 			$this->options = get_option ( 'swpsmtp_options' );
 		}
+		/**
+		 * @return string
+		 */
 		public function getPluginSlug() {
 			return self::SLUG;
 		}
+		/**
+		 * @return string
+		 */
 		public function getPluginName() {
 			return self::PLUGIN_NAME;
 		}
@@ -316,6 +349,9 @@ if (! class_exists ( 'PostmanEasyWpSmtpOptions' )) {
 				}
 			}
 		}
+		/**
+		 * @return null|string
+		 */
 		public function getAuthenticationType() {
 			if (isset ( $this->options [self::SMTP_SETTINGS] [self::AUTHENTICATION_TYPE] )) {
 				switch ($this->options [self::SMTP_SETTINGS] [self::AUTHENTICATION_TYPE]) {
@@ -326,6 +362,9 @@ if (! class_exists ( 'PostmanEasyWpSmtpOptions' )) {
 				}
 			}
 		}
+		/**
+		 * @return null|string
+		 */
 		public function getEncryptionType() {
 			if (isset ( $this->options [self::SMTP_SETTINGS] [self::ENCRYPTION_TYPE] )) {
 				switch ($this->options [self::SMTP_SETTINGS] [self::ENCRYPTION_TYPE]) {
@@ -361,9 +400,15 @@ if (! class_exists ( 'PostmanWpMailBankOptions' )) {
 			$wpdb->suppress_errors ();
 			$this->options = @$wpdb->get_row ( "SELECT from_name, from_email, mailer_type, smtp_host, smtp_port, encryption, authentication, smtp_username, smtp_password FROM " . $wpdb->prefix . "mail_bank" );
 		}
+		/**
+		 * @return string
+		 */
 		public function getPluginSlug() {
 			return self::SLUG;
 		}
+		/**
+		 * @return string
+		 */
 		public function getPluginName() {
 			return self::PLUGIN_NAME;
 		}
@@ -371,6 +416,9 @@ if (! class_exists ( 'PostmanWpMailBankOptions' )) {
 			if (isset ( $this->options->from_email ))
 				return $this->options->from_email;
 		}
+		/**
+		 * @return null|string
+		 */
 		public function getMessageSenderName() {
 			if (isset ( $this->options->from_name )) {
 				return stripslashes ( htmlspecialchars_decode ( $this->options->from_name, ENT_QUOTES ) );
@@ -395,6 +443,9 @@ if (! class_exists ( 'PostmanWpMailBankOptions' )) {
 					return $this->options->smtp_password;
 			}
 		}
+		/**
+		 * @return null|string
+		 */
 		public function getAuthenticationType() {
 			if (isset ( $this->options->authentication )) {
 				if ($this->options->authentication == 1) {
@@ -404,6 +455,9 @@ if (! class_exists ( 'PostmanWpMailBankOptions' )) {
 				}
 			}
 		}
+		/**
+		 * @return null|string
+		 */
 		public function getEncryptionType() {
 			if (isset ( $this->options->mailer_type )) {
 				if ($this->options->mailer_type == 0) {
@@ -448,9 +502,15 @@ if (! class_exists ( 'PostmanWpMailSmtpOptions' )) {
 			$this->options [self::USERNAME] = get_option ( self::USERNAME );
 			$this->options [self::PASSWORD] = get_option ( self::PASSWORD );
 		}
+		/**
+		 * @return string
+		 */
 		public function getPluginSlug() {
 			return self::SLUG;
 		}
+		/**
+		 * @return string
+		 */
 		public function getPluginName() {
 			return self::PLUGIN_NAME;
 		}
@@ -478,6 +538,9 @@ if (! class_exists ( 'PostmanWpMailSmtpOptions' )) {
 			if (isset ( $this->options [self::PASSWORD] ))
 				return $this->options [self::PASSWORD];
 		}
+		/**
+		 * @return null|string
+		 */
 		public function getAuthenticationType() {
 			if (isset ( $this->options [self::AUTHENTICATION_TYPE] )) {
 				switch ($this->options [self::AUTHENTICATION_TYPE]) {
@@ -488,6 +551,9 @@ if (! class_exists ( 'PostmanWpMailSmtpOptions' )) {
 				}
 			}
 		}
+		/**
+		 * @return null|string
+		 */
 		public function getEncryptionType() {
 			if (isset ( $this->options [self::ENCRYPTION_TYPE] )) {
 				switch ($this->options [self::ENCRYPTION_TYPE]) {
@@ -520,9 +586,15 @@ if (! class_exists ( 'PostmanWpSmtpOptions' )) {
 			parent::__construct ();
 			$this->options = get_option ( 'wp_smtp_options' );
 		}
+		/**
+		 * @return string
+		 */
 		public function getPluginSlug() {
 			return self::SLUG;
 		}
+		/**
+		 * @return string
+		 */
 		public function getPluginName() {
 			return self::PLUGIN_NAME;
 		}
@@ -550,6 +622,9 @@ if (! class_exists ( 'PostmanWpSmtpOptions' )) {
 			if (isset ( $this->options [self::PASSWORD] ))
 				return $this->options [self::PASSWORD];
 		}
+		/**
+		 * @return null|string
+		 */
 		public function getAuthenticationType() {
 			if (isset ( $this->options [self::AUTHENTICATION_TYPE] )) {
 				switch ($this->options [self::AUTHENTICATION_TYPE]) {
@@ -560,6 +635,9 @@ if (! class_exists ( 'PostmanWpSmtpOptions' )) {
 				}
 			}
 		}
+		/**
+		 * @return null|string
+		 */
 		public function getEncryptionType() {
 			if (isset ( $this->options [self::ENCRYPTION_TYPE] )) {
 				switch ($this->options [self::ENCRYPTION_TYPE]) {

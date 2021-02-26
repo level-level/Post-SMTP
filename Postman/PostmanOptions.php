@@ -164,15 +164,18 @@ if ( ! class_exists( 'PostmanOptions' ) ) {
 			$this->load();
 		}
 
+		/**
+		 * @return void
+		 */
 		public function save() {
             update_option( PostmanOptions::POSTMAN_OPTIONS, $this->options );
 		}
 
-		public function reload() {
+		public function reload(): void {
 			$this->load();
 		}
 
-		private function load() {
+		private function load(): void {
 
             $options = get_option( self::POSTMAN_OPTIONS );
 
@@ -192,10 +195,13 @@ if ( ! class_exists( 'PostmanOptions' ) ) {
             $this->options = $options;
 		}
 
+		/**
+		 * @return bool
+		 */
 		public function isNew() {
 			return ! isset( $this->options [ PostmanOptions::TRANSPORT_TYPE ] );
 		}
-		public function isMailLoggingEnabled() {
+		public function isMailLoggingEnabled(): bool {
 			$allowed = $this->isMailLoggingAllowed();
 			$enabled = $this->getMailLoggingEnabled() == self::MAIL_LOG_ENABLED_OPTION_YES;
 			return $allowed && $enabled;
@@ -205,7 +211,10 @@ if ( ! class_exists( 'PostmanOptions' ) ) {
 				return $this->options [ self::TEMPORARY_DIRECTORY ];
 			} else { 				return self::DEFAULT_TEMP_DIRECTORY; }
 		}
-		public function isMailLoggingAllowed() {
+		/**
+		 * @return true
+		 */
+		public function isMailLoggingAllowed(): bool {
 			return true;
 		}
 		public function isStealthModeEnabled() {
@@ -479,18 +488,27 @@ if ( ! class_exists( 'PostmanOptions' ) ) {
 			}
 		}
 
+		/**
+		 * @return false|null|string
+		 */
 		public function getPushoverUser() {
 			if ( isset( $this->options [ PostmanOptions::PUSHOVER_USER ] ) ) {
 				return base64_decode( $this->options [ PostmanOptions::PUSHOVER_USER ] );
 			}
 		}
 
+		/**
+		 * @return false|null|string
+		 */
 		public function getPushoverToken() {
 			if ( isset( $this->options [ PostmanOptions::PUSHOVER_TOKEN ] ) ) {
 				return base64_decode( $this->options [ PostmanOptions::PUSHOVER_TOKEN ] );
 			}
 		}
 
+		/**
+		 * @return false|null|string
+		 */
 		public function getSlackToken() {
 			if ( isset( $this->options [ PostmanOptions::SLACK_TOKEN ] ) ) {
 				return base64_decode( $this->options [ PostmanOptions::SLACK_TOKEN ] );
@@ -503,6 +521,9 @@ if ( ! class_exists( 'PostmanOptions' ) ) {
             }
         }
 
+        /**
+         * @return false|null|string
+         */
         public function getNotificationChromeUid() {
             if ( isset( $this->options [ PostmanOptions::NOTIFICATION_CHROME_UID ] ) ) {
                 return base64_decode( $this->options [ PostmanOptions::NOTIFICATION_CHROME_UID ] );
@@ -558,18 +579,18 @@ if ( ! class_exists( 'PostmanOptions' ) ) {
 		public function isSenderEmailOverridePrevented() {
 			return $this->isPluginSenderEmailEnforced();
 		}
-		private function setSenderEmail( $senderEmail ) {
+		private function setSenderEmail( $senderEmail ): void {
 			$this->options [ PostmanOptions::MESSAGE_SENDER_EMAIL ] = $senderEmail;
 		}
-		public function setMessageSenderEmailIfEmpty( $senderEmail ) {
+		public function setMessageSenderEmailIfEmpty( $senderEmail ): void {
 			if ( empty( $this->options [ PostmanOptions::MESSAGE_SENDER_EMAIL ] ) ) {
 				$this->setSenderEmail( $senderEmail );
 			}
 		}
-		private function setSenderName( $senderName ) {
+		private function setSenderName( $senderName ): void {
 			$this->options [ PostmanOptions::MESSAGE_SENDER_NAME ] = $senderName;
 		}
-		public function setMessageSenderNameIfEmpty( $senderName ) {
+		public function setMessageSenderNameIfEmpty( $senderName ): void {
 			if ( empty( $this->options [ PostmanOptions::MESSAGE_SENDER_NAME ] ) ) {
 				$this->setSenderName( $senderName );
 			}
@@ -583,21 +604,39 @@ if ( ! class_exists( 'PostmanOptions' ) ) {
             return $this->options [ 'smtp_mailers' ];
         }
 
+		/**
+		 * @return bool
+		 */
 		public function isAuthTypePassword() {
 			return $this->isAuthTypeLogin() || $this->isAuthTypeCrammd5() || $this->isAuthTypePlain();
 		}
+		/**
+		 * @return bool
+		 */
 		public function isAuthTypeOAuth2() {
 			return PostmanOptions::AUTHENTICATION_TYPE_OAUTH2 == $this->getAuthenticationType();
 		}
+		/**
+		 * @return bool
+		 */
 		public function isAuthTypeLogin() {
 			return PostmanOptions::AUTHENTICATION_TYPE_LOGIN == $this->getAuthenticationType();
 		}
+		/**
+		 * @return bool
+		 */
 		public function isAuthTypePlain() {
 			return PostmanOptions::AUTHENTICATION_TYPE_PLAIN == $this->getAuthenticationType();
 		}
+		/**
+		 * @return bool
+		 */
 		public function isAuthTypeCrammd5() {
 			return PostmanOptions::AUTHENTICATION_TYPE_CRAMMD5 == $this->getAuthenticationType();
 		}
+		/**
+		 * @return bool
+		 */
 		public function isAuthTypeNone() {
 			return PostmanOptions::AUTHENTICATION_TYPE_NONE == $this->getAuthenticationType();
 		}
@@ -637,8 +676,11 @@ if ( ! class_exists( 'PostmanOptions' ) ) {
 		}
 
 		/**
+		 * 		 *
 		 *
 		 * @param mixed $data
+		 *
+		 * @return bool|null
 		 */
 		public function import( $data ) {
 			if ( PostmanPreRequisitesCheck::checkZlibEncode() ) {

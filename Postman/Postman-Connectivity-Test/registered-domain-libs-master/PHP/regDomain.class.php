@@ -64,7 +64,7 @@ class regDomain {
 	}
 
 	/* validate parts */
-	public function validDomainPart($domPart) {
+	public function validDomainPart($domPart): bool {
 		// see http://www.register.com/domain-extension-rules.rcmx
 		$len = strlen($domPart);
 

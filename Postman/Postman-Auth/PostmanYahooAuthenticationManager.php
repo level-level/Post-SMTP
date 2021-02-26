@@ -38,15 +38,18 @@ if (! class_exists ( "PostmanYahooAuthenticationManager" )) {
 		}
 		
 		/**
-		 * The authorization sequence begins when your application redirects a browser to a Google URL;
-		 * the URL includes query parameters that indicate the type of access being requested.
-		 *
-		 * As in other scenarios, Google handles user authentication, session selection, and user consent.
-		 * The result is an authorization code, which Google returns to your application in a query string.
-		 *
-		 * (non-PHPdoc)
+		 * 		 * The authorization sequence begins when your application redirects a browser to a Google URL;
+		 * 		 * the URL includes query parameters that indicate the type of access being requested.
+		 * 		 *
+		 * 		 * As in other scenarios, Google handles user authentication, session selection, and user consent.
+		 * 		 * The result is an authorization code, which Google returns to your application in a query string.
+		 * 		 *
+		 * 		 * (non-PHPdoc)
+		 * 		 *
 		 *
 		 * @see PostmanAuthenticationManager::requestVerificationCode()
+		 *
+		 * @return void
 		 */
 		public function requestVerificationCode($transactionId) {
 			$params = array (
@@ -64,13 +67,16 @@ if (! class_exists ( "PostmanYahooAuthenticationManager" )) {
 		}
 		
 		/**
-		 * After receiving the authorization code, your application can exchange the code
-		 * (along with a client ID and client secret) for an access token and, in some cases,
-		 * a refresh token.
-		 *
-		 * (non-PHPdoc)
+		 * 		 * After receiving the authorization code, your application can exchange the code
+		 * 		 * (along with a client ID and client secret) for an access token and, in some cases,
+		 * 		 * a refresh token.
+		 * 		 *
+		 * 		 * (non-PHPdoc)
+		 * 		 *
 		 *
 		 * @see PostmanAuthenticationManager::processAuthorizationGrantCode()
+		 *
+		 * @return bool
 		 */
 		public function processAuthorizationGrantCode($transactionId) {
 			if (isset ( $_GET ['code'] )) {
@@ -103,8 +109,10 @@ if (! class_exists ( "PostmanYahooAuthenticationManager" )) {
 		}
 		
 		/**
-		 * Step 5: Exchange refresh token for new access token
-		 * After the access token expires, you can use the refresh token, which has a long lifetime, to get a new access token.
+		 * 		 * Step 5: Exchange refresh token for new access token
+		 * 		 * After the access token expires, you can use the refresh token, which has a long lifetime, to get a new access token.
+		 *
+		 * @return void
 		 */
 		public function refreshToken() {
 			$this->getLogger ()->debug ( 'Refreshing Token' );
@@ -123,9 +131,15 @@ if (! class_exists ( "PostmanYahooAuthenticationManager" )) {
 			$response = PostmanUtils::remotePostGetBodyOnly ( $this->getTokenUrl (), $postvals, $headers );
 			$this->processResponse ( $response );
 		}
+		/**
+		 * @return string
+		 */
 		public function getAuthorizationUrl() {
 			return self::AUTHORIZATION_URL;
 		}
+		/**
+		 * @return string
+		 */
 		public function getTokenUrl() {
 			return self::GET_TOKEN_URL;
 		}

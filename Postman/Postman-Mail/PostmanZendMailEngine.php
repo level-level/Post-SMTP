@@ -59,9 +59,12 @@ if ( ! class_exists( 'PostmanZendMailEngine' ) ) {
 		}
 
 		/**
-		 * (non-PHPdoc)
+		 * 		 * (non-PHPdoc)
+		 * 		 *
 		 *
 		 * @see PostmanSmtpEngine::send()
+		 *
+		 * @return void
 		 */
 		public function send( PostmanMessage $message ) {
 			$this->logger->debug( 'Prepping Zend' );

@@ -143,7 +143,7 @@ if (! class_exists ( 'PostmanSmtpDiscovery' )) {
 		private function validateEmail($email) {
 			return PostmanUtils::validateEmail ( $email );
 		}
-		private function determineSmtpServer($email) {
+		private function determineSmtpServer($email): bool {
 			$hostname = substr ( strrchr ( $email, "@" ), 1 );
 			$this->domain = $hostname;
 			$smtp = PostmanSmtpMappings::getSmtpFromEmail ( $hostname );

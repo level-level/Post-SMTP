@@ -40,9 +40,12 @@ if ( ! class_exists( 'PostmanMandrillMailEngine' ) ) {
 		}
 
 		/**
-		 * (non-PHPdoc)
+		 * 		 * (non-PHPdoc)
+		 * 		 *
 		 *
 		 * @see PostmanSmtpEngine::send()
+		 *
+		 * @return void
 		 */
 		public function send( PostmanMessage $message ) {
 			$options = PostmanOptions::getInstance();
@@ -185,7 +188,7 @@ if ( ! class_exists( 'PostmanMandrillMailEngine' ) ) {
 				throw $e;
 			}
 		}
-		private function addHeader( $key, $value, $append = false ) {
+		private function addHeader( $key, $value, $append = false ): void {
 			$this->logger->debug( 'Adding header: ' . $key . ' = ' . $value );
 			$header = &$this->mandrillMessage ['headers'];
 			if ( $append && ! empty( $header [ $key ] ) ) {
@@ -196,11 +199,14 @@ if ( ! class_exists( 'PostmanMandrillMailEngine' ) ) {
 		}
 
 		/**
-		 * Add attachments to the message
+		 * 		 * Add attachments to the message
+		 * 		 *
 		 *
 		 * @param Postman_Zend_Mail $mail
+		 *
+		 * @return void
 		 */
-		private function addAttachmentsToMail( PostmanMessage $message ) {
+		private function addAttachmentsToMail( PostmanMessage $message ): void {
 			$attachments = $message->getAttachments();
 			if ( isset( $attachments ) ) {
 				$this->mandrillMessage ['attachments'] = array();

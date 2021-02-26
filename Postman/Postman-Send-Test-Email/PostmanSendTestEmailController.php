@@ -40,34 +40,42 @@ class PostmanSendTestEmailController {
 	}
 
 	/**
-	 * Functions to execute on the init event
+	 * 	 * Functions to execute on the init event
+	 * 	 *
+	 * 	 * "Typically used by plugins to initialize. The current user is already authenticated by this time."
+	 * 	 * ref: http://codex.wordpress.org/Plugin_API/Action_Reference#Actions_Run_During_a_Typical_Request
 	 *
-	 * "Typically used by plugins to initialize. The current user is already authenticated by this time."
-	 * ref: http://codex.wordpress.org/Plugin_API/Action_Reference#Actions_Run_During_a_Typical_Request
+	 * @return void
 	 */
-	public function on_init() {
+	public function on_init(): void {
 		// register Ajax handlers
 		new PostmanSendTestEmailAjaxController();
 	}
 
 	/**
-	 * Fires on the admin_init method
+	 * 	 * Fires on the admin_init method
+	 *
+	 * @return void
 	 */
-	public function on_admin_init() {
+	public function on_admin_init(): void {
 				$this->registerStylesAndScripts();
 	}
 
 	/**
-	 * Get the settings option array and print one of its values
+	 * 	 * Get the settings option array and print one of its values
+	 *
+	 * @return void
 	 */
-	public function test_email_callback() {
+	public function test_email_callback(): void {
 		printf( '<input type="text" id="%s" name="postman_test_options[test_email]" value="%s" class="required email" size="40"/>', self::RECIPIENT_EMAIL_FIELD_NAME, wp_get_current_user()->user_email );
 	}
 
 	/**
-	 * Register and add settings
+	 * 	 * Register and add settings
+	 *
+	 * @return void
 	 */
-	private function registerStylesAndScripts() {
+	private function registerStylesAndScripts(): void {
 		if ( $this->logger->isTrace() ) {
 			$this->logger->trace( 'registerStylesAndScripts()' );
 		}
@@ -87,9 +95,11 @@ class PostmanSendTestEmailController {
 	}
 
 	/**
-	 * Register the Email Test screen
+	 * 	 * Register the Email Test screen
+	 *
+	 * @return void
 	 */
-	public function addEmailTestSubmenu() {
+	public function addEmailTestSubmenu(): void {
 		$page = add_submenu_page( null, sprintf( __( '%s Setup', 'post-smtp' ), __( 'Postman SMTP', 'post-smtp' ) ), __( 'Postman SMTP', 'post-smtp' ), Postman::MANAGE_POSTMAN_CAPABILITY_NAME, PostmanSendTestEmailController::EMAIL_TEST_SLUG, array(
 				$this,
 				'outputTestEmailContent',
@@ -102,8 +112,9 @@ class PostmanSendTestEmailController {
 	}
 
 	/**
+	 * @return void
 	 */
-	function enqueueEmailTestResources() {
+	function enqueueEmailTestResources(): void {
 		wp_enqueue_style( 'jquery_steps_style' );
 		wp_enqueue_style( PostmanViewController::POSTMAN_STYLE );
 		wp_enqueue_style( 'postman_send_test_email' );
@@ -119,8 +130,9 @@ class PostmanSendTestEmailController {
 	}
 
 	/**
+	 * @return void
 	 */
-	public function outputTestEmailContent() {
+	public function outputTestEmailContent(): void {
 		print '<div class="wrap">';
 
 		PostmanViewController::outputChildPageHeader( __( 'Send a Test Email', 'post-smtp' ) );
@@ -196,9 +208,11 @@ class PostmanSendTestEmailAjaxController extends PostmanAbstractAjaxHandler {
 	}
 
 	/**
-	 * This Ajax sends a test email
+	 * 	 * This Ajax sends a test email
+	 *
+	 * @return void
 	 */
-	function sendTestEmailViaAjax() {
+	function sendTestEmailViaAjax(): void {
 		// get the email address of the recipient from the HTTP Request
 		$email = $this->getRequestParameter( 'email' );
 

@@ -5,24 +5,34 @@ if (! class_exists ( "PostmanNonOAuthAuthenticationManager" )) {
 	class PostmanNonOAuthAuthenticationManager implements PostmanAuthenticationManager {
 		
 		/**
+		 * @return false
 		 */
 		public function isAccessTokenExpired() {
 			return false;
 		}
 		
 		/**
-		 * (non-PHPdoc)
+		 * 		 * (non-PHPdoc)
+		 * 		 *
 		 *
 		 * @see PostmanAuthenticationManager::requestVerificationCode()
+		 *
+		 * @return void
 		 */
 		public function requestVerificationCode($transactionId) {
 			// otherwise known as IllegaStateException
 			assert ( false );
 		}
+		/**
+		 * @return void
+		 */
 		public function processAuthorizationGrantCode($transactionId) {
 			// otherwise known as IllegaStateException
 			assert ( false );
 		}
+		/**
+		 * @return void
+		 */
 		public function refreshToken() {
 			// no-op
 		}
@@ -35,6 +45,9 @@ if (! class_exists ( "PostmanNonOAuthAuthenticationManager" )) {
 		public function getCallbackUri() {
 			return null;
 		}
+		/**
+		 * @return void
+		 */
 		public function generateRequestTransactionId() {
 			// otherwise known as IllegaStateException
 			assert ( false );

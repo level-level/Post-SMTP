@@ -29,18 +29,22 @@ if (! class_exists ( 'PostmanOAuthToken.php' )) {
 		}
 		
 		/**
-		 * Is there a valid access token and refresh token
+		 * 		 * Is there a valid access token and refresh token
+		 *
+		 * @return bool
 		 */
-		public function isValid() {
+		public function isValid(): bool {
 			$accessToken = $this->getAccessToken ();
 			$refreshToken = $this->getRefreshToken ();
 			return ! (empty ( $accessToken ) || empty ( $refreshToken ));
 		}
 		
 		/**
-		 * Load the Postman OAuth token properties to the database
+		 * 		 * Load the Postman OAuth token properties to the database
+		 *
+		 * @return void
 		 */
-		private function load() {
+		private function load(): void {
 			$a = get_option ( PostmanOAuthToken::OPTIONS_NAME );
 			$this->setAccessToken ( $a [PostmanOAuthToken::ACCESS_TOKEN] );
 			$this->setRefreshToken ( $a [PostmanOAuthToken::REFRESH_TOKEN] );
@@ -49,9 +53,11 @@ if (! class_exists ( 'PostmanOAuthToken.php' )) {
 		}
 		
 		/**
-		 * Save the Postman OAuth token properties to the database
+		 * 		 * Save the Postman OAuth token properties to the database
+		 *
+		 * @return void
 		 */
-		public function save() {
+		public function save(): void {
 			$a [PostmanOAuthToken::ACCESS_TOKEN] = $this->getAccessToken ();
 			$a [PostmanOAuthToken::REFRESH_TOKEN] = $this->getRefreshToken ();
 			$a [PostmanOAuthToken::EXPIRY_TIME] = $this->getExpiryTime ();
@@ -70,16 +76,16 @@ if (! class_exists ( 'PostmanOAuthToken.php' )) {
 		public function getRefreshToken() {
 			return $this->refreshToken;
 		}
-		public function setVendorName($name) {
+		public function setVendorName($name): void {
 			$this->vendorName = sanitize_text_field ( $name );
 		}
-		public function setExpiryTime($time) {
+		public function setExpiryTime($time): void {
 			$this->expiryTime = sanitize_text_field ( $time );
 		}
-		public function setAccessToken($token) {
+		public function setAccessToken($token): void {
 			$this->accessToken = sanitize_text_field ( $token );
 		}
-		public function setRefreshToken($token) {
+		public function setRefreshToken($token): void {
 			$this->refreshToken = sanitize_text_field ( $token );
 		}
 	}

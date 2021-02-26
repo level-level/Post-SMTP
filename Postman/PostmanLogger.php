@@ -23,31 +23,34 @@ if (! class_exists ( "PostmanLogger" )) {
 				$this->logLevel = self::OFF_INT;
 			}
 		}
-		function trace($text) {
+		function trace($text): void {
 			$this->printLog ( $text, self::TRACE_INT, 'TRACE' );
 		}
-		function debug($text) {
+		function debug($text): void {
 			$this->printLog ( $text, self::DEBUG_INT, 'DEBUG' );
 		}
-		function info($text) {
+		function info($text): void {
 			$this->printLog ( $text, self::INFO_INT, 'INFO' );
 		}
-		function warn($text) {
+		function warn($text): void {
 			$this->printLog ( $text, self::WARN_INT, 'WARN' );
 		}
-		function error($text) {
+		function error($text): void {
 			$this->printLog ( $text, self::ERROR_INT, 'ERROR' );
 		}
-		function fatal($text) {
+		function fatal($text): void {
 			$this->printLog ( $text, self::FATAL_INT, 'FATAL' );
 		}
 		/**
-		 * better logging thanks to http://www.smashingmagazine.com/2011/03/08/ten-things-every-wordpress-plugin-developer-should-know/
+		 * 		 * better logging thanks to http://www.smashingmagazine.com/2011/03/08/ten-things-every-wordpress-plugin-developer-should-know/
+		 * 		 *
 		 *
 		 * @param mixed $intLogLevel        	
 		 * @param mixed $logLevelName        	
+		 *
+		 * @return void
 		 */
-		private function printLog($text, $intLogLevel, $logLevelName) {
+		private function printLog($text, $intLogLevel, $logLevelName): void {
 			if ($this->wpDebug && $intLogLevel >= $this->logLevel) {
 				if (is_array ( $text ) || is_object ( $text )) {
 					error_log ( $logLevelName . ' ' . $this->name . ': ' . print_r ( $text, true ) );
@@ -56,13 +59,13 @@ if (! class_exists ( "PostmanLogger" )) {
 				}
 			}
 		}
-		public function isDebug() {
+		public function isDebug(): bool {
 			return self::DEBUG_INT >= $this->logLevel;
 		}
-		public function isTrace() {
+		public function isTrace(): bool {
 			return self::TRACE_INT >= $this->logLevel;
 		}
-		public function isInfo() {
+		public function isInfo(): bool {
 			return self::INFO_INT >= $this->logLevel;
 		}
 	}

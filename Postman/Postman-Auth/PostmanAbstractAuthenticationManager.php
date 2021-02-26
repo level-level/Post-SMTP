@@ -49,14 +49,17 @@ if (! class_exists ( "PostmanAbstractAuthenticationManager" )) {
 		}
 		
 		/**
-		 * Create a state token to prevent request forgery.
-		 * Store it in the session for later validation.
+		 * 		 * Create a state token to prevent request forgery.
+		 * 		 * Store it in the session for later validation.
+		 *
+		 * @return string
 		 */
 		public function generateRequestTransactionId() {
 			return $state = md5 ( rand () );
 		}
 		
 		/**
+		 * @return bool
 		 */
 		public function isAccessTokenExpired() {
 			$expireTime = ($this->authorizationToken->getExpiryTime () - self::FORCE_REFRESH_X_SECONDS_BEFORE_EXPIRE);
@@ -66,13 +69,17 @@ if (! class_exists ( "PostmanAbstractAuthenticationManager" )) {
 		}
 		
 		/**
-		 * Decoded the received token
-		 * This code is identical for Google and Hotmail
+		 * 		 * Decoded the received token
+		 * 		 * This code is identical for Google and Hotmail
+		 * 		 *
 		 *
 		 * @param mixed $response        	
+		 *
 		 * @throws Exception
+		 *
+		 * @return void
 		 */
-		protected function processResponse($response) {
+		protected function processResponse($response): void {
 			$authToken = json_decode ( stripslashes ( $response ) );
 			if ($authToken === NULL) {
 				$this->getLogger ()->error ( $response );
@@ -94,14 +101,17 @@ if (! class_exists ( "PostmanAbstractAuthenticationManager" )) {
 		}
 		
 		/**
-		 * Parses the authorization token and extracts the expiry time, accessToken,
-		 * and if this is a first-time authorization, a refresh token.
-		 *
-		 * This code is identical for Google and Hotmail
+		 * 		 * Parses the authorization token and extracts the expiry time, accessToken,
+		 * 		 * and if this is a first-time authorization, a refresh token.
+		 * 		 *
+		 * 		 * This code is identical for Google and Hotmail
+		 * 		 *
 		 *
 		 * @param mixed $client        	
+		 *
+		 * @return void
 		 */
-		protected function decodeReceivedAuthorizationToken($newtoken) {
+		protected function decodeReceivedAuthorizationToken($newtoken): void {
 			assert ( ! empty ( $newtoken ) );
 			assert ( ! empty ( $newtoken->{self::EXPIRES} ) );
 			assert ( ! empty ( $newtoken->{self::ACCESS_TOKEN} ) );
@@ -131,10 +141,12 @@ if (! class_exists ( "PostmanAbstractAuthenticationManager" )) {
 		}
 		
 		/**
-		 * Given an OAuth provider-specific URL and redirectUri,
-		 * issue an HttpRequest to refresh the access token
+		 * 		 * Given an OAuth provider-specific URL and redirectUri,
+		 * 		 * issue an HttpRequest to refresh the access token
+		 * 		 *
+		 * 		 * This code is identical for Google and Hotmail
 		 *
-		 * This code is identical for Google and Hotmail
+		 * @return void
 		 */
 		public function refreshToken() {
 			$this->getLogger ()->debug ( 'Refreshing Token' );

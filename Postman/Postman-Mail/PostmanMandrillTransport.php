@@ -32,11 +32,17 @@ class PostmanMandrillTransport extends PostmanAbstractModuleTransport implements
 		$data [PostmanOptions::MANDRILL_API_KEY] = PostmanOptions::getInstance ()->getMandrillApiKey ();
 		return $data;
 	}
+	/**
+	 * @return string
+	 */
 	public function getProtocol() {
 		return 'https';
 	}
 	
 	// this should be standard across all transports
+	/**
+	 * @return string
+	 */
 	public function getSlug() {
 		return self::SLUG;
 	}
@@ -99,23 +105,38 @@ class PostmanMandrillTransport extends PostmanAbstractModuleTransport implements
 	public function getCredentialsSecret() {
 		return $this->options->getClientSecret ();
 	}
+	/**
+	 * @return false
+	 */
 	public function isServiceProviderGoogle($hostname) {
 		return false;
 	}
+	/**
+	 * @return false
+	 */
 	public function isServiceProviderMicrosoft($hostname) {
 		return false;
 	}
+	/**
+	 * @return false
+	 */
 	public function isServiceProviderYahoo($hostname) {
 		return false;
 	}
+	/**
+	 * @return false
+	 */
 	public function isOAuthUsed($authType) {
 		return false;
 	}
 	
 	/**
-	 * (non-PHPdoc)
+	 * 	 * (non-PHPdoc)
+	 * 	 *
 	 *
 	 * @see PostmanModuleTransport::createMailEngine()
+	 *
+	 * @return PostmanMandrillMailEngine
 	 */
 	public function createMailEngine() {
 		$apiKey = $this->options->getMandrillApiKey ();
@@ -125,10 +146,13 @@ class PostmanMandrillTransport extends PostmanAbstractModuleTransport implements
 	}
 	
 	/**
-	 * This short description of the Transport State shows on the Summary screens
-	 * (non-PHPdoc)
+	 * 	 * This short description of the Transport State shows on the Summary screens
+	 * 	 * (non-PHPdoc)
+	 * 	 *
 	 *
 	 * @see PostmanModuleTransport::getDeliveryDetails()
+	 *
+	 * @return string
 	 */
 	public function getDeliveryDetails() {
 		/* translators: where (1) is the secure icon and (2) is the transport name */
@@ -155,7 +179,11 @@ class PostmanMandrillTransport extends PostmanAbstractModuleTransport implements
 	}
 	
 	/**
-	 * Mandrill API doesn't care what the hostname or guessed SMTP Server is; it runs it's port test no matter what
+	 * 	 * Mandrill API doesn't care what the hostname or guessed SMTP Server is; it runs it's port test no matter what
+	 *
+	 * @return array
+	 *
+	 * @psalm-return array{0: mixed}
 	 */
 	public function getSocketsForSetupWizardToProbe($hostname, $smtpServerGuess) {
 		$hosts = array (
@@ -165,9 +193,14 @@ class PostmanMandrillTransport extends PostmanAbstractModuleTransport implements
 	}
 	
 	/**
-	 * (non-PHPdoc)
+	 * 	 * (non-PHPdoc)
+	 * 	 *
 	 *
 	 * @see PostmanModuleTransport::getConfigurationBid()
+	 *
+	 * @return (int|mixed|null|string)[]
+	 *
+	 * @psalm-return array{priority: 0|9000, transport: string, hostname: null, label: mixed, message?: string}
 	 */
 	public function getConfigurationBid(PostmanWizardSocket $hostData, $userAuthOverride, $originalSmtpServer) {
 		$recommendation = array ();
@@ -199,12 +232,14 @@ class PostmanMandrillTransport extends PostmanAbstractModuleTransport implements
 	}
 	
 	/**
-	 * Functions to execute on the admin_init event
+	 * 	 * Functions to execute on the admin_init event
+	 * 	 *
+	 * 	 * "Runs at the beginning of every admin page before the page is rendered."
+	 * 	 * ref: http://codex.wordpress.org/Plugin_API/Action_Reference#Actions_Run_During_an_Admin_Page_Request
 	 *
-	 * "Runs at the beginning of every admin page before the page is rendered."
-	 * ref: http://codex.wordpress.org/Plugin_API/Action_Reference#Actions_Run_During_an_Admin_Page_Request
+	 * @return void
 	 */
-	public function on_admin_init() {
+	public function on_admin_init(): void {
 		// only administrators should be able to trigger this
 		if (PostmanUtils::isAdmin ()) {
 			$this->addSettings ();
@@ -217,8 +252,9 @@ class PostmanMandrillTransport extends PostmanAbstractModuleTransport implements
 	 */
 	
 	/**
+	 * @return void
 	 */
-	public function addSettings() {
+	public function addSettings(): void {
 		// the Mandrill Auth section
 		add_settings_section ( PostmanMandrillTransport::MANDRILL_AUTH_SECTION, __ ( 'Authentication', 'post-smtp' ), array (
 				$this,
@@ -232,22 +268,25 @@ class PostmanMandrillTransport extends PostmanAbstractModuleTransport implements
 	}
 	
 	/**
+	 * @return void
 	 */
-	public function printMandrillAuthSectionInfo() {
+	public function printMandrillAuthSectionInfo(): void {
 		/* Translators: Where (1) is the service URL and (2) is the service name and (3) is a api key URL */
 		printf ( '<p id="wizard_mandrill_auth_help">%s</p>', sprintf ( __ ( 'Create an account at <a href="%1$s" target="_blank">%2$s</a> and enter <a href="%3$s" target="_blank">an API key</a> below.', 'post-smtp' ), 'https://mandrillapp.com', 'Mandrillapp.com', 'https://mandrillapp.com/settings' ) );
 	}
 	
 	/**
+	 * @return void
 	 */
-	public function mandrill_api_key_callback() {
+	public function mandrill_api_key_callback(): void {
 		printf ( '<input type="password" autocomplete="off" id="mandrill_api_key" name="postman_options[mandrill_api_key]" value="%s" size="60" class="required" placeholder="%s"/>', null !== $this->options->getMandrillApiKey () ? esc_attr ( PostmanUtils::obfuscatePassword ( $this->options->getMandrillApiKey () ) ) : '', __ ( 'Required', 'post-smtp' ) );
 		print ' <input type="button" id="toggleMandrillApiKey" value="Show Password" class="button button-secondary" style="visibility:hidden" />';
 	}
 	
 	/**
+	 * @return void
 	 */
-	public function registerStylesAndScripts() {
+	public function registerStylesAndScripts(): void {
 		// register the stylesheet and javascript external resources
 		$pluginData = apply_filters ( 'postman_get_plugin_metadata', null );
 		wp_register_script ( 'postman_mandrill_script', plugins_url ( 'Postman/Postman-Mail/postman_mandrill.js', $this->rootPluginFilenameAndPath ), array (
@@ -258,12 +297,14 @@ class PostmanMandrillTransport extends PostmanAbstractModuleTransport implements
 	}
 	
 	/**
+	 * @return void
 	 */
 	public function enqueueScript() {
 		wp_enqueue_script ( 'postman_mandrill_script' );
 	}
 	
 	/**
+	 * @return void
 	 */
 	public function printWizardAuthenticationStep() {
 		print '<section class="wizard_mandrill">';

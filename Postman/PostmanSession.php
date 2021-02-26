@@ -34,57 +34,66 @@ if (! class_exists ( 'PostmanSession' )) {
 		}
 		
 		/**
-		 * OAuth is in progress $state is the randomly generated
-		 * transaction ID
+		 * 		 * OAuth is in progress $state is the randomly generated
+		 * 		 * transaction ID
+		 * 		 *
 		 *
 		 * @param mixed $state        	
+		 *
+		 * @return bool
 		 */
-		public function isSetOauthInProgress() {
+		public function isSetOauthInProgress(): bool {
 			return get_transient ( self::OAUTH_IN_PROGRESS ) != false;
 		}
-		public function setOauthInProgress($state) {
+		public function setOauthInProgress($state): void {
 			set_transient ( self::OAUTH_IN_PROGRESS, $state, 3 * self::MINUTES_IN_SECONDS );
 		}
 		public function getOauthInProgress() {
 			return get_transient ( self::OAUTH_IN_PROGRESS );
 		}
-		public function unsetOauthInProgress() {
+		public function unsetOauthInProgress(): void {
 			delete_transient ( self::OAUTH_IN_PROGRESS );
 		}
 		
 		/**
-		 * Sometimes I need to keep track of what I'm doing between requests
+		 * 		 * Sometimes I need to keep track of what I'm doing between requests
+		 * 		 *
 		 *
 		 * @param mixed $action        	
+		 *
+		 * @return bool
 		 */
-		public function isSetAction() {
+		public function isSetAction(): bool {
 			return get_transient ( self::ACTION ) != false;
 		}
-		public function setAction($action) {
+		public function setAction($action): void {
 			set_transient ( self::ACTION, $action, 30 * self::MINUTES_IN_SECONDS );
 		}
 		public function getAction() {
 			return get_transient ( self::ACTION );
 		}
-		public function unsetAction() {
+		public function unsetAction(): void {
 			delete_transient ( self::ACTION );
 		}
 		
 		/**
-		 * Sometimes I need to keep track of what I'm doing between requests
+		 * 		 * Sometimes I need to keep track of what I'm doing between requests
+		 * 		 *
 		 *
 		 * @param mixed $message        	
+		 *
+		 * @return bool
 		 */
-		public function isSetErrorMessage() {
+		public function isSetErrorMessage(): bool {
 			return get_transient ( self::ERROR_MESSAGE ) != false;
 		}
-		public function setMessage($message) {
+		public function setMessage($message): void {
 			set_transient ( self::ERROR_MESSAGE, $message, 30 * self::MINUTES_IN_SECONDS );
 		}
 		public function getMessage() {
 			return get_transient ( self::ERROR_MESSAGE );
 		}
-		public function unsetMessage() {
+		public function unsetMessage(): void {
 			delete_transient ( self::ERROR_MESSAGE );
 		}
 		

@@ -12,14 +12,14 @@ class PostmanPluginFeedback {
 		}
 	}
 
-	function load_scripts() {
+	function load_scripts(): void {
 		wp_enqueue_style( 'wp-jquery-ui-dialog' );
 		wp_register_script( 'post-feedback', plugins_url( 'script/feedback/feedback.js', POST_BASE ), array( 'jquery', 'jquery-ui-core', 'jquery-ui-dialog' ), false, true );
 		wp_localize_script( 'post-feedback', 'post_feedback', array( 'admin_ajax' => admin_url( 'admin-ajax.php' ) ) );
 		wp_enqueue_script( 'post-feedback' );
 	}
 
-	function post_user_feedback() {
+	function post_user_feedback(): void {
 		if ( ! check_ajax_referer() ) {
 			die( 'security error' );
 		}
@@ -43,7 +43,7 @@ class PostmanPluginFeedback {
 		die( 'success' );
 	}
 
-	function admin_head() {
+	function admin_head(): void {
 		?>
 		<style type="text/css">
 			.postman-feedback-dialog-form .ui-dialog-buttonset {
@@ -97,7 +97,7 @@ class PostmanPluginFeedback {
 		return $links;
 	}
 
-	function add_deactivation_dialog() {
+	function add_deactivation_dialog(): void {
 		?>
 		<div id="postman-feedback-dialog-content" style="display: none;">
 			<p>

@@ -34,8 +34,11 @@ if (! class_exists ( 'PostmanAdminPointer' )) {
 		}
 		
 		/**
+		 * 		 *
 		 *
 		 * @param mixed $hook_suffix        	
+		 *
+		 * @return void
 		 */
 		function wptuts_pointer_load($hook_suffix) {
 			// only do this for administrators

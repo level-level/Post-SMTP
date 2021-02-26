@@ -18,9 +18,12 @@ class PostmanSmtpModuleTransport extends PostmanAbstractZendModuleTransport impl
 	}
 
 	/**
-	 * (non-PHPdoc)
+	 * 	 * (non-PHPdoc)
+	 * 	 *
 	 *
 	 * @see PostmanModuleTransport::createMailEngine()
+	 *
+	 * @return PostmanZendMailEngine
 	 */
 	public function createMailEngine() {
 		require_once 'PostmanZendMailEngine.php';
@@ -28,9 +31,12 @@ class PostmanSmtpModuleTransport extends PostmanAbstractZendModuleTransport impl
 	}
 
 	/**
-	 * (non-PHPdoc)
+	 * 	 * (non-PHPdoc)
+	 * 	 *
 	 *
 	 * @see PostmanZendModuleTransport::createZendMailTransport()
+	 *
+	 * @return Postman_Zend_Mail_Transport_Smtp
 	 */
 	public function createZendMailTransport( $fakeHostname, $fakeConfig ) {
 		if ( PostmanOptions::AUTHENTICATION_TYPE_OAUTH2 == $this->getAuthenticationType() ) {
@@ -42,16 +48,25 @@ class PostmanSmtpModuleTransport extends PostmanAbstractZendModuleTransport impl
 	}
 
 	/**
-	 * Determines whether Mail Engine locking is needed
+	 * 	 * Determines whether Mail Engine locking is needed
+	 * 	 *
 	 *
 	 * @see PostmanModuleTransport::requiresLocking()
+	 *
+	 * @return bool
 	 */
 	public function isLockingRequired() {
 		return PostmanOptions::AUTHENTICATION_TYPE_OAUTH2 == $this->getAuthenticationType();
 	}
+	/**
+	 * @return string
+	 */
 	public function getSlug() {
 		return self::SLUG;
 	}
+	/**
+	 * @return string
+	 */
 	public function getName() {
 		return 'SMTP';
 	}
@@ -134,9 +149,13 @@ class PostmanSmtpModuleTransport extends PostmanAbstractZendModuleTransport impl
 	}
 
 	/**
-	 * Given a hostname, what ports should we test?
+	 * 	 * Given a hostname, what ports should we test?
+	 * 	 *
+	 * 	 * May return an array of several combinations.
 	 *
-	 * May return an array of several combinations.
+	 * @return array
+	 *
+	 * @psalm-return array{0: mixed, 1: mixed, 2: mixed}
 	 */
 	public function getSocketsForSetupWizardToProbe( $hostname, $smtpServerGuess ) {
 		$hosts = array(
@@ -158,9 +177,14 @@ class PostmanSmtpModuleTransport extends PostmanAbstractZendModuleTransport impl
 	}
 
 	/**
-	 * SendGrid will never recommend it's configuration
+	 * 	 * SendGrid will never recommend it's configuration
+	 * 	 *
 	 *
 	 * @param mixed $hostData
+	 *
+	 * @return (int|mixed|string|true)[]
+	 *
+	 * @psalm-return array{mitm?: true, enc?: string, auth?: string, display_auth?: string, label?: string, message?: string, transport: string, priority: positive-int, port: mixed, hostname: mixed}
 	 */
 	public function getConfigurationBid( PostmanWizardSocket $hostData, $userAuthOverride, $originalSmtpServer ) {
 		$port = $hostData->port;
@@ -279,12 +303,14 @@ class PostmanSmtpModuleTransport extends PostmanAbstractZendModuleTransport impl
 	}
 
 	/**
-	 * Functions to execute on the admin_init event
+	 * 	 * Functions to execute on the admin_init event
+	 * 	 *
+	 * 	 * "Runs at the beginning of every admin page before the page is rendered."
+	 * 	 * ref: http://codex.wordpress.org/Plugin_API/Action_Reference#Actions_Run_During_an_Admin_Page_Request
 	 *
-	 * "Runs at the beginning of every admin page before the page is rendered."
-	 * ref: http://codex.wordpress.org/Plugin_API/Action_Reference#Actions_Run_During_an_Admin_Page_Request
+	 * @return void
 	 */
-	public function on_admin_init() {
+	public function on_admin_init(): void {
 		// only administrators should be able to trigger this
 		if ( PostmanUtils::isAdmin() ) {
 			$this->addSettings();
@@ -293,8 +319,9 @@ class PostmanSmtpModuleTransport extends PostmanAbstractZendModuleTransport impl
 	}
 
 	/**
+	 * @return void
 	 */
-	public function registerStylesAndScripts() {
+	public function registerStylesAndScripts(): void {
 		// register the stylesheet and javascript external resources
 		$pluginData = apply_filters( 'postman_get_plugin_metadata', null );
 		wp_register_script( 'postman_smtp_script', plugins_url( 'Postman/Postman-Mail/postman_smtp.js', $this->rootPluginFilenameAndPath ), array(
@@ -309,14 +336,16 @@ class PostmanSmtpModuleTransport extends PostmanAbstractZendModuleTransport impl
 	 */
 
 	/**
+	 * @return void
 	 */
 	public function enqueueScript() {
 		wp_enqueue_script( 'postman_smtp_script' );
 	}
 
 	/**
+	 * @return void
 	 */
-	public function addSettings() {
+	public function addSettings(): void {
 		$transport = $this;
 		$this->options = $this->options;
 		$oauthScribe = $transport->getScribe();
@@ -395,30 +424,38 @@ class PostmanSmtpModuleTransport extends PostmanAbstractZendModuleTransport impl
 	}
 
 	/**
-	 * Print the Section text
+	 * 	 * Print the Section text
+	 *
+	 * @return void
 	 */
-	public function printSmtpSectionInfo() {
+	public function printSmtpSectionInfo(): void {
 		print __( 'Configure the communication with the mail server.', 'post-smtp' );
 	}
 
 	/**
-	 * Get the settings option array and print one of its values
+	 * 	 * Get the settings option array and print one of its values
+	 *
+	 * @return void
 	 */
-	public function hostname_callback() {
+	public function hostname_callback(): void {
 		printf( '<input type="text" id="input_hostname" name="postman_options[hostname]" value="%s" size="40" class="required" placeholder="%s"/>', null !== $this->options->getHostname() ? esc_attr( $this->options->getHostname() ) : '', __( 'Required', 'post-smtp' ) );
 	}
 
 	/**
-	 * Get the settings option array and print one of its values
+	 * 	 * Get the settings option array and print one of its values
+	 *
+	 * @return void
 	 */
-	public function port_callback( $args ) {
+	public function port_callback( $args ): void {
 		printf( '<input type="text" id="input_port" name="postman_options[port]" value="%s" %s placeholder="%s"/>', null !== $this->options->getPort() ? esc_attr( $this->options->getPort() ) : '', isset( $args ['style'] ) ? $args ['style'] : '', __( 'Required', 'post-smtp' ) );
 	}
 
 	/**
-	 * Get the settings option array and print one of its values
+	 * 	 * Get the settings option array and print one of its values
+	 *
+	 * @return void
 	 */
-	public function encryption_type_callback() {
+	public function encryption_type_callback(): void {
 		$encType = $this->options->getEncryptionType();
 		print '<select id="input_enc_type" class="input_encryption_type" name="postman_options[enc_type]">';
 		printf( '<option class="input_enc_type_none" value="%s" %s>%s</option>', PostmanOptions::SECURITY_TYPE_NONE, $encType == PostmanOptions::SECURITY_TYPE_NONE ? 'selected="selected"' : '', __( 'None', 'post-smtp' ) );
@@ -428,9 +465,11 @@ class PostmanSmtpModuleTransport extends PostmanAbstractZendModuleTransport impl
 	}
 
 	/**
-	 * Get the settings option array and print one of its values
+	 * 	 * Get the settings option array and print one of its values
+	 *
+	 * @return void
 	 */
-	public function authentication_type_callback() {
+	public function authentication_type_callback(): void {
 		$authType = $this->options->getAuthenticationType();
 		printf( '<select id="input_%2$s" class="input_%2$s" name="%1$s[%2$s]">', PostmanOptions::POSTMAN_OPTIONS, PostmanOptions::AUTHENTICATION_TYPE );
 		printf( '<option class="input_auth_type_none" value="%s" %s>%s</option>', PostmanOptions::AUTHENTICATION_TYPE_NONE, $authType == PostmanOptions::AUTHENTICATION_TYPE_NONE ? 'selected="selected"' : '', 'None' );
@@ -442,16 +481,20 @@ class PostmanSmtpModuleTransport extends PostmanAbstractZendModuleTransport impl
 	}
 
 	/**
-	 * Print the Section text
+	 * 	 * Print the Section text
+	 *
+	 * @return void
 	 */
-	public function printBasicAuthSectionInfo() {
+	public function printBasicAuthSectionInfo(): void {
 		print __( 'Enter the account credentials.', 'post-smtp' );
 	}
 
 	/**
-	 * Get the settings option array and print one of its values
+	 * 	 * Get the settings option array and print one of its values
+	 *
+	 * @return void
 	 */
-	public function basic_auth_username_callback() {
+	public function basic_auth_username_callback(): void {
 		$inputValue = (null !== $this->options->getUsername() ? esc_attr( $this->options->getUsername() ) : '');
 		$inputDescription = __( 'The Username is usually the same as the Envelope-From Email Address.', 'post-smtp' );
 		print ('<input tabindex="99" id="fake_user_name" name="fake_user[name]" style="position:absolute; top:-500px;" type="text" value="Safari Autofill Me">') ;
@@ -459,32 +502,40 @@ class PostmanSmtpModuleTransport extends PostmanAbstractZendModuleTransport impl
 	}
 
 	/**
-	 * Get the settings option array and print one of its values
+	 * 	 * Get the settings option array and print one of its values
+	 *
+	 * @return void
 	 */
-	public function basic_auth_password_callback() {
+	public function basic_auth_password_callback(): void {
 		print ('<input tabindex="99" id="fake_password" name="fake[password]" style="position:absolute; top:-500px;" type="password" value="Safari Autofill Me">') ;
 		printf( '<input type="password" id="input_basic_auth_password" name="postman_options[basic_auth_password]" value="%s" size="40" class="required" placeholder="%s"/>', null !== $this->options->getPassword() ? esc_attr( PostmanUtils::obfuscatePassword( $this->options->getPassword() ) ) : '', __( 'Required', 'post-smtp' ) );
 		print ' <input type="button" id="togglePasswordField" value="Show Password" class="button button-secondary" style="visibility:hidden" />';
 	}
 
 	/**
-	 * Get the settings option array and print one of its values
+	 * 	 * Get the settings option array and print one of its values
+	 *
+	 * @return void
 	 */
-	public function oauth_client_id_callback() {
+	public function oauth_client_id_callback(): void {
 		printf( '<input type="text" onClick="this.setSelectionRange(0, this.value.length)" id="oauth_client_id" name="postman_options[oauth_client_id]" value="%s" size="60" class="required" placeholder="%s"/>', null !== $this->options->getClientId() ? esc_attr( $this->options->getClientId() ) : '', __( 'Required', 'post-smtp' ) );
 	}
 
 	/**
-	 * Get the settings option array and print one of its values
+	 * 	 * Get the settings option array and print one of its values
+	 *
+	 * @return void
 	 */
-	public function oauth_client_secret_callback() {
+	public function oauth_client_secret_callback(): void {
 		printf( '<input type="text" onClick="this.setSelectionRange(0, this.value.length)" autocomplete="off" id="oauth_client_secret" name="postman_options[oauth_client_secret]" value="%s" size="60" class="required" placeholder="%s"/>', null !== $this->options->getClientSecret() ? esc_attr( $this->options->getClientSecret() ) : '', __( 'Required', 'post-smtp' ) );
 	}
 
 	/**
-	 * Print the Section text
+	 * 	 * Print the Section text
+	 *
+	 * @return void
 	 */
-	public function printOAuthSectionInfo() {
+	public function printOAuthSectionInfo(): void {
 		$this->options = $this->options;
 		$transport = $this;
 		$oauthScribe = $transport->getScribe();
@@ -492,9 +543,11 @@ class PostmanSmtpModuleTransport extends PostmanAbstractZendModuleTransport impl
 	}
 
 	/**
-	 * Get the settings option array and print one of its values
+	 * 	 * Get the settings option array and print one of its values
+	 *
+	 * @return void
 	 */
-	public function callback_domain_callback() {
+	public function callback_domain_callback(): void {
 		printf( '<input type="text" onClick="this.setSelectionRange(0, this.value.length)" readonly="readonly" id="input_oauth_callback_domain" value="%s" size="60"/>', $this->getCallbackDomain() );
 	}
 
@@ -512,9 +565,11 @@ class PostmanSmtpModuleTransport extends PostmanAbstractZendModuleTransport impl
 	}
 
 	/**
-	 * Get the settings option array and print one of its values
+	 * 	 * Get the settings option array and print one of its values
+	 *
+	 * @return void
 	 */
-	public function redirect_url_callback() {
+	public function redirect_url_callback(): void {
 		$this->options = $this->options;
 		$transport = $this;
 		$oauthScribe = $transport->getScribe();
@@ -522,9 +577,11 @@ class PostmanSmtpModuleTransport extends PostmanAbstractZendModuleTransport impl
 	}
 
 	/**
-	 * Get the settings option array and print one of its values
+	 * 	 * Get the settings option array and print one of its values
+	 *
+	 * @return void
 	 */
-	public function sender_email_callback() {
+	public function sender_email_callback(): void {
 		$inputValue = (null !== $this->options->getEnvelopeSender() ? esc_attr( $this->options->getEnvelopeSender() ) : '');
 		$requiredLabel = __( 'Required', 'post-smtp' );
 		$envelopeFromMessage = __( 'This address, like the <b>return address</b> printed on an envelope, identifies the account owner to the SMTP server.', 'post-smtp' );
@@ -533,6 +590,7 @@ class PostmanSmtpModuleTransport extends PostmanAbstractZendModuleTransport impl
 	}
 
 	/**
+	 * @return void
 	 */
 	public function printWizardMailServerHostnameStep() {
 		printf( '<legend>%s</legend>', _x( 'Which host will relay the mail?', 'Wizard Step Title', 'post-smtp' ) );
@@ -552,6 +610,7 @@ class PostmanSmtpModuleTransport extends PostmanAbstractZendModuleTransport impl
 	}
 
 	/**
+	 * @return void
 	 */
 	public function printWizardAuthenticationStep() {
 		print '<section class="wizard-auth-oauth2">';

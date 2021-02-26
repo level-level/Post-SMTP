@@ -39,27 +39,33 @@ class PostmanConnectivityTestController {
 	}
 
 	/**
-	 * Functions to execute on the init event
+	 * 	 * Functions to execute on the init event
+	 * 	 *
+	 * 	 * "Typically used by plugins to initialize. The current user is already authenticated by this time."
+	 * 	 * ref: http://codex.wordpress.org/Plugin_API/Action_Reference#Actions_Run_During_a_Typical_Request
 	 *
-	 * "Typically used by plugins to initialize. The current user is already authenticated by this time."
-	 * ref: http://codex.wordpress.org/Plugin_API/Action_Reference#Actions_Run_During_a_Typical_Request
+	 * @return void
 	 */
-	public function on_init() {
+	public function on_init(): void {
 		// register Ajax handlers
 		new PostmanPortTestAjaxController();
 	}
 
 	/**
-	 * Fires on the admin_init method
+	 * 	 * Fires on the admin_init method
+	 *
+	 * @return void
 	 */
-	public function on_admin_init() {
+	public function on_admin_init(): void {
 				$this->registerStylesAndScripts();
 	}
 
 	/**
-	 * Register and add settings
+	 * 	 * Register and add settings
+	 *
+	 * @return void
 	 */
-	private function registerStylesAndScripts() {
+	private function registerStylesAndScripts(): void {
 		if ( $this->logger->isTrace() ) {
 			$this->logger->trace( 'registerStylesAndScripts()' );
 		}
@@ -74,9 +80,11 @@ class PostmanConnectivityTestController {
 	}
 
 	/**
-	 * Register the Email Test screen
+	 * 	 * Register the Email Test screen
+	 *
+	 * @return void
 	 */
-	public function addPortTestSubmenu() {
+	public function addPortTestSubmenu(): void {
 		$page = add_submenu_page( null, sprintf( __( '%s Setup', 'post-smtp' ), __( 'Postman SMTP', 'post-smtp' ) ), __( 'Postman SMTP', 'post-smtp' ), Postman::MANAGE_POSTMAN_CAPABILITY_NAME, PostmanConnectivityTestController::PORT_TEST_SLUG, array(
 				$this,
 				'outputPortTestContent',
@@ -89,15 +97,16 @@ class PostmanConnectivityTestController {
 	}
 
 	/**
+	 * @return void
 	 */
-	function enqueuePortTestResources() {
+	function enqueuePortTestResources(): void {
 		wp_enqueue_style( PostmanViewController::POSTMAN_STYLE );
 		wp_enqueue_script( 'postman_port_test_script' );
 		$warning = __( 'Warning', 'post-smtp' );
 		wp_localize_script( PostmanViewController::POSTMAN_SCRIPT, 'postman_hostname_element_name', '#input_' . PostmanOptions::HOSTNAME );
 		PostmanConnectivityTestController::addLocalizeScriptForPortTest();
 	}
-	static function addLocalizeScriptForPortTest() {
+	static function addLocalizeScriptForPortTest(): void {
 		wp_localize_script( PostmanViewController::POSTMAN_SCRIPT, 'postman_port_test', array(
 				'in_progress' => _x( 'Checking..', 'The "please wait" message', 'post-smtp' ),
 				'open' => _x( 'Open', 'The port is open', 'post-smtp' ),
@@ -117,9 +126,11 @@ class PostmanConnectivityTestController {
 	}
 
 	/**
-	 * Get the settings option array and print one of its values
+	 * 	 * Get the settings option array and print one of its values
+	 *
+	 * @return void
 	 */
-	public function port_test_hostname_callback() {
+	public function port_test_hostname_callback(): void {
 		$hostname = PostmanTransportRegistry::getInstance()->getSelectedTransport()->getHostname();
 		if ( empty( $hostname ) ) {
 			$hostname = PostmanTransportRegistry::getInstance()->getActiveTransport()->getHostname();
@@ -128,8 +139,9 @@ class PostmanConnectivityTestController {
 	}
 
 	/**
+	 * @return void
 	 */
-	public function outputPortTestContent() {
+	public function outputPortTestContent(): void {
 		print '<div class="wrap">';
 
 		PostmanViewController::outputChildPageHeader( __( 'Connectivity Test', 'post-smtp' ) );
@@ -199,12 +211,14 @@ class PostmanPortTestAjaxController {
 	}
 
 	/**
-	 * This Ajax function determines which hosts/ports to test in both the Wizard Connectivity Test and direct Connectivity Test
+	 * 	 * This Ajax function determines which hosts/ports to test in both the Wizard Connectivity Test and direct Connectivity Test
+	 * 	 *
+	 * 	 * Given a single outgoing smtp server hostname, return an array of host/port
+	 * 	 * combinations to run the connectivity test on
 	 *
-	 * Given a single outgoing smtp server hostname, return an array of host/port
-	 * combinations to run the connectivity test on
+	 * @return void
 	 */
-	function getPortsToTestViaAjax() {
+	function getPortsToTestViaAjax(): void {
 		$queryHostname = PostmanUtils::getRequestParameter( 'hostname' );
 		// originalSmtpServer is what SmtpDiscovery thinks the SMTP server should be, given an email address
 		$originalSmtpServer = PostmanUtils::getRequestParameter( 'original_smtp_server' );
@@ -219,9 +233,11 @@ class PostmanPortTestAjaxController {
 	}
 
 	/**
-	 * This Ajax function retrieves whether a TCP port is open or not
+	 * 	 * This Ajax function retrieves whether a TCP port is open or not
+	 *
+	 * @return void
 	 */
-	function runPortQuizTest() {
+	function runPortQuizTest(): void {
 		$hostname = 'portquiz.net';
 		$port = intval( PostmanUtils::getRequestParameter( 'port' ) );
 		$this->logger->debug( 'testing TCP port: hostname ' . $hostname . ' port ' . $port );
@@ -231,10 +247,12 @@ class PostmanPortTestAjaxController {
 	}
 
 	/**
-	 * This Ajax function retrieves whether a TCP port is open or not.
-	 * This is called by both the Wizard and Port Test
+	 * 	 * This Ajax function retrieves whether a TCP port is open or not.
+	 * 	 * This is called by both the Wizard and Port Test
+	 *
+	 * @return void
 	 */
-	function runSmtpTest() {
+	function runSmtpTest(): void {
 		$hostname = trim( PostmanUtils::getRequestParameter( 'hostname' ) );
 		$port = intval( PostmanUtils::getRequestParameter( 'port' ) );
 		$transport = trim( PostmanUtils::getRequestParameter( 'transport' ) );
@@ -255,9 +273,11 @@ class PostmanPortTestAjaxController {
 		$this->buildResponse( $hostname, $port, $portTest, $success, $transport );
 	}
 	/**
-	 * This Ajax function retrieves whether a TCP port is open or not
+	 * 	 * This Ajax function retrieves whether a TCP port is open or not
+	 *
+	 * @return void
 	 */
-	function runSmtpsTest() {
+	function runSmtpsTest(): void {
 		$hostname = trim( PostmanUtils::getRequestParameter( 'hostname' ) );
 		$port = intval( PostmanUtils::getRequestParameter( 'port' ) );
 		$transport = trim( PostmanUtils::getRequestParameter( 'transport' ) );
@@ -270,12 +290,15 @@ class PostmanPortTestAjaxController {
 	}
 
 	/**
+	 * 	 *
 	 *
 	 * @param mixed $hostname
 	 * @param mixed $port
 	 * @param mixed $success
+	 *
+	 * @return void
 	 */
-	private function buildResponse( $hostname, $port, PostmanPortTest $portTest, $success, $transport = '' ) {
+	private function buildResponse( $hostname, $port, PostmanPortTest $portTest, $success, $transport = '' ): void {
 		$this->logger->debug( sprintf( 'testing port result for %s:%s success=%s', $hostname, $port, $success ) );
 		$response = array(
 				'hostname' => $hostname,

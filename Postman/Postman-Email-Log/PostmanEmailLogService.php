@@ -17,7 +17,7 @@ if ( ! class_exists( 'PostmanEmailLog' ) ) {
 		public $originalMessage;
 		public $originalHeaders;
 
-		public function setStatusMessage( $message ) {
+		public function setStatusMessage( $message ): void {
 		    $this->statusMessage .= $message;
         }
 	}
@@ -64,13 +64,16 @@ if ( ! class_exists( 'PostmanEmailLogService' ) ) {
 		}
 
 		/**
-		 * Logs successful email attempts
+		 * 		 * Logs successful email attempts
+		 * 		 *
 		 *
 		 * @param PostmanMessage         $message
 		 * @param mixed                $transcript
 		 * @param PostmanModuleTransport $transport
+		 *
+		 * @return void
 		 */
-		public function writeSuccessLog( PostmanEmailLog $log, PostmanMessage $message, $transcript, PostmanModuleTransport $transport ) {
+		public function writeSuccessLog( PostmanEmailLog $log, PostmanMessage $message, $transcript, PostmanModuleTransport $transport ): void {
 			if ( PostmanOptions::getInstance()->isMailLoggingEnabled() ) {
 				$statusMessage = '';
 				$status = true;
@@ -85,7 +88,8 @@ if ( ! class_exists( 'PostmanEmailLogService' ) ) {
 		}
 
 		/**
-		 * Logs failed email attempts, requires more metadata so the email can be resent in the future
+		 * 		 * Logs failed email attempts, requires more metadata so the email can be resent in the future
+		 * 		 *
 		 *
 		 * @param PostmanMessage         $message
 		 * @param mixed                $transcript
@@ -95,8 +99,10 @@ if ( ! class_exists( 'PostmanEmailLogService' ) ) {
 		 * @param mixed                $originalSubject
 		 * @param mixed                $originalMessage
 		 * @param mixed                $originalHeaders
+		 *
+		 * @return void
 		 */
-		public function writeFailureLog( PostmanEmailLog $log, PostmanMessage $message = null, $transcript, PostmanModuleTransport $transport, $statusMessage ) {
+		public function writeFailureLog( PostmanEmailLog $log, PostmanMessage $message = null, $transcript, PostmanModuleTransport $transport, $statusMessage ): void {
 			if ( PostmanOptions::getInstance()->isMailLoggingEnabled() ) {
 				$this->createLog( $log, $message, $transcript, $statusMessage, false, $transport );
 				$this->writeToEmailLog( $log,$message );
@@ -104,11 +110,13 @@ if ( ! class_exists( 'PostmanEmailLogService' ) ) {
 		}
 
 		/**
-		 * Writes an email sending attempt to the Email Log
+		 * 		 * Writes an email sending attempt to the Email Log
+		 * 		 *
+		 * 		 * From http://wordpress.stackexchange.com/questions/8569/wp-insert-post-php-function-and-custom-fields
 		 *
-		 * From http://wordpress.stackexchange.com/questions/8569/wp-insert-post-php-function-and-custom-fields
+		 * @return void
 		 */
-		private function writeToEmailLog( PostmanEmailLog $log, PostmanMessage $message = null ) {
+		private function writeToEmailLog( PostmanEmailLog $log, PostmanMessage $message = null ): void {
 
 		    $options = PostmanOptions::getInstance();
 
@@ -181,7 +189,7 @@ if ( ! class_exists( 'PostmanEmailLogService' ) ) {
 			$purger->truncateLogItems( PostmanOptions::getInstance()->getMailLoggingMaxEntries() );
 		}
 
-		private function checkForLogErrors( PostmanEmailLog $log, $postMessage ) {
+		private function checkForLogErrors( PostmanEmailLog $log, $postMessage ): void {
 			$message = __( 'You getting this message because an error detected while delivered your email.', 'post-smtp' );
 			$message .= "\r\n" . sprintf( __( 'For the domain: %1$s','post-smtp' ), get_bloginfo('url') );
 			$message .= "\r\n" . __( 'The log to paste when you open a support issue:', 'post-smtp' ) . "\r\n";
@@ -311,9 +319,12 @@ if ( ! class_exists( 'PostmanEmailLogPurger' ) ) {
 		}
 
 		/**
+		 * 		 *
 		 *
 		 * @param array   $posts
 		 * @param mixed $postid
+		 *
+		 * @return void
 		 */
 		function verifyLogItemExistsAndRemove( $postid ) {
 			$force_delete = true;
@@ -326,7 +337,7 @@ if ( ! class_exists( 'PostmanEmailLogPurger' ) ) {
 			}
 			$this->logger->warn( 'could not find Postman Log Item #' . $postid );
 		}
-		function removeAll() {
+		function removeAll(): void {
 			$this->logger->debug( sprintf( 'deleting %d log items ', sizeof( $this->posts ) ) );
 			$force_delete = true;
 			foreach ( $this->posts as $post ) {
@@ -335,10 +346,13 @@ if ( ! class_exists( 'PostmanEmailLogPurger' ) ) {
 		}
 
 		/**
+		 * 		 *
 		 *
 		 * @param mixed $size
+		 *
+		 * @return void
 		 */
-		function truncateLogItems( $size ) {
+		function truncateLogItems( $size ): void {
 			$index = count( $this->posts );
 			$force_delete = true;
 			while ( $index > $size ) {

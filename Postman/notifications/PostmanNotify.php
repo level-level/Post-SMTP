@@ -11,10 +11,13 @@ class PostmanNotify {
         $this->notify = $notify;
     }
 
-    public function send( $message, $log ) {
+    public function send( $message, $log ): void {
         $this->notify->send_message( $message );
     }
 
+    /**
+     * @return void
+     */
     public function push_to_chrome($message) {
         $push_chrome = PostmanOptions::getInstance()->useChromeExtension();
 

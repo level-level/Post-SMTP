@@ -14,9 +14,11 @@ if ( ! class_exists( 'PostmanWpMail' ) ) {
 		private $logger;
 
 		/**
-		 * Load the dependencies
+		 * 		 * Load the dependencies
+		 *
+		 * @return void
 		 */
-		public function init() {
+		public function init(): void {
 			$this->logger = new PostmanLogger( get_class( $this ) );
 			require_once 'Postman-Mail/PostmanMessage.php';
 			require_once 'Postman-Email-Log/PostmanEmailLogService.php';
@@ -84,15 +86,18 @@ if ( ! class_exists( 'PostmanWpMail' ) ) {
         }
 
 		/**
-		 * Builds a PostmanMessage based on the WordPress wp_mail parameters
+		 * 		 * Builds a PostmanMessage based on the WordPress wp_mail parameters
+		 * 		 *
 		 *
 		 * @param mixed $to
 		 * @param mixed $subject
 		 * @param mixed $message
 		 * @param mixed $headers
 		 * @param mixed $attachments
+		 *
+		 * @return PostmanMessage
 		 */
-		private function processWpMailCall( $to, $subject, $message, $headers, $attachments ) {
+		private function processWpMailCall( $to, $subject, $message, $headers, $attachments ): PostmanMessage {
 			$this->logger->trace( 'wp_mail parameters before applying WordPress wp_mail filter:' );
 			$this->traceParameters( $to, $subject, $message, $headers, $attachments );
 
@@ -292,6 +297,9 @@ if ( ! class_exists( 'PostmanWpMail' ) ) {
 			}
 		}
 
+		/**
+		 * @return bool
+		 */
 		private function fallback( $log, $postMessage,$options ) {
 
             if ( ! $options->is_fallback && $options->getFallbackIsEnabled() && $options->getFallbackIsEnabled() == 'yes' ) {
@@ -312,12 +320,15 @@ if ( ! class_exists( 'PostmanWpMail' ) ) {
         }
 
 		/**
-		 * Clean up after sending the mail
+		 * 		 * Clean up after sending the mail
+		 * 		 *
 		 *
 		 * @param PostmanZendMailEngine $engine
 		 * @param mixed               $startTime
+		 *
+		 * @return void
 		 */
-		private function postSend( PostmanMailEngine $engine, $startTime, PostmanOptions $options, PostmanModuleTransport $transport ) {
+		private function postSend( PostmanMailEngine $engine, $startTime, PostmanOptions $options, PostmanModuleTransport $transport ): void {
 			// save the transcript
 			$this->transcript = $engine->getTranscript();
 
@@ -338,11 +349,14 @@ if ( ! class_exists( 'PostmanWpMail' ) ) {
 		}
 
 		/**
-		 * Returns the result of the last call to send()
+		 * 		 * Returns the result of the last call to send()
+		 * 		 *
 		 *
-		 * @return multitype:Exception NULL
+		 * @return array NULL
+		 *
+		 * @psalm-return array{time: mixed, exception: mixed, transcript: mixed}
 		 */
-		function postman_wp_mail_result() {
+		function postman_wp_mail_result(): array {
 			$result = array(
 					'time' => $this->totalTime,
 					'exception' => $this->exception,
@@ -352,8 +366,9 @@ if ( ! class_exists( 'PostmanWpMail' ) ) {
 		}
 
 		/**
+		 * @return void
 		 */
-		private function ensureAuthtokenIsUpdated( PostmanModuleTransport $transport, PostmanOptions $options, PostmanOAuthToken $authorizationToken ) {
+		private function ensureAuthtokenIsUpdated( PostmanModuleTransport $transport, PostmanOptions $options, PostmanOAuthToken $authorizationToken ): void {
 			assert( ! empty( $transport ) );
 			assert( ! empty( $options ) );
 			assert( ! empty( $authorizationToken ) );
@@ -369,15 +384,18 @@ if ( ! class_exists( 'PostmanWpMail' ) ) {
 		}
 
 		/**
-		 * Aggregates all the content into a Message to be sent to the MailEngine
+		 * 		 * Aggregates all the content into a Message to be sent to the MailEngine
+		 * 		 *
 		 *
 		 * @param mixed $to
 		 * @param mixed $subject
 		 * @param mixed $body
 		 * @param mixed $headers
 		 * @param mixed $attachments
+		 *
+		 * @return PostmanMessage
 		 */
-		private function populateMessageFromWpMailParams( PostmanMessage $message, $to, $subject, $body, $headers, $attachments ) {
+		private function populateMessageFromWpMailParams( PostmanMessage $message, $to, $subject, $body, $headers, $attachments ): PostmanMessage {
 			$message->addHeaders( $headers );
 			$message->setBody( $body );
 			$message->setSubject( $subject );
@@ -387,15 +405,18 @@ if ( ! class_exists( 'PostmanWpMail' ) ) {
 		}
 
 		/**
-		 * Trace the parameters to aid in debugging
+		 * 		 * Trace the parameters to aid in debugging
+		 * 		 *
 		 *
 		 * @param mixed $to
 		 * @param mixed $subject
 		 * @param mixed $body
 		 * @param mixed $headers
 		 * @param mixed $attachments
+		 *
+		 * @return void
 		 */
-		private function traceParameters( $to, $subject, $message, $headers, $attachments ) {
+		private function traceParameters( $to, $subject, $message, $headers, $attachments ): void {
 			$this->logger->trace( 'to:' );
 			$this->logger->trace( $to );
 			$this->logger->trace( 'subject:' );
