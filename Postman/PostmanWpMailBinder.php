@@ -115,7 +115,7 @@ if (! class_exists ( 'PostmanWpMailBinder' )) {
 			 *        	Optional. Files to attach.
 			 * @return bool Whether the email contents were sent successfully.
 			 */
-			function wp_mail($to, $subject, $message, $headers = '', $attachments = array()) {
+			function wp_mail($to, $subject, $message, $headers = '', $attachments = array()) { // @phpstan-ignore-line
 				// create an instance of PostmanWpMail to send the message
 				$postmanWpMail = new PostmanWpMail ();
 				// send the mail
