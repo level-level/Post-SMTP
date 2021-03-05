@@ -138,15 +138,6 @@ if (! class_exists ( 'PostmanSmtpDiscovery' )) {
 		public function getSmtpServer() {
 			return $this->smtpServer;
 		}
-
-		/**
-		 *
-		 * @param mixed $email
-		 * @return string|bool
-		 */
-		private function validateEmail($email) {
-			return PostmanUtils::validateEmail ( $email );
-		}
 		private function determineSmtpServer($email): bool {
 			$hostname = substr ( strrchr ( $email, "@" ), 1 );
 			$this->domain = $hostname;

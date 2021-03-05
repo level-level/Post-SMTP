@@ -23,12 +23,6 @@ class PostmanEmailLogs {
 
     private static $instance;
 
-    private function __construct() {
-        global $wpdb;
-
-        $this->db = $wpdb;
-    }
-
     /**
      * @return array[]
      *
