@@ -1,10 +1,10 @@
 <?php
 if ( ! interface_exists( 'PostmanConfigTextHelper' ) ) {
 	interface PostmanConfigTextHelper {
-		public function isOauthHost();
-		public function isGoogle();
-		public function isMicrosoft();
-		public function isYahoo();
+		public function isOauthHost():bool;
+		public function isGoogle():bool;
+		public function isMicrosoft():bool;
+		public function isYahoo():bool;
 		public function getCallbackUrl();
 		public function getCallbackDomain();
 		public function getClientIdLabel();
@@ -37,28 +37,20 @@ if ( ! class_exists( 'PostmanAbstractConfigTextHelper' ) ) {
 			
 			return $text;
 		}
-		/**
-		 * @return false
-		 */
-		function isOauthHost() {
+		
+		function isOauthHost():bool {
 			return false;
 		}
-		/**
-		 * @return false
-		 */
-		function isGoogle() {
+
+		function isGoogle():bool {
 			return false;
 		}
-		/**
-		 * @return false
-		 */
-		function isMicrosoft() {
+		
+		function isMicrosoft():bool {
 			return false;
 		}
-		/**
-		 * @return false
-		 */
-		function isYahoo() {
+		
+		function isYahoo():bool {
 			return false;
 		}
 		/**
@@ -72,16 +64,12 @@ if ( ! class_exists( 'PostmanAbstractConfigTextHelper' ) ) {
 }
 if ( ! class_exists( 'PostmanGoogleOAuthScribe' ) ) {
 	class PostmanGoogleOAuthScribe extends PostmanAbstractConfigTextHelper {
-		/**
-		 * @return true
-		 */
-		public function isGoogle() {
+
+		public function isGoogle():bool {
 			return true;
 		}
-		/**
-		 * @return true
-		 */
-		function isOauthHost() {
+
+		function isOauthHost():bool {
 			return true;
 		}
 		/**
@@ -156,16 +144,12 @@ if ( ! class_exists( 'PostmanGoogleOAuthScribe' ) ) {
 }
 if ( ! class_exists( 'PostmanMicrosoftOAuthScribe' ) ) {
 	class PostmanMicrosoftOAuthScribe extends PostmanAbstractConfigTextHelper {
-		/**
-		 * @return true
-		 */
-		public function isMicrosoft() {
+
+		public function isMicrosoft():bool {
 			return true;
 		}
-		/**
-		 * @return true
-		 */
-		function isOauthHost() {
+		
+		function isOauthHost():bool {
 			return true;
 		}
 		public function getCallbackUrl() {
@@ -236,16 +220,12 @@ if ( ! class_exists( 'PostmanMicrosoftOAuthScribe' ) ) {
 }
 if ( ! class_exists( 'PostmanYahooOAuthScribe' ) ) {
 	class PostmanYahooOAuthScribe extends PostmanAbstractConfigTextHelper {
-		/**
-		 * @return true
-		 */
-		public function isYahoo() {
+		
+		public function isYahoo():bool {
 			return true;
 		}
-		/**
-		 * @return true
-		 */
-		function isOauthHost() {
+		
+		function isOauthHost():bool {
 			return true;
 		}
 		/**
@@ -323,22 +303,16 @@ if ( ! class_exists( 'PostmanNonOAuthScribe' ) ) {
 		public function __construct( $hostname ) {
 			$this->hostname = $hostname;
 		}
-		/**
-		 * @return bool
-		 */
-		public function isGoogle() {
+		
+		public function isGoogle():bool {
 			return PostmanUtils::endsWith( $this->hostname, 'gmail.com' );
 		}
-		/**
-		 * @return bool
-		 */
-		public function isMicrosoft() {
+		
+		public function isMicrosoft():bool {
 			return PostmanUtils::endsWith( $this->hostname, 'live.com' );
 		}
-		/**
-		 * @return bool
-		 */
-		public function isYahoo() {
+		
+		public function isYahoo():bool {
 			return PostmanUtils::endsWith( $this->hostname, 'yahoo.com' );
 		}
 		/**
