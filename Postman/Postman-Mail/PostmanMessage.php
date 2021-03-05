@@ -320,42 +320,14 @@ if ( ! class_exists( 'PostmanMessage' ) ) {
 		public function setContentType( string $contentType ): void {
 			$this->contentType = $contentType;
 		}
-		/**
-		 * 		 *
-		 *
-		 * @param mixed $recipients
-		 *        	Array or comma-separated list of email addresses to send message.
-		 *
-		 * @throws Exception
-		 *
-		 * @return void
-		 */
 		public function addTo( string $to ): void {
 			$this->addRecipients( $this->toRecipients, $to );
 		}
-		/**
-		 * 		 *
-		 *
-		 * @param mixed $recipients
-		 *        	Array or comma-separated list of email addresses to send message.
-		 *
-		 * @throws Exception
-		 *
-		 * @return void
-		 */
+
 		public function addCc( string $cc ): void {
 			$this->addRecipients( $this->ccRecipients, $cc );
 		}
-		/**
-		 * 		 *
-		 *
-		 * @param mixed $recipients
-		 *        	Array or comma-separated list of email addresses to send message.
-		 *
-		 * @throws Exception
-		 *
-		 * @return void
-		 */
+
 		public function addBcc( string $bcc ): void {
 			$this->addRecipients( $this->bccRecipients, $bcc );
 		}
@@ -424,10 +396,6 @@ if ( ! class_exists( 'PostmanMessage' ) ) {
 		 * 		 * Add the headers that were processed in processHeaders()
 		 * 		 * Zend requires that several headers are specially handled.
 		 * 		 *
-		 *
-		 * @param mixed           $name
-		 * @param mixed           $value
-		 * @param Zend_Mail $mail
 		 *
 		 * @return void
 		 */
