@@ -55,7 +55,7 @@ if (! class_exists ( "PostmanAbstractAuthenticationManager" )) {
 		 * @return string
 		 */
 		public function generateRequestTransactionId() {
-			return $state = md5 ( rand () );
+			return uniqid('postman-');
 		}
 		
 		/**
