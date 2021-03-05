@@ -1,5 +1,4 @@
 <?php
-require_once 'PostmanModuleTransport.php';
 
 /**
  *
@@ -26,7 +25,6 @@ class PostmanSmtpModuleTransport extends PostmanAbstractZendModuleTransport impl
 	 * @return PostmanZendMailEngine
 	 */
 	public function createMailEngine() {
-		require_once 'PostmanZendMailEngine.php';
 		return new PostmanZendMailEngine( $this );
 	}
 

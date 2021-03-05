@@ -1,10 +1,6 @@
 <?php
 if (! class_exists ( "PostmanAbstractAuthenticationManager" )) {
-	
-	require_once 'PostmanAuthenticationManager.php';
-	
-	/**
-	 */
+
 	abstract class PostmanAbstractAuthenticationManager implements PostmanAuthenticationManager {
 		
 		// constants

@@ -1,5 +1,4 @@
 <?php
-require_once 'PostmanModuleTransport.php';
 /**
  * Postman SendGrid module
  *
@@ -79,7 +78,6 @@ class PostmanSendGridTransport extends PostmanAbstractModuleTransport implements
 	 */
 	public function createMailEngine() {
 		$apiKey = $this->options->getSendGridApiKey ();
-		require_once 'PostmanSendGridMailEngine.php';
 		$engine = new PostmanSendGridMailEngine ( $apiKey );
 		return $engine;
 	}

@@ -1,5 +1,4 @@
 <?php
-require_once 'PostmanModuleTransport.php';
 /**
  * Postman Mailgun module
  *
@@ -81,7 +80,6 @@ class PostmanMailgunTransport extends PostmanAbstractModuleTransport implements 
 		$apiKey = $this->options->getMailgunApiKey();
 		$domainName = $this->options->getMailgunDomainName();
 
-		require_once 'PostmanMailgunMailEngine.php';
 		$engine = new PostmanMailgunMailEngine( $apiKey, $domainName );
 		return $engine;
 	}

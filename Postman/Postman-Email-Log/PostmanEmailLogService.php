@@ -191,7 +191,6 @@ if ( ! class_exists( 'PostmanEmailLogService' ) ) {
 			$message .= "\r\n" . __( 'The log to paste when you open a support issue:', 'post-smtp' ) . "\r\n";
 
 			if ( $log->statusMessage && ! empty( $log->statusMessage ) ) {
-				require_once POST_PATH . '/Postman/notifications/PostmanNotify.php';
 
 				$message = $message . $log->statusMessage;
 

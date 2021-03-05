@@ -1,11 +1,5 @@
 <?php
-require_once 'PostmanModuleTransport.php';
-require_once 'PostmanZendMailTransportConfigurationFactory.php';
 
-/**
- *
- * @author jasonhendriks
- */
 class PostmanTransportRegistry {
 	private $transports;
 	private $logger;

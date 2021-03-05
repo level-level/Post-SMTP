@@ -1,8 +1,6 @@
 <?php
 if (! class_exists ( "PostmanGoogleAuthenticationManager" )) {
 	
-	require_once 'PostmanAbstractAuthenticationManager.php';
-	require_once 'PostmanStateIdMissingException.php';
 	
 	/**
 	 * https://developers.google.com/accounts/docs/OAuth2WebServer

@@ -127,6 +127,5 @@ function post_start( $startingMemory ) {
  * Instantiate the mail Postman class
  */
 function post_setupPostman() {
-	require_once 'Postman/Postman.php';
 	$kevinCostner = new Postman( __FILE__, POST_SMTP_VER );
 }

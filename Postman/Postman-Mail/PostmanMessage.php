@@ -1,8 +1,6 @@
 <?php
 if ( ! class_exists( 'PostmanMessage' ) ) {
 
-	require_once 'PostmanEmailAddress.php';
-
 	/**
 	 * This class knows how to interface with Wordpress
 	 * including loading/saving to the database.

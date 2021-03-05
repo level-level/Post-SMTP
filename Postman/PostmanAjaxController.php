@@ -1,9 +1,6 @@
 <?php
 if (! class_exists ( 'PostmanAbstractAjaxHandler' )) {
 	
-	require_once ('PostmanPreRequisitesCheck.php');
-	require_once ('Postman-Mail/PostmanMessage.php');
-	
 	/**
 	 *
 	 * @author jasonhendriks
@@ -56,5 +53,3 @@ if (! class_exists ( 'PostmanAbstractAjaxHandler' )) {
 		}
 	}
 }
-
-require_once ('Postman-Controller/PostmanManageConfigurationAjaxHandler.php');

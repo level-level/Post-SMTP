@@ -1,5 +1,4 @@
 <?php
-require_once 'PostmanModuleTransport.php';
 
 /**
  * This class integrates Postman with the Gmail API
@@ -50,7 +49,6 @@ class PostmanGmailApiModuleTransport extends PostmanAbstractZendModuleTransport 
 	 * @return PostmanZendMailEngine
 	 */
 	public function createMailEngine() {
-		require_once 'PostmanZendMailEngine.php';
 		return new PostmanZendMailEngine ( $this );
 	}
 	
@@ -68,10 +66,7 @@ class PostmanGmailApiModuleTransport extends PostmanAbstractZendModuleTransport 
 		} else {
 			$config = PostmanBasicAuthConfigurationFactory::createConfig ( $this );
 		}
-		
-		// Google's autoloader will try and load this so we list it first
-		require_once 'PostmanGmailApiModuleZendMailTransport.php';
-		
+				
 		// build the Gmail Client
 		$authToken = PostmanOAuthToken::getInstance ();
 		$client = new Google_Client ();

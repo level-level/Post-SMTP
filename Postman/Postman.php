@@ -46,25 +46,6 @@ class Postman {
 		assert( ! empty( $version ) );
 		$this->rootPluginFilenameAndPath = $rootPluginFilenameAndPath;
 
-		// load the dependencies
-		require_once 'PostmanOptions.php';
-		require_once 'PostmanState.php';
-		require_once 'PostmanLogger.php';
-		require_once 'PostmanUtils.php';
-		require_once 'Postman-Mail/PostmanTransportRegistry.php';
-		require_once 'Postman-Mail/PostmanDefaultModuleTransport.php';
-		require_once 'Postman-Mail/PostmanSmtpModuleTransport.php';
-		require_once 'Postman-Mail/PostmanGmailApiModuleTransport.php';
-		require_once 'Postman-Mail/PostmanMandrillTransport.php';
-		require_once 'Postman-Mail/PostmanSendGridTransport.php';
-		require_once 'Postman-Mail/PostmanMailgunTransport.php';
-		require_once 'PostmanOAuthToken.php';
-		require_once 'PostmanWpMailBinder.php';
-		require_once 'PostmanConfigTextHelper.php';
-		require_once 'Postman-Email-Log/PostmanEmailLogPostType.php';
-		require_once 'Postman-Mail/PostmanContactForm7.php';
-		require_once 'Phpmailer/PostsmtpMailer.php';
-
 		// get plugin metadata - alternative to get_plugin_data
 		$this->pluginData = array(
 				'name' => __( 'Postman SMTP', 'post-smtp' ),
@@ -115,7 +96,6 @@ class Postman {
 			if ( $this->logger->isInfo() ) {
 				$this->logger->info( sprintf( 'Upgrading datastore from version %s to %s', PostmanState::getInstance()->getVersion(), $this->pluginData ['version'] ) );
 			}
-			require_once 'PostmanInstaller.php';
 			$upgrader = new PostmanInstaller();
 			$upgrader->activatePostman();
 		}
@@ -241,7 +221,6 @@ class Postman {
 		if ( $this->logger->isInfo() ) {
 			$this->logger->info( 'Activating plugin' );
 		}
-		require_once 'PostmanInstaller.php';
 		$upgrader = new PostmanInstaller();
 		$upgrader->activatePostman();
 	}
@@ -256,7 +235,6 @@ class Postman {
 		if ( $this->logger->isInfo() ) {
 			$this->logger->info( 'Deactivating plugin' );
 		}
-		require_once 'PostmanInstaller.php';
 		$upgrader = new PostmanInstaller();
 		$upgrader->deactivatePostman();
 	}
@@ -272,17 +250,6 @@ class Postman {
 		$options = PostmanOptions::getInstance();
 		$authToken = PostmanOAuthToken::getInstance();
 		$rootPluginFilenameAndPath = $this->rootPluginFilenameAndPath;
-
-		// load the dependencies
-		require_once 'PostmanMessageHandler.php';
-		require_once 'PostmanAdminController.php';
-		require_once 'Postman-Controller/PostmanWelcomeController.php';
-		require_once 'Postman-Controller/PostmanDashboardWidgetController.php';
-		require_once 'Postman-Email-Log/PostmanEmailLogController.php';
-		require_once 'Postman-Connectivity-Test/PostmanConnectivityTestController.php';
-		require_once 'Postman-Configuration/PostmanConfigurationController.php';
-		require_once 'Postman-Send-Test-Email/PostmanSendTestEmailController.php';
-		require_once 'Postman-Diagnostic-Test/PostmanDiagnosticTestController.php';
 
 		// create and store an instance of the MessageHandler
 		$this->messageHandler = new PostmanMessageHandler();

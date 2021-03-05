@@ -1,7 +1,6 @@
 <?php
 if (! class_exists ( "PostmanMicrosoftAuthenticationManager" )) {
 	
-	require_once 'PostmanAbstractAuthenticationManager.php';
 	
 	/**
 	 * https://msdn.microsoft.com/en-us/library/hh243647.aspx (Seems to be the most up-to-date doc on OAuth 2.0

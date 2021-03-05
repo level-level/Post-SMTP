@@ -1,5 +1,4 @@
 <?php
-require_once 'PostmanModuleTransport.php';
 /**
  * Postman Mandrill module
  *
@@ -140,7 +139,6 @@ class PostmanMandrillTransport extends PostmanAbstractModuleTransport implements
 	 */
 	public function createMailEngine() {
 		$apiKey = $this->options->getMandrillApiKey ();
-		require_once 'PostmanMandrillMailEngine.php';
 		$engine = new PostmanMandrillMailEngine ( $apiKey );
 		return $engine;
 	}

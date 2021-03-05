@@ -3,8 +3,8 @@
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 
-require_once ABSPATH . WPINC . '/PHPMailer/PHPMailer.php';
-require_once ABSPATH . WPINC . '/PHPMailer/SMTP.php';
+// require_once ABSPATH . WPINC . '/PHPMailer/PHPMailer.php';
+// require_once ABSPATH . WPINC . '/PHPMailer/SMTP.php';
 
 add_action('plugins_loaded', function() {
     global $phpmailer;
@@ -28,8 +28,6 @@ class PostsmtpMailer extends PHPMailer {
 
     public function send()
     {
-        require_once dirname(__DIR__) . '/PostmanWpMail.php';
-
         // create a PostmanWpMail instance
         $postmanWpMail = new PostmanWpMail();
         $postmanWpMail->init();

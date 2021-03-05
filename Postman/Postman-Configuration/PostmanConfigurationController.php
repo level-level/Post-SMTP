@@ -1,5 +1,4 @@
 <?php
-require_once( 'PostmanRegisterConfigurationSettings.php' );
 class PostmanConfigurationController {
 	const CONFIGURATION_SLUG = 'postman/configuration';
 	const CONFIGURATION_WIZARD_SLUG = 'postman/configuration_wizard';

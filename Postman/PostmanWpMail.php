@@ -22,11 +22,6 @@ if ( ! class_exists( 'PostmanWpMail' ) ) {
 		 */
 		public function init(): void {
 			$this->logger = new PostmanLogger( get_class( $this ) );
-			require_once 'Postman-Mail/PostmanMessage.php';
-			require_once 'Postman-Email-Log/PostmanEmailLogService.php';
-			require_once 'Postman-Mail/PostmanMailEngine.php';
-			require_once 'Postman-Auth/PostmanAuthenticationManagerFactory.php';
-			require_once 'PostmanState.php';
 		}
 
 		/**

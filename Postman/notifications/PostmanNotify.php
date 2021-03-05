@@ -1,8 +1,4 @@
 <?php
-require_once 'INotify.php';
-require_once 'PostmanMailNotify.php';
-require_once 'PostmanPushoverNotify.php';
-require_once 'PostmanSlackNotify.php';
 
 class PostmanNotify {
     private $notify;

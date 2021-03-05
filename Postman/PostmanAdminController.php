@@ -1,20 +1,5 @@
 <?php
 if ( ! class_exists( 'PostmanAdminController' ) ) {
-
-	require_once 'PostmanOptions.php';
-	require_once 'PostmanState.php';
-	require_once 'PostmanState.php';
-	require_once 'PostmanOAuthToken.php';
-	require_once 'Postman-Connectivity-Test/Postman-PortTest.php';
-	require_once 'Postman-Configuration/PostmanSmtpDiscovery.php';
-	require_once 'PostmanInputSanitizer.php';
-	require_once 'Postman-Configuration/PostmanImportableConfiguration.php';
-	require_once 'PostmanConfigTextHelper.php';
-	require_once 'PostmanAjaxController.php';
-	require_once 'PostmanViewController.php';
-	require_once 'PostmanPreRequisitesCheck.php';
-	require_once 'Postman-Auth/PostmanAuthenticationManagerFactory.php';
-
 	class PostmanAdminController {
 
 		// this is the slug used in the URL
@@ -153,7 +138,6 @@ if ( ! class_exists( 'PostmanAdminController' ) ) {
 					'postmanModifyLinksOnPluginsListPage',
 			) );
 
-			require_once( 'PostmanPluginFeedback.php' );
 		}
 
 

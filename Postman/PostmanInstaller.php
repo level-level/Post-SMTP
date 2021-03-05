@@ -1,6 +1,4 @@
 <?php
-require_once( 'PostmanOAuthToken.php' );
-require_once( 'PostmanOptions.php' );
 
 /**
  * If required, database upgrades are made during activation

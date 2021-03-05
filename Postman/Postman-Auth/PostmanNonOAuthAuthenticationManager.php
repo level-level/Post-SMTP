@@ -1,7 +1,6 @@
 <?php
 if (! class_exists ( "PostmanNonOAuthAuthenticationManager" )) {
-	
-	require_once 'PostmanAuthenticationManager.php';
+
 	class PostmanNonOAuthAuthenticationManager implements PostmanAuthenticationManager {
 		
 		/**

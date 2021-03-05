@@ -1,9 +1,6 @@
 <?php
 if (! class_exists ( "PostmanYahooAuthenticationManager" )) {
 	
-	require_once 'PostmanAbstractAuthenticationManager.php';
-	require_once 'PostmanStateIdMissingException.php';
-	
 	/**
 	 * Super-simple.
 	 * I should have started with Yahoo.

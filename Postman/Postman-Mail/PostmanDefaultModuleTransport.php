@@ -1,5 +1,4 @@
 <?php
-require_once 'PostmanModuleTransport.php';
 if (! class_exists ( 'PostmanSmtpModuleTransport' )) {
 	class PostmanDefaultModuleTransport extends PostmanAbstractZendModuleTransport implements PostmanZendModuleTransport {
 		const SLUG = 'default';
@@ -82,7 +81,6 @@ if (! class_exists ( 'PostmanSmtpModuleTransport' )) {
 		 * @return PostmanZendMailEngine
 		 */
 		public function createMailEngine() {
-			require_once 'PostmanZendMailEngine.php';
 			return new PostmanZendMailEngine ( $this );
 		}
 		

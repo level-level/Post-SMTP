@@ -1,12 +1,6 @@
 <?php
 if (! class_exists ( "PostmanAuthenticationManagerFactory" )) {
 
-	require_once 'PostmanGoogleAuthenticationManager.php';
-	require_once 'PostmanMicrosoftAuthenticationManager.php';
-	require_once 'PostmanNonOAuthAuthenticationManager.php';
-	require_once 'PostmanYahooAuthenticationManager.php';
-
-	//
 	class PostmanAuthenticationManagerFactory {
 		private $logger;
 

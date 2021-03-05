@@ -1,7 +1,6 @@
 <?php
 if (! class_exists ( 'PostmanMessageHandler' )) {
 
-	require_once ('PostmanSession.php');
 	class PostmanMessageHandler {
 
 		// The Session variables that carry messages

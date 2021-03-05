@@ -11,11 +11,6 @@ if (! class_exists ( 'PostmanWpMailBinder' )) {
 		private function __construct() {
 			$this->logger = new PostmanLogger ( get_class ( $this ) );
 			
-			// load the dependencies
-			require_once 'PostmanWpMail.php';
-			require_once 'PostmanOptions.php';
-			require_once 'PostmanPreRequisitesCheck.php';
-			
 			// register the bind status hook
 			add_filter ( 'postman_wp_mail_bind_status', array (
 					$this,

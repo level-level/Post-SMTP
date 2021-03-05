@@ -1,7 +1,4 @@
 <?php
-require_once dirname(__DIR__) . '/PostmanEmailLogs.php';
-require_once 'PostmanEmailLogService.php';
-require_once 'PostmanEmailLogView.php';
 
 /**
  *
