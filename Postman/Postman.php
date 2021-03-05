@@ -413,7 +413,7 @@ class Postman {
 	 * Returns the plugin version number and name
 	 * Part of the Postman API
 	 *
-	 * @return multitype:unknown NULL
+	 * @return array
 	 */
 	public function getPluginMetaData() {
 		// get plugin metadata
@@ -456,8 +456,6 @@ class Postman {
 	 * 	 * The Gmail API used to be a separate plugin which was registered when that plugin
 	 * 	 * was loaded. But now both the SMTP, Gmail API and other transports are registered here.
 	 * 	 *
-	 *
-	 * @param mixed $pluginData
 	 *
 	 * @return void
 	 */
@@ -516,21 +514,5 @@ class Postman {
 	 */
 	function version_shortcode() {
 		return $this->pluginData ['version'];
-	}
-}
-
-if ( ! function_exists( 'str_getcsv' ) ) {
-	/**
-	 * PHP version less than 5.3 don't have str_getcsv natively.
-	 *
-	 * @param mixed $string
-	 * @return multitype:
-	 */
-	function str_getcsv( $string ) {
-		$logger = new PostmanLogger( 'postman-common-functions' );
-		if ( $logger->isDebug() ) {
-			$logger->debug( 'Using custom str_getcsv' );
-		}
-		return PostmanUtils::postman_strgetcsv_impl( $string );
 	}
 }
