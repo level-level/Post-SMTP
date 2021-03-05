@@ -115,7 +115,6 @@ class PostmanSendTestEmailController {
 	 * @return void
 	 */
 	function enqueueEmailTestResources(): void {
-		wp_enqueue_style( 'jquery_steps_style' );
 		wp_enqueue_style( PostmanViewController::POSTMAN_STYLE );
 		wp_enqueue_style( 'postman_send_test_email' );
 		wp_enqueue_script( 'postman_test_email_wizard_script' );

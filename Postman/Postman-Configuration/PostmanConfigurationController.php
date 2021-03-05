@@ -159,7 +159,6 @@ class PostmanConfigurationController {
 	function enqueueConfigurationResources(): void {
 		$this->addLocalizeScriptsToPage();
 		wp_enqueue_style( PostmanViewController::POSTMAN_STYLE );
-		wp_enqueue_style( 'jquery_ui_style' );
 		wp_enqueue_script( 'postman_manual_config_script' );
 	}
 
@@ -193,7 +192,6 @@ class PostmanConfigurationController {
 		wp_localize_script( PostmanViewController::POSTMAN_SCRIPT, 'postman_setup_wizard', array(
 				'start_page' => $startPage,
 		) );
-		wp_enqueue_style( 'jquery_steps_style' );
 		wp_enqueue_style( PostmanViewController::POSTMAN_STYLE );
 		wp_enqueue_script( 'postman_wizard_script' );
 		wp_localize_script( PostmanViewController::POSTMAN_SCRIPT, '$jq', 'jQuery.noConflict(true)' );

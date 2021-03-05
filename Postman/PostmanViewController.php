@@ -157,16 +157,26 @@ if ( ! class_exists( 'PostmanViewController' ) ) {
 			}
 			// register the stylesheet and javascript external resources
 			$pluginData = apply_filters( 'postman_get_plugin_metadata', null );
-			wp_register_style( PostmanViewController::POSTMAN_STYLE, plugins_url( 'style/postman.css', $this->rootPluginFilenameAndPath ), null, $pluginData ['version'] );
-			wp_register_style( 'jquery_ui_style', plugins_url( 'style/jquery-steps/jquery-ui.css', $this->rootPluginFilenameAndPath ), PostmanViewController::POSTMAN_STYLE, '1.1.0' );
-			wp_register_style( 'jquery_steps_style', plugins_url( 'style/jquery-steps/jquery.steps.css', $this->rootPluginFilenameAndPath ), PostmanViewController::POSTMAN_STYLE, '1.1.0' );
+			wp_register_style( 
+				'jquery_ui_style', 
+				plugins_url( 'style/jquery-steps/jquery-ui.css', $this->rootPluginFilenameAndPath ), 
+				array(), 
+				'1.1.0' 
+			);
+			wp_register_style( 'jquery_steps_style', plugins_url( 'style/jquery-steps/jquery.steps.css', $this->rootPluginFilenameAndPath ), array(), '1.1.0' );
+			wp_register_style( 
+				PostmanViewController::POSTMAN_STYLE, 
+				plugins_url( 'style/postman.css', $this->rootPluginFilenameAndPath ), 
+				array('jquery_ui_style', 'jquery_steps_style'), 
+				$pluginData ['version'] 
+			);
 
 			wp_register_script( PostmanViewController::POSTMAN_SCRIPT, plugins_url( 'script/postman.js', $this->rootPluginFilenameAndPath ), array(
 					PostmanViewController::JQUERY_SCRIPT,
 				'jquery-ui-core',
 				'jquery-ui-datepicker',
 			), $pluginData ['version'] );
-			wp_register_script( 'sprintf', plugins_url( 'script/sprintf/sprintf.min.js', $this->rootPluginFilenameAndPath ), null, '1.0.2' );
+			wp_register_script( 'sprintf', plugins_url( 'script/sprintf/sprintf.min.js', $this->rootPluginFilenameAndPath ), array(), '1.0.2' );
 			wp_register_script( 'jquery_steps_script', plugins_url( 'script/jquery-steps/jquery.steps.min.js', $this->rootPluginFilenameAndPath ), array(
 					PostmanViewController::JQUERY_SCRIPT
 			), '1.1.0' );
