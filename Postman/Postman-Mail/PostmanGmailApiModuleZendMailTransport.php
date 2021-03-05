@@ -85,7 +85,7 @@ if (! class_exists ( 'PostmanGmailApiModuleZendMailTransport' )) {
 		/**
 		 * Instance of Zend_Mail_Protocol_Smtp
 		 *
-		 * @var Zend_Mail_Protocol_Smtp
+		 * @var Zend_Mail_Protocol_Abstract
 		 */
 		protected $_connection;
 		
