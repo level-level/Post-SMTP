@@ -16,10 +16,9 @@ class PostmanMandrillTransport extends PostmanAbstractModuleTransport implements
 		parent::__construct ( $rootPluginFilenameAndPath );
 		
 		// add a hook on the plugins_loaded event
-		add_action ( 'admin_init', array (
-				$this,
-				'on_admin_init' 
-		) );
+		add_action ( 'admin_init', function () : void {
+			$this->on_admin_init();
+		} );
 	}
 	
 	/**
@@ -139,8 +138,7 @@ class PostmanMandrillTransport extends PostmanAbstractModuleTransport implements
 	 */
 	public function createMailEngine() {
 		$apiKey = $this->options->getMandrillApiKey ();
-		$engine = new PostmanMandrillMailEngine ( $apiKey );
-		return $engine;
+		return new PostmanMandrillMailEngine ( $apiKey );
 	}
 	
 	/**
@@ -161,11 +159,11 @@ class PostmanMandrillTransport extends PostmanAbstractModuleTransport implements
 		$messages = parent::validateTransportConfiguration ();
 		$apiKey = $this->options->getMandrillApiKey ();
 		if (empty ( $apiKey )) {
-			array_push ( $messages, __ ( 'API Key can not be empty', 'post-smtp' ) . '.' );
+			$messages[] = __ ( 'API Key can not be empty', 'post-smtp' ) . '.';
 			$this->setNotConfiguredAndReady ();
 		}
 		if (! $this->isSenderConfigured ()) {
-			array_push ( $messages, __ ( 'Message From Address can not be empty', 'post-smtp' ) . '.' );
+			$messages[] = __ ( 'Message From Address can not be empty', 'post-smtp' ) . '.';
 			$this->setNotConfiguredAndReady ();
 		}
 		return $messages;
@@ -179,10 +177,9 @@ class PostmanMandrillTransport extends PostmanAbstractModuleTransport implements
 	 * @psalm-return array{0: mixed}
 	 */
 	public function getSocketsForSetupWizardToProbe($hostname, $smtpServerGuess) {
-		$hosts = array (
+		return array (
 				self::createSocketDefinition ( $this->getHostname (), $this->getPort () ) 
 		);
-		return $hosts;
 	}
 	
 	/**
@@ -249,15 +246,13 @@ class PostmanMandrillTransport extends PostmanAbstractModuleTransport implements
 	 */
 	public function addSettings(): void {
 		// the Mandrill Auth section
-		add_settings_section ( PostmanMandrillTransport::MANDRILL_AUTH_SECTION, __ ( 'Authentication', 'post-smtp' ), array (
-				$this,
-				'printMandrillAuthSectionInfo' 
-		), PostmanMandrillTransport::MANDRILL_AUTH_OPTIONS );
+		add_settings_section ( PostmanMandrillTransport::MANDRILL_AUTH_SECTION, __ ( 'Authentication', 'post-smtp' ), function () : void {
+			$this->printMandrillAuthSectionInfo();
+		}, PostmanMandrillTransport::MANDRILL_AUTH_OPTIONS );
 		
-		add_settings_field ( PostmanOptions::MANDRILL_API_KEY, __ ( 'API Key', 'post-smtp' ), array (
-				$this,
-				'mandrill_api_key_callback' 
-		), PostmanMandrillTransport::MANDRILL_AUTH_OPTIONS, PostmanMandrillTransport::MANDRILL_AUTH_SECTION );
+		add_settings_field ( PostmanOptions::MANDRILL_API_KEY, __ ( 'API Key', 'post-smtp' ), function () : void {
+			$this->mandrill_api_key_callback();
+		}, PostmanMandrillTransport::MANDRILL_AUTH_OPTIONS, PostmanMandrillTransport::MANDRILL_AUTH_SECTION );
 	}
 	
 	/**

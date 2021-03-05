@@ -73,12 +73,9 @@ class regDomain {
 
 		// not less than 1 characters --> there are TLD-specific rules that could be considered additionally
 		if ($len<1) return FALSE;
-
 		// Use only letters, numbers, or hyphen ("-")
 		// not beginning or ending with a hypen (this is TLD specific, be aware!)
-		if (!preg_match("/^([a-z0-9])(([a-z0-9-])*([a-z0-9]))*$/", $domPart)) return FALSE;
-
-		return TRUE;
+		return (bool) preg_match("/^([a-z0-9])(([a-z0-9-])*([a-z0-9]))*$/", $domPart);
 	}
 
 	/* recursive helper method */
@@ -99,7 +96,7 @@ class regDomain {
 
 		if (is_array($treeNode) && array_key_exists($sub, $treeNode)) {
 			$result = $this->findRegisteredDomain($remainingSigningDomainParts, $treeNode[$sub]);
-		} else if (is_array($treeNode) && array_key_exists('*', $treeNode)) {
+		} elseif (is_array($treeNode) && array_key_exists('*', $treeNode)) {
 			$result = $this->findRegisteredDomain($remainingSigningDomainParts, $treeNode['*']);
 		} else {
 			return $sub;
@@ -108,7 +105,7 @@ class regDomain {
 		// this is a hack 'cause PHP interpretes '' as NULL
 		if ($result == '#') {
 			return $sub;
-		} else if (strlen($result)>0) {
+		} elseif (strlen($result)>0) {
 			return $result.'.'.$sub;
 		}
 		return NULL;

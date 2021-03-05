@@ -80,7 +80,7 @@ if (! class_exists ( "PostmanAbstractAuthenticationManager" )) {
 			if ($authToken === NULL) {
 				$this->getLogger ()->error ( $response );
 				throw new Exception ( $response );
-			} else if (isset ( $authToken->{'error'} )) {
+			} elseif (isset ( $authToken->{'error'} )) {
 				if (isset ( $authToken->{'error_description'} )) {
 					$this->getLogger ()->error ( $authToken->{'error'} . ' processing response: ' . $authToken->{'error_description'} );
 					throw new Exception ( $authToken->{'error_description'} . '(' . $authToken->{'error'} . ')' );
@@ -126,7 +126,7 @@ if (! class_exists ( "PostmanAbstractAuthenticationManager" )) {
 			$this->getLogger ()->debug ( 'Updating Access Token' );
 			
 			// update refresh token, if there is one
-			if (isset ( $newtoken->{self::REFRESH_TOKEN} )) {
+			if (property_exists($newtoken, 'self::REFRESH_TOKEN') && $newtoken->{self::REFRESH_TOKEN} !== null) {
 				$newRefreshToken = $newtoken->{self::REFRESH_TOKEN};
 				$this->getAuthorizationToken ()->setRefreshToken ( $newRefreshToken );
 				$this->getLogger ()->debug ( 'Updating Refresh Token ' );

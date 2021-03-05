@@ -131,8 +131,7 @@ if (! class_exists ( 'PostmanOAuth2ConfigurationFactory' )) {
 		 * @return string
 		 */
 		private static function createAuthenticationString($senderEmail, $oauth2AccessToken, $vendor) {
-			$initClientRequestEncoded = base64_encode ( sprintf ( "user=%s\1auth=Bearer %s\1%s\1", $senderEmail, $oauth2AccessToken, $vendor ) );
-			return $initClientRequestEncoded;
+			return base64_encode ( sprintf ( "user=%s\1auth=Bearer %s\1%s\1", $senderEmail, $oauth2AccessToken, $vendor ) );
 		}
 	}
 }

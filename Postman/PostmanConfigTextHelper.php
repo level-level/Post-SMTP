@@ -33,9 +33,8 @@ if ( ! class_exists( 'PostmanAbstractConfigTextHelper' ) ) {
 		public function getOAuthHelp() {
 			$attention = __( 'Attention', 'post-smtp' );
 			$errorMessage = sprintf( __('Check this article how to configure Gmail/Gsuite OAuth:<a href="%1$s" target="_blank">Read Here</a>', 'post-smtp' ), 'https://postmansmtp.com/how-to-configure-post-smtp-with-gmailgsuite-using-oauth/' );
-			$text = sprintf( '<b style="color:red">%s!</b> %s', $attention, $errorMessage );
 			
-			return $text;
+			return sprintf( '<b style="color:red">%s!</b> %s', $attention, $errorMessage );
 		}
 		
 		function isOauthHost():bool {

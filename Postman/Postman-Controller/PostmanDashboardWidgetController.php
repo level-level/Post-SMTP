@@ -21,29 +21,25 @@ if (! class_exists ( "PostmanDashboardWidgetController" )) {
 			$this->authorizationToken = $authorizationToken;
 			$this->wpMailBinder = $binder;
 			
-			add_action ( 'wp_dashboard_setup', array (
-					$this,
-					'addDashboardWidget' 
-			) );
+			add_action ( 'wp_dashboard_setup', function () : void {
+				$this->addDashboardWidget();
+			} );
 			
-			add_action ( 'wp_network_dashboard_setup', array (
-					$this,
-					'addNetworkDashboardWidget' 
-			) );
+			add_action ( 'wp_network_dashboard_setup', function () : void {
+				$this->addNetworkDashboardWidget();
+			} );
 			
 			// dashboard glance mod
 			if ($this->options->isMailLoggingEnabled ()) {
-				add_filter ( 'dashboard_glance_items', array (
-						$this,
-						'customizeAtAGlanceDashboardWidget' 
-				), 10, 1 );
+				add_filter ( 'dashboard_glance_items', function ($items = array()) {
+					return $this->customizeAtAGlanceDashboardWidget($items);
+				}, 10, 1 );
 			}
 			
 			// Postman API: register the human-readable plugin state
-			add_filter ( 'print_postman_status', array (
-					$this,
-					'print_postman_status' 
-			) );
+			add_filter ( 'print_postman_status', function () : void {
+				$this->print_postman_status();
+			} );
 		}
 		
 		/**
@@ -56,10 +52,9 @@ if (! class_exists ( "PostmanDashboardWidgetController" )) {
 		public function addDashboardWidget(): void {
 			// only display to the widget to administrator
 			if (PostmanUtils::isAdmin ()) {
-				wp_add_dashboard_widget ( 'example_dashboard_widget', __ ( 'Postman SMTP', 'post-smtp' ), array (
-						$this,
-						'printDashboardWidget' 
-				) ); // Display function.
+				wp_add_dashboard_widget ( 'example_dashboard_widget', __ ( 'Postman SMTP', 'post-smtp' ), function () : void {
+					$this->printDashboardWidget();
+				} ); // Display function.
 			}
 		}
 		
@@ -71,10 +66,9 @@ if (! class_exists ( "PostmanDashboardWidgetController" )) {
 		public function addNetworkDashboardWidget(): void {
 			// only display to the widget to administrator
 			if (PostmanUtils::isAdmin ()) {
-				wp_add_dashboard_widget ( 'example_dashboard_widget', __ ( 'Postman SMTP', 'post-smtp' ), array (
-						$this,
-						'printNetworkDashboardWidget' 
-				) ); // Display function.
+				wp_add_dashboard_widget ( 'example_dashboard_widget', __ ( 'Postman SMTP', 'post-smtp' ), function () : void {
+					$this->printNetworkDashboardWidget();
+				} ); // Display function.
 			}
 		}
 		
@@ -101,12 +95,12 @@ if (! class_exists ( "PostmanDashboardWidgetController" )) {
 		public function print_postman_status(): void {
 			if (! PostmanPreRequisitesCheck::isReady ()) {
 				printf ( '<p><span style="color:red">%s</span></p>', __ ( 'Error: Postman is missing a required PHP library.', 'post-smtp' ) );
-			} else if ($this->wpMailBinder->isUnboundDueToException ()) {
+			} elseif ($this->wpMailBinder->isUnboundDueToException ()) {
 				printf ( '<p><span style="color:red">%s</span></p>', __ ( 'Postman: wp_mail has been declared by another plugin or theme, so you won\'t be able to use Postman until the conflict is resolved.', 'post-smtp' ) );
 			} else {
 				if ($this->options->getRunMode () != PostmanOptions::RUN_MODE_PRODUCTION) {
 					printf ( '<p><span style="background-color:yellow">%s</span></p>', __ ( 'Postman is in <em>non-Production</em> mode and is dumping all emails.', 'post-smtp' ) );
-				} else if (PostmanTransportRegistry::getInstance ()->getSelectedTransport ()->isConfiguredAndReady ()) {
+				} elseif (PostmanTransportRegistry::getInstance ()->getSelectedTransport ()->isConfiguredAndReady ()) {
 					printf ( '<p class="wp-menu-image dashicons-before dashicons-email"> %s </p>', sprintf ( _n ( '<span style="color:green">Postman is configured</span> and has delivered <span style="color:green">%d</span> email.', '<span style="color:green">Postman is configured</span> and has delivered <span style="color:green">%d</span> emails.', PostmanState::getInstance ()->getSuccessfulDeliveries (), 'post-smtp' ), PostmanState::getInstance ()->getSuccessfulDeliveries () ) );
 				} else {
 					printf ( '<p><span style="color:red">%s</span></p>', __ ( 'Postman is <em>not</em> configured and is mimicking out-of-the-box WordPress email delivery.', 'post-smtp' ) );
@@ -149,8 +143,8 @@ if (! class_exists ( "PostmanDashboardWidgetController" )) {
 					
 					if ($num_posts > 0) {
 						
-						$published = intval ( $num_posts->publish );
-						$privated = intval ( $num_posts->private );
+						$published = (int) $num_posts->publish;
+						$privated = (int) $num_posts->private;
 						$post_type = get_post_type_object ( $type );
 						
 						$text = _n ( '%s ' . $post_type->labels->singular_name, '%s ' . $post_type->labels->name, $privated, 'post-smtp' );

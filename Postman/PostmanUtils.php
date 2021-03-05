@@ -67,8 +67,7 @@ class PostmanUtils {
 	}
 
 	public static function isCurrentPagePostmanAdmin( string $page = 'postman' ): bool {
-		$result = (isset( $_REQUEST ['page'] ) && substr( $_REQUEST ['page'], 0, strlen( $page ) ) == $page);
-		return $result;
+		return isset( $_REQUEST ['page'] ) && substr( $_REQUEST ['page'], 0, strlen( $page ) ) === $page;
 	}
 	/**
 	 * from http://stackoverflow.com/questions/834303/startswith-and-endswith-functions-in-php
@@ -105,8 +104,8 @@ class PostmanUtils {
 	 */
 	public static function isHostAddressNotADomainName( string $host ) {
 		// IPv4 / IPv6 test from http://stackoverflow.com/a/17871737/4368109
-		$ipv6Detected = preg_match( '/(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))/', $host );
-		$ipv4Detected = preg_match( '/((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])/', $host );
+		$ipv6Detected = preg_match( '/(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}\d){0,1}\d)\.){3,3}(25[0-5]|(2[0-4]|1{0,1}\d){0,1}\d)|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}\d){0,1}\d)\.){3,3}(25[0-5]|(2[0-4]|1{0,1}\d){0,1}\d))/', $host );
+		$ipv4Detected = preg_match( '/((25[0-5]|(2[0-4]|1{0,1}\d){0,1}\d)\.){3,3}(25[0-5]|(2[0-4]|1{0,1}\d){0,1}\d)/', $host );
 		return $ipv4Detected || $ipv6Detected;
 		// from http://stackoverflow.com/questions/106179/regular-expression-to-match-dns-hostname-or-ip-address
 		// return preg_match ( '/^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9‌​]{2}|2[0-4][0-9]|25[0-5])$/', $ipAddress );
@@ -124,8 +123,7 @@ class PostmanUtils {
 	 */
 	static function remotePostGetBodyOnly( $url, array $parameters, array $headers = array() ) {
 		$response = PostmanUtils::remotePost( $url, $parameters, $headers );
-		$theBody = wp_remote_retrieve_body( $response );
-		return $theBody;
+		return wp_remote_retrieve_body( $response );
 	}
 
 	/**
@@ -240,7 +238,7 @@ class PostmanUtils {
 				} else {
 					$attempts ++;
 					if ( $attempts >= 10 ) {
-						throw new Exception( sprintf( 'Could not create lockfile %s', '/tmp' . '/.postman.lock' ) );
+						throw new Exception( sprintf( 'Could not create lockfile %s', '/tmp/.postman.lock' ) );
 					}
 					sleep( 1 );
 				}
@@ -288,8 +286,7 @@ class PostmanUtils {
 			$options = PostmanOptions::getInstance();
 			$tempDirectory = $options->getTempDirectory();
 		}
-		$fullPath = sprintf( '%s/.postman_%s.lock', $tempDirectory, self::generateUniqueLockKey() );
-		return $fullPath;
+		return sprintf( '%s/.postman_%s.lock', $tempDirectory, self::generateUniqueLockKey() );
 	}
 
 	/**
@@ -384,9 +381,9 @@ class PostmanUtils {
 	 * @return string|mixed
 	 */
 	static function postmanGetServerName() {
-		if ( ! empty( $_SERVER ['SERVER_NAME'] ) ) {
+		if (! empty( $_SERVER ['SERVER_NAME'] )) {
 			$serverName = $_SERVER ['SERVER_NAME'];
-		} else if ( ! empty( $_SERVER ['HTTP_HOST'] ) ) {
+		} elseif (! empty( $_SERVER ['HTTP_HOST'] )) {
 			$serverName = $_SERVER ['HTTP_HOST'];
 		} else {
 			$serverName = 'localhost.localdomain';
@@ -479,7 +476,7 @@ class PostmanUtils {
 
         if (array_key_exists('SERVER_NAME', $_SERVER)) {
             $host = $_SERVER['SERVER_NAME'];
-        } elseif (function_exists('gethostname') and gethostname() !== false) {
+        } elseif (function_exists('gethostname') && gethostname() !== false) {
             $host = gethostname();
         } elseif (php_uname('n') !== false) {
             $host = php_uname('n');

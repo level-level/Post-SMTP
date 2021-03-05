@@ -153,23 +153,23 @@ if ( ! class_exists( 'PostmanZendMailEngine' ) ) {
 					$this->logger->info( sprintf( 'Message %d accepted for delivery', PostmanState::getInstance()->getSuccessfulDeliveries() + 1 ) );
 				}
 				// finally not supported??
-				if ( $zendTransport->getConnection() && ! PostmanUtils::isEmpty( $zendTransport->getConnection()->getLog() ) ) {
+				if ($zendTransport->getConnection() && ! PostmanUtils::isEmpty( $zendTransport->getConnection()->getLog() )) {
 					$this->transcript = $zendTransport->getConnection()->getLog();
-				} else if ( method_exists( $zendTransport, 'getTranscript' ) && ! PostmanUtils::isEmpty( $zendTransport->getTranscript() ) ) {
+				} elseif (method_exists( $zendTransport, 'getTranscript' ) && ! PostmanUtils::isEmpty( $zendTransport->getTranscript() )) {
 					// then use the API response
 					$this->transcript = $zendTransport->getTranscript();
-				} else if ( method_exists( $zendTransport, 'getMessage' ) && ! PostmanUtils::isEmpty( $zendTransport->getMessage() ) ) {
+				} elseif (method_exists( $zendTransport, 'getMessage' ) && ! PostmanUtils::isEmpty( $zendTransport->getMessage() )) {
 					// then use the Raw Message as the Transcript
 					$this->transcript = $zendTransport->getMessage();
 				}
 			} catch ( Exception $e ) {
 				// finally not supported??
-				if ( $zendTransport->getConnection() && ! PostmanUtils::isEmpty( $zendTransport->getConnection()->getLog() ) ) {
+				if ($zendTransport->getConnection() && ! PostmanUtils::isEmpty( $zendTransport->getConnection()->getLog() )) {
 					$this->transcript = $zendTransport->getConnection()->getLog();
-				} else if ( method_exists( $zendTransport, 'getTranscript' ) && ! PostmanUtils::isEmpty( $zendTransport->getTranscript() ) ) {
+				} elseif (method_exists( $zendTransport, 'getTranscript' ) && ! PostmanUtils::isEmpty( $zendTransport->getTranscript() )) {
 					// then use the API response
 					$this->transcript = $zendTransport->getTranscript();
-				} else if ( method_exists( $zendTransport, 'getMessage' ) && ! PostmanUtils::isEmpty( $zendTransport->getMessage() ) ) {
+				} elseif (method_exists( $zendTransport, 'getMessage' ) && ! PostmanUtils::isEmpty( $zendTransport->getMessage() )) {
 					// then use the Raw Message as the Transcript
 					$this->transcript = $zendTransport->getMessage();
 				}
@@ -178,7 +178,7 @@ if ( ! class_exists( 'PostmanZendMailEngine' ) ) {
 				$message = $e->getMessage();
 				if ( $e->getCode() == 334 ) {
 					// replace the unusable Google message with a better one in the case of code 334
-					$message = sprintf( __( 'Communication Error [334] - make sure the Envelope From email is the same account used to create the Client ID.', 'post-smtp' ) );
+					$message = __( 'Communication Error [334] - make sure the Envelope From email is the same account used to create the Client ID.', 'post-smtp' );
 				}
 				// create a new exception
 				$newException = new Exception( $message, $e->getCode() );

@@ -53,10 +53,9 @@ class Postman {
 		);
 
 		// register the plugin metadata filter (part of the Postman API)
-		add_filter( 'postman_get_plugin_metadata', array(
-				$this,
-				'getPluginMetaData',
-		) );
+		add_filter( 'postman_get_plugin_metadata', function () {
+			return $this->getPluginMetaData();
+		} );
 
 		// create an instance of the logger
 		$this->logger = new PostmanLogger( get_class( $this ) );
@@ -107,16 +106,14 @@ class Postman {
 		//new PostmanWoocommerce();
 
 		// register the shortcode handler on the add_shortcode event
-		add_shortcode( 'postman-version', array(
-				$this,
-				'version_shortcode',
-		) );
+		add_shortcode( 'postman-version', function () {
+			return $this->version_shortcode();
+		} );
 
 		// hook on the plugins_loaded event
-		add_action( 'plugins_loaded', array(
-				$this,
-				'on_plugins_loaded',
-		) );
+		add_action( 'plugins_loaded', function () : void {
+			$this->on_plugins_loaded();
+		} );
 
 		/**
 		 * @todo: WPML say they fix the issue in version 3.9
@@ -126,30 +123,31 @@ class Postman {
 
 			$active_plugins = (array)get_option('active_plugins', array());
 			if (in_array('sitepress-multilingual-cms/sitepress.php', $active_plugins) && !get_option('postman_wpml_fixed')) {
-				add_action('admin_notices', array($this, 'post_smtp_wpml_admin_notice'));
+				add_action('admin_notices', function () : void {
+					$this->post_smtp_wpml_admin_notice();
+				});
 
 				// Temp: Just a quick solution, need to find a better option.
-				add_action('admin_init', array($this, 'postman_fix_wpml'));
+				add_action('admin_init', function () : void {
+					$this->postman_fix_wpml();
+				});
 			}
 		}
 
 		// hook on the wp_loaded event
-		add_action( 'wp_loaded', array(
-				$this,
-				'on_wp_loaded',
-		) );
+		add_action( 'wp_loaded', function () : void {
+			$this->on_wp_loaded();
+		} );
 
 		// hook on the acivation event
-		register_activation_hook( $rootPluginFilenameAndPath, array(
-				$this,
-				'on_activation',
-		) );
+		register_activation_hook( $rootPluginFilenameAndPath, function () : void {
+			$this->on_activation();
+		} );
 
 		// hook on the deactivation event
-		register_deactivation_hook( $rootPluginFilenameAndPath, array(
-				$this,
-				'on_deactivation',
-		) );
+		register_deactivation_hook( $rootPluginFilenameAndPath, function () : void {
+			$this->on_deactivation();
+		} );
 
 	}
 
@@ -266,10 +264,9 @@ class Postman {
 
 		// register the Postman signature (only if we're on a postman admin screen) on the in_admin_footer event
 		if ( PostmanUtils::isCurrentPagePostmanAdmin() ) {
-			add_action( 'in_admin_footer', array(
-					$this,
-					'print_signature',
-			) );
+			add_action( 'in_admin_footer', function () : void {
+				$this->print_signature();
+			} );
 		}
 	}
 
@@ -348,10 +345,9 @@ class Postman {
 			if ( PostmanUtils::isAdmin() && ! PostmanUtils::isCurrentPagePostmanAdmin() && ! $transport->isConfiguredAndReady() ) {
 				// on pages that are *NOT* Postman admin pages only....
 				// if the configuration is broken show this error message
-				add_action( 'admin_notices', array(
-						$this,
-						'display_configuration_required_warning',
-				) );
+				add_action( 'admin_notices', function () : void {
+					$this->display_configuration_required_warning();
+				} );
 			}
 		}
 	}
@@ -399,7 +395,7 @@ class Postman {
 				$this->logger->debug( 'Displaying configuration required warning' );
 			}
 			$msg = PostmanTransportRegistry::getInstance()->getReadyMessage();
-			$message = sprintf( $msg['message'] );
+			$message = $msg['message'];
 			$goToSettings = sprintf( '<a href="%s">%s</a>', PostmanUtils::getSettingsPageUrl(), __( 'Settings', 'post-smtp' ) );
 			$goToEmailLog = sprintf( '%s', _x( 'Email Log', 'The log of Emails that have been delivered', 'post-smtp' ) );
 			if ( PostmanOptions::getInstance()->isMailLoggingEnabled() ) {

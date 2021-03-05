@@ -23,8 +23,8 @@
  * Florian Sager, 25.07.2008, sager@agitos.de, http://www.agitos.de
  */
 
-require_once("effectiveTLDs.inc.php");
-require_once("regDomain.inc.php");
+require_once(__DIR__ . "/effectiveTLDs.inc.php");
+require_once(__DIR__ . "/regDomain.inc.php");
 
 if ($_SERVER["argc"]<2) {
 	print("test-regDomain.php <(fully-qualified-domain-name )+>\n");

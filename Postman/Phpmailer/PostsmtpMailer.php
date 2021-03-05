@@ -23,7 +23,9 @@ class PostsmtpMailer extends PHPMailer {
         parent::__construct($exceptions);
 
         $this->options = PostmanOptions::getInstance();
-        add_filter( 'postman_wp_mail_result', [ $this, 'postman_wp_mail_result' ] );
+        add_filter( 'postman_wp_mail_result', function () {
+            return $this->postman_wp_mail_result();
+        } );
     }
 
     public function send()
@@ -96,12 +98,11 @@ class PostsmtpMailer extends PHPMailer {
     }
 
     public function postman_wp_mail_result() {
-        $result = [
+        return [
             'time' => '',
             'exception' => $this->error,
             'transcript' => '',
         ];
-        return $result;
     }
 
     /**

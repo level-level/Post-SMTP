@@ -106,13 +106,13 @@ if ( ! class_exists( 'PostmanMessage' ) ) {
 			$body = $this->getBody();
 			$contentType = $this->getContentType();
 			// add the message content as either text or html
-			if ( empty( $contentType ) || substr( $contentType, 0, 10 ) === 'text/plain' ) {
+			if (empty( $contentType ) || substr( $contentType, 0, 10 ) === 'text/plain') {
 				$this->logger->debug( 'Creating text body part' );
 				$this->setBodyTextPart( $body );
-			} else if ( substr( $contentType, 0, 9 ) === 'text/html' ) {
+			} elseif (substr( $contentType, 0, 9 ) === 'text/html') {
 				$this->logger->debug( 'Creating html body part' );
 				$this->setBodyHtmlPart( $body );
-			} else if ( substr( $contentType, 0, 21 ) === 'multipart/alternative' ) {
+			} elseif (substr( $contentType, 0, 21 ) === 'multipart/alternative') {
 				$this->logger->debug( 'Adding body as multipart/alternative' );
 				$arr = explode( PHP_EOL, $body );
 				$textBody = '';
@@ -120,20 +120,20 @@ if ( ! class_exists( 'PostmanMessage' ) ) {
 				$mode = '';
 				foreach ( $arr as $s ) {
 					$this->logger->trace( 'mode: ' . $mode . ' bodyline: ' . $s );
-					if ( substr( $s, 0, 25 ) === 'Content-Type: text/plain;' ) {
+					if (substr( $s, 0, 25 ) === 'Content-Type: text/plain;') {
 						$mode = 'foundText';
-					} else if ( substr( $s, 0, 24 ) === 'Content-Type: text/html;' ) {
+					} elseif (substr( $s, 0, 24 ) === 'Content-Type: text/html;') {
 						$mode = 'foundHtml';
-					} else if ( $mode == 'textReading' ) {
+					} elseif ($mode == 'textReading') {
 						$textBody .= $s;
-					} else if ( $mode == 'htmlReading' ) {
+					} elseif ($mode == 'htmlReading') {
 						$htmlBody .= $s;
-					} else if ( $mode == 'foundText' ) {
+					} elseif ($mode == 'foundText') {
 						$trim = trim( $s );
 						if ( empty( $trim ) ) {
 							$mode = 'textReading';
 						}
-					} else if ( $mode == 'foundHtml' ) {
+					} elseif ($mode == 'foundHtml') {
 						$trim = trim( $s );
 						if ( empty( $trim ) ) {
 							$mode = 'htmlReading';
@@ -255,7 +255,7 @@ if ( ! class_exists( 'PostmanMessage' ) ) {
 		 */
 		private function internalValidate(): void {
 			// check the reply-to address for errors
-			if ( isset( $this->replyTo ) ) {
+			if ( $this->replyTo !== null ) {
 				$this->getReplyTo()->validate( 'Reply-To' );
 			}
 
@@ -345,7 +345,7 @@ if ( ! class_exists( 'PostmanMessage' ) ) {
 				foreach ( $recipients as $recipient ) {
 					if ( ! empty( $recipient ) ) {
 						$this->logger->debug( sprintf( 'User added recipient: "%s"', $recipient ) );
-						array_push( $recipientList, new PostmanEmailAddress( $recipient ) );
+						$recipientList[] = new PostmanEmailAddress( $recipient );
 					}
 				}
 			}
@@ -469,10 +469,10 @@ if ( ! class_exists( 'PostmanMessage' ) ) {
 				default :
 					// Add it to our grand headers array
 					$this->logProcessHeader( 'other', $name, $content );
-					array_push( $this->headers, array(
+					$this->headers[] = array(
 							'name' => $name,
 							'content' => $content,
-					) );
+					);
 					break;
 			}
 		}
@@ -500,12 +500,7 @@ if ( ! class_exists( 'PostmanMessage' ) ) {
 		 */
 		public function addAttachmentsToMail( Zend_Mail $mail ): void {
 			$attachments = $this->attachments;
-			if ( ! is_array( $attachments ) ) {
-				// WordPress may a single filename or a newline-delimited string list of multiple filenames
-				$attArray = explode( PHP_EOL, $attachments );
-			} else {
-				$attArray = $attachments;
-			}
+			$attArray = is_array( $attachments ) ? $attachments : explode( PHP_EOL, $attachments );
 			// otherwise WordPress sends an array
 			foreach ( $attArray as $file ) {
 				if ( ! empty( $file ) ) {

@@ -4,8 +4,12 @@ class Postsmtp_ContactForm7 {
     private $result_error;
 
     public function __construct() {
-        add_action( 'wpcf7_mail_failed', array( $this, 'save_error' ) );
-        add_filter( 'wpcf7_ajax_json_echo', array( $this, 'change_rest_response' ), 10, 2 );
+        add_action( 'wpcf7_mail_failed', function ($contact_form) : void {
+            $this->save_error($contact_form);
+        } );
+        add_filter( 'wpcf7_ajax_json_echo', function ($response) {
+            return $this->change_rest_response($response);
+        }, 10, 2 );
     }
 
     public function save_error($contact_form): void {

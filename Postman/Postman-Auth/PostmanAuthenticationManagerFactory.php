@@ -31,9 +31,9 @@ if (! class_exists ( "PostmanAuthenticationManagerFactory" )) {
 			if ($transport->isOAuthUsed ( $options->getAuthenticationType () )) {
 				if ($transport->isServiceProviderGoogle ( $hostname )) {
 					$authenticationManager = new PostmanGoogleAuthenticationManager ( $clientId, $clientSecret, $authorizationToken, $redirectUrl, $senderEmail );
-				} else if ($transport->isServiceProviderMicrosoft ( $hostname )) {
+				} elseif ($transport->isServiceProviderMicrosoft ( $hostname )) {
 					$authenticationManager = new PostmanMicrosoftAuthenticationManager ( $clientId, $clientSecret, $authorizationToken, $redirectUrl );
-				} else if ($transport->isServiceProviderYahoo ( $hostname )) {
+				} elseif ($transport->isServiceProviderYahoo ( $hostname )) {
 					$authenticationManager = new PostmanYahooAuthenticationManager ( $clientId, $clientSecret, $authorizationToken, $redirectUrl );
 				} else {
 					throw new Exception(__('Invalid authentication manager for oAuth.', 'post-smtp'));

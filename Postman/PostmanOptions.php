@@ -652,8 +652,7 @@ if ( ! class_exists( 'PostmanOptions' ) ) {
 				foreach ( PostmanTransportRegistry::getInstance()->getTransports() as $transport ) {
 					$data = $transport->prepareOptionsForExport( $data );
 				}
-				$data = base64_encode( gzcompress( json_encode( $data ), 9 ) );
-				return $data;
+				return base64_encode( gzcompress( json_encode( $data ), 9 ) );
 			}
 		}
 

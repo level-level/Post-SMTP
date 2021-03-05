@@ -138,12 +138,12 @@ if ( ! class_exists( 'PostmanInputSanitizer' ) ) {
 			// https://core.trac.wordpress.org/ticket/21989
 			$action = PostmanSession::getInstance()->getAction();
 			// if $action is not empty, then sanitize has already run
-			if ( ! empty( $action ) ) {
+			if (! empty( $action )) {
 				// use the already encoded password in the $input
 				$new_input [ $key ] = $input [ $key ];
 				// log it
 				$this->logger->debug( 'Warning, second sanitizePassword attempt detected' );
-			} else if ( isset( $input [ $key ] ) ) {
+			} elseif (isset( $input [ $key ] )) {
 				if ( strlen( $input [ $key ] ) > 0 && preg_match( '/^\**$/', $input [ $key ] ) ) {
 					// if the password is all stars, then keep the existing password
 					$new_input [ $key ] = $existingPassword;

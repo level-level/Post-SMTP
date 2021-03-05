@@ -192,7 +192,7 @@ if ( ! class_exists( 'PostmanEmailLogService' ) ) {
 
 			if ( $log->statusMessage && ! empty( $log->statusMessage ) ) {
 
-				$message = $message . $log->statusMessage;
+				$message .= $log->statusMessage;
 
 				$notification_service = PostmanOptions::getInstance()->getNotificationService();
 				switch ($notification_service) {
@@ -221,8 +221,8 @@ if ( ! class_exists( 'PostmanEmailLogService' ) ) {
 			 */
 			preg_match_all( '/(.*)From/s', $log->sessionTranscript, $matches );
 
-			if ( isset( $matches[1][0] ) && ! empty( $matches[1][0] ) && strpos( strtolower( $matches[1][0] ), 'error' ) !== false ) {
-				$message = $message . $log->sessionTranscript;
+			if ( isset( $matches[1][0] ) && ! empty( $matches[1][0] ) && stripos( $matches[1][0], 'error' ) !== false ) {
+				$message .= $log->sessionTranscript;
 			}
 		}
 
@@ -237,7 +237,7 @@ if ( ! class_exists( 'PostmanEmailLogService' ) ) {
 		 * @return PostmanEmailLog
 		 */
 		private function createLog( PostmanEmailLog $log, PostmanMessage $message = null, $transcript, $statusMessage, $success, PostmanModuleTransport $transport ) {
-			if ( $message ) {
+			if ( $message !== null ) {
 				$log->sender = $message->getFromAddress()->format();
 				$log->toRecipients = $this->flattenEmails( $message->getToRecipients() );
 				$log->ccRecipients = $this->flattenEmails( $message->getCcRecipients() );
@@ -266,7 +266,7 @@ if ( ! class_exists( 'PostmanEmailLogService' ) ) {
 			$count = 0;
 			foreach ( $addresses as $address ) {
 				if ( $count >= 3 ) {
-					$flat .= sprintf( __( '.. +%d more', 'post-smtp' ), sizeof( $addresses ) - $count );
+					$flat .= sprintf( __( '.. +%d more', 'post-smtp' ), count( $addresses ) - $count );
 					break;
 				}
 				if ( $count > 0 ) {
@@ -322,7 +322,7 @@ if ( ! class_exists( 'PostmanEmailLogPurger' ) ) {
 			$force_delete = true;
 			foreach ( $this->posts as $post ) {
 				if ( $post->ID == $postid ) {
-					$this->logger->debug( 'deleting log item ' . intval( $postid ) );
+					$this->logger->debug( 'deleting log item ' . (int) $postid );
 					wp_delete_post( $postid, $force_delete );
 					return;
 				}
@@ -330,7 +330,7 @@ if ( ! class_exists( 'PostmanEmailLogPurger' ) ) {
 			$this->logger->warn( 'could not find Postman Log Item #' . $postid );
 		}
 		function removeAll(): void {
-			$this->logger->debug( sprintf( 'deleting %d log items ', sizeof( $this->posts ) ) );
+			$this->logger->debug( sprintf( 'deleting %d log items ', count( $this->posts ) ) );
 			$force_delete = true;
 			foreach ( $this->posts as $post ) {
 				wp_delete_post( $post->ID, $force_delete );

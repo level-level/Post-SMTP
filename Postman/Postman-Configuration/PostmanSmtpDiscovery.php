@@ -159,7 +159,7 @@ if (! class_exists ( 'PostmanSmtpDiscovery' )) {
 				return true;
 			} else {
 				$host = strtolower ( $this->findMxHostViaDns ( $hostname ) );
-				if ($host) {
+				if ($host !== '') {
 					$this->primaryMx = $host;
 					$smtp = PostmanSmtpMappings::getSmtpFromMx ( $host );
 					if ($smtp) {
@@ -186,12 +186,12 @@ if (! class_exists ( 'PostmanSmtpDiscovery' )) {
 			} else {
 				$b_mx_avail = $this->getmxrr ( $hostname, $mx_records, $mx_weight );
 			}
-			if ($b_mx_avail && sizeof ( $mx_records ) > 0) {
+			if ($b_mx_avail && count ( $mx_records ) > 0) {
 				// copy mx records and weight into array $mxs
 				$mxs = array ();
 				
-				for($i = 0; $i < count ( $mx_records ); $i ++) {
-					$mxs [$mx_weight [$i]] = $mx_records [$i];
+				foreach ($mx_records as $i => $mx_record) {
+					$mxs [$mx_weight [$i]] = $mx_record;
 				}
 				
 				// sort array mxs to get servers with highest prio

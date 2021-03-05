@@ -17,7 +17,7 @@ $format = "php";
 if ($_SERVER['argc']>1) {
 	if ($_SERVER['argv'][1] == "perl") {
 		$format = "perl";
-	} else if ($_SERVER['argv'][1] == "c") {
+	} elseif ($_SERVER['argv'][1] == "c") {
 		$format = "c";
 	}
 }
@@ -48,11 +48,7 @@ function buildSubdomain(&$node, $tldParts): void {
 	}
 
 	if (!array_key_exists($dom, $node)) {
-		if ($isNotDomain) {
-			$node[$dom] = array("!" => "");
-		} else {
-			$node[$dom] = array();
-		}
+		$node[$dom] = $isNotDomain ? array("!" => "") : array();
 	}
 
 	if (!$isNotDomain && count($tldParts)>0) {
@@ -73,26 +69,23 @@ function printNode($key, $valueTree, $isAssignment = false) {
 		} else {
 			echo "$key = array(";
 		}
-	} else {
-		if (strcmp($key, "!")==0) {
-			if ($format == "perl") {
+	} elseif (strcmp($key, "!")==0) {
+		if ($format == "perl") {
 				echo "'!' => {}";
 			} else {
 				echo "'!' => ''";
 			}
-			return;
-		} else {
-			if ($format == "perl") {
-				echo "'$key' => {";
-			} else {
+		return;
+	} elseif ($format == "perl") {
+		echo "'$key' => {";
+	} else {
 				echo "'$key' => array(";
 			}
-		}
-	}
 
 	$keys = array_keys($valueTree);
+	$keysCount = count($keys);
 
-	for ($i=0; $i<count($keys); $i++) {
+	for ($i=0; $i<$keysCount; $i++) {
 
 		$key = $keys[$i];
 
@@ -128,14 +121,11 @@ function printNode_C($key, $valueTree): void {
 
 			echo "(".count($keys).":";
 
-			for ($i=0; $i<count($keys); $i++) {
-
-				$key = $keys[$i];
-
+			foreach ($keys as $i => $key) {
+				$key = $key;
 				// if (count($valueTree[$key])>0) {
-					printNode_C($key, $valueTree[$key]);
+				printNode_C($key, $valueTree[$key]);
 				// }
-
 				if ($i+1 != count($valueTree)) {
 					echo ",";
 				}

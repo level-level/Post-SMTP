@@ -32,14 +32,11 @@ class PostmanInstaller {
 			'fallback_smtp_enabled' => 'no',
 		);
 
-		if ( empty( $options ) ) {
+		if (empty( $options )) {
 			add_option( 'postman_options', $args );
-
-		} else {
-			if ( empty( $options['fallback_smtp_enabled'] ) ) {
-				$result = array_merge($options, $args);
-				update_option( PostmanOptions::POSTMAN_OPTIONS, $result );
-			}
+		} elseif (empty( $options['fallback_smtp_enabled'] )) {
+			$result = array_merge($options, $args);
+			update_option( PostmanOptions::POSTMAN_OPTIONS, $result );
 		}
 
 		if ( function_exists( 'is_multisite' ) && is_multisite() ) {
@@ -163,22 +160,19 @@ class PostmanInstaller {
 			}
 			update_option( 'postman_auth_token', $authOptions );
 		}
-		if ( ! isset( $options ['authorization_type'] ) && ! isset( $options ['auth_type'] ) ) {
-			// prior to 1.0.0, access tokens were saved in authOptions without an auth type
-			// prior to 0.2.5, access tokens were save in options without an auth type
-			// either way, only oauth2 was supported
-			if ( isset( $authOptions ['access_token'] ) || isset( $options ['access_token'] ) ) {
-				$this->logger->debug( "Upgrading database: setting authorization_type to 'oauth2'" );
-				$options ['authorization_type'] = 'oauth2';
-				update_option( 'postman_options', $options );
-			}
+		// prior to 1.0.0, access tokens were saved in authOptions without an auth type
+		// prior to 0.2.5, access tokens were save in options without an auth type
+		// either way, only oauth2 was supported
+		if (! isset( $options ['authorization_type'] ) && ! isset( $options ['auth_type'] ) && (isset( $authOptions ['access_token'] ) || isset( $options ['access_token'] ))) {
+			$this->logger->debug( "Upgrading database: setting authorization_type to 'oauth2'" );
+			$options ['authorization_type'] = 'oauth2';
+			update_option( 'postman_options', $options );
 		}
-		if ( ! isset( $options ['enc_type'] ) ) {
-			// prior to 1.3, encryption type was combined with authentication type
-			if ( isset( $options ['authorization_type'] ) ) {
-				$this->logger->debug( 'Upgrading database: creating auth_type and enc_type from authorization_type' );
-				$authType = $options ['authorization_type'];
-				switch ( $authType ) {
+		// prior to 1.3, encryption type was combined with authentication type
+		if (! isset( $options ['enc_type'] ) && isset( $options ['authorization_type'] )) {
+			$this->logger->debug( 'Upgrading database: creating auth_type and enc_type from authorization_type' );
+			$authType = $options ['authorization_type'];
+			switch ( $authType ) {
 					case 'none' :
 						$options ['auth_type'] = 'none';
 						$options ['enc_type'] = 'none';
@@ -197,11 +191,10 @@ class PostmanInstaller {
 						break;
 					default :
 				}
-				update_option( 'postman_options', $options );
-			}
+			update_option( 'postman_options', $options );
 		}
 		// prior to 1.3.3, the version identifier was not stored and the passwords were plaintext
-		if ( isset( $options ['enc_type'] ) && ! (isset( $options ['version'] ) || isset( $postmanState ['version'] )) ) {
+		if ( isset( $options ['enc_type'] ) && (!isset( $options ['version'] ) && !isset( $postmanState ['version'] )) ) {
 			$this->logger->debug( 'Upgrading database: added plugin version and encoding password' );
 			$options ['version'] = '1.3.3';
 			if ( isset( $options ['basic_auth_password'] ) ) {
@@ -216,9 +209,10 @@ class PostmanInstaller {
 			update_option( 'postman_options', $options );
 			if ( isset( $authOptions ['access_token'] ) && isset( $options ['oauth_client_id'] ) ) {
 				// if there is a stored token..
-				if ( PostmanUtils::endsWith( $options ['oauth_client_id'], 'googleusercontent.com' ) ) {
-					$authOptions ['vendor_name'] = 'google'; 
-				} else if ( strlen( $options ['oauth_client_id']) < strlen( $options ['oauth_client_secret'] ) ) { // TODO: ?
+				if (PostmanUtils::endsWith( $options ['oauth_client_id'], 'googleusercontent.com' )) {
+					$authOptions ['vendor_name'] = 'google';
+				} elseif (strlen( $options ['oauth_client_id']) < strlen( $options ['oauth_client_secret'] )) {
+					// TODO: ?
 					$authOptions ['vendor_name'] = 'microsoft';
 				} else {
 					$authOptions ['vendor_name'] = 'yahoo'; 

@@ -9,8 +9,12 @@ class PostmanWelcomeController {
 		$this->pluginUrl = plugins_url( 'style', $rootPluginFilenameAndPath );
 		$this->version = PostmanState::getInstance()->getVersion();
 
-		add_action( 'admin_menu', array( $this, 'add_menus' ) );
-		add_action( 'admin_head', array( $this, 'admin_head' ) );
+		add_action( 'admin_menu', function () : void {
+			$this->add_menus();
+		} );
+		add_action( 'admin_head', function () : void {
+			$this->admin_head();
+		} );
 	}
 
 	public function add_menus(): void {
@@ -23,7 +27,9 @@ class PostmanWelcomeController {
 				__( 'Welcome',  'post-smtp' ),
 				'manage_options',
 				'post-about',
-				array( $this, 'about_screen' )
+				function () : void {
+					$this->about_screen();
+				}
 			);
 
 			// Credits
@@ -32,7 +38,9 @@ class PostmanWelcomeController {
 				__( 'Credits',  'post-smtp' ),
 				'manage_options',
 				'post-credits',
-				array( $this, 'credits_screen' )
+				function () : void {
+					$this->credits_screen();
+				}
 			);
 
 			// add_action( 'admin_print_styles-' . $page, array( $this, 'postman_about_enqueue_resources' ) );

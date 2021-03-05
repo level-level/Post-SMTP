@@ -27,16 +27,14 @@ class PostmanDiagnosticTestController {
 		PostmanUtils::registerAdminMenu( $this, 'addDiagnosticsSubmenu' );
 
 		// hook on the init event
-		add_action( 'init', array(
-				$this,
-				'on_init',
-		) );
+		add_action( 'init', function () : void {
+			$this->on_init();
+		} );
 
 		// initialize the scripts, stylesheets and form fields
-		add_action( 'admin_init', array(
-				$this,
-				'on_admin_init',
-		) );
+		add_action( 'admin_init', function () : void {
+			$this->on_admin_init();
+		} );
 	}
 
 	/**
@@ -85,15 +83,13 @@ class PostmanDiagnosticTestController {
 	 * @return void
 	 */
 	public function addDiagnosticsSubmenu(): void {
-		$page = add_submenu_page( PostmanViewController::POSTMAN_MENU_SLUG, sprintf( __( '%s Setup', 'post-smtp' ), __( 'Postman SMTP', 'post-smtp' ) ), __( 'Diagnostic', 'post-smtp' ), Postman::MANAGE_POSTMAN_CAPABILITY_NAME, PostmanDiagnosticTestController::DIAGNOSTICS_SLUG, array(
-				$this,
-				'outputDiagnosticsContent',
-		) );
+		$page = add_submenu_page( PostmanViewController::POSTMAN_MENU_SLUG, sprintf( __( '%s Setup', 'post-smtp' ), __( 'Postman SMTP', 'post-smtp' ) ), __( 'Diagnostic', 'post-smtp' ), Postman::MANAGE_POSTMAN_CAPABILITY_NAME, PostmanDiagnosticTestController::DIAGNOSTICS_SLUG, function () : void {
+			$this->outputDiagnosticsContent();
+		} );
 		// When the plugin options page is loaded, also load the stylesheet
-		add_action( 'admin_print_styles-' . $page, array(
-				$this,
-				'enqueueDiagnosticsScreenStylesheet',
-		) );
+		add_action( 'admin_print_styles-' . $page, function () : void {
+			$this->enqueueDiagnosticsScreenStylesheet();
+		} );
 	}
 	function enqueueDiagnosticsScreenStylesheet(): void {
 		wp_enqueue_style( PostmanViewController::POSTMAN_STYLE );
@@ -154,7 +150,7 @@ class PostmanGetDiagnosticsViaAjax {
 		$pluginText = array();
 		foreach ( $apl as $p ) {
 			if ( isset( $plugins [ $p ] ) ) {
-				array_push( $pluginText, $plugins [ $p ] ['Name'] );
+				$pluginText[] = $plugins [ $p ] ['Name'];
 			}
 		}
 		return implode( ', ', $pluginText );
@@ -166,7 +162,7 @@ class PostmanGetDiagnosticsViaAjax {
 		$apl = PostmanPreRequisitesCheck::getState();
 		$pluginText = array();
 		foreach ( $apl as $p ) {
-			array_push( $pluginText, $p ['name'] . '=' . ($p ['ready'] ? 'Yes' : 'No') );
+			$pluginText[] = $p ['name'] . '=' . ($p ['ready'] ? 'Yes' : 'No');
 		}
 		return implode( ', ', $pluginText );
 	}
@@ -214,9 +210,9 @@ class PostmanGetDiagnosticsViaAjax {
 				$thing = $function ['function'];
 				if ( is_array( $thing ) ) {
 					$name = get_class( $thing [0] ) . '->' . $thing [1];
-					array_push( $functionArray, $name );
+					$functionArray[] = $name;
 				} else {
-					array_push( $functionArray, $thing );
+					$functionArray[] = $thing;
 				}
 			}
 		}

@@ -74,11 +74,7 @@ if ( ! class_exists( 'PostmanWpMail' ) ) {
 
             $id = md5(uniqid((string)time()));
 
-            if (isset($_SERVER["SERVER_NAME"])) {
-                $hostName = $_SERVER["SERVER_NAME"];
-            } else {
-                $hostName = php_uname('n');
-            }
+            $hostName = isset($_SERVER["SERVER_NAME"]) ? $_SERVER["SERVER_NAME"] : php_uname('n');
 
             return $id . '@' . $hostName;
         }
@@ -108,7 +104,7 @@ if ( ! class_exists( 'PostmanWpMail' ) ) {
 			 *        	A compacted array of wp_mail() arguments, including the "to" email,
 			 *        	subject, message, headers, and attachments values.
 			 */
-			$atts = apply_filters( 'wp_mail', compact( 'to', 'subject', 'message', 'headers', 'attachments' ) );
+			$atts = apply_filters( 'wp_mail', ['to' => $to, 'subject' => $subject, 'message' => $message, 'headers' => $headers, 'attachments' => $attachments] );
 			if ( isset( $atts ['to'] ) ) {
 				$to = $atts ['to'];
 			}
@@ -137,10 +133,9 @@ if ( ! class_exists( 'PostmanWpMail' ) ) {
 			$this->traceParameters( $to, $subject, $message, $headers, $attachments );
 
 			// Postman API: register the response hook
-			add_filter( 'postman_wp_mail_result', array(
-					$this,
-					'postman_wp_mail_result',
-			) );
+			add_filter( 'postman_wp_mail_result', function () : array {
+				return $this->postman_wp_mail_result();
+			} );
 
 			// create the message
 			$postmanMessage = $this->createNewMessage();
@@ -355,12 +350,11 @@ if ( ! class_exists( 'PostmanWpMail' ) ) {
 		 * @psalm-return array{time: mixed, exception: mixed, transcript: mixed}
 		 */
 		function postman_wp_mail_result(): array {
-			$result = array(
+			return array(
 					'time' => $this->totalTime,
 					'exception' => $this->exception,
 					'transcript' => $this->transcript,
 			);
-			return $result;
 		}
 
 		/**

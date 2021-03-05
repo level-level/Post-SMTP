@@ -21,10 +21,9 @@ class PostmanSendGridTransport extends PostmanAbstractModuleTransport implements
 		parent::__construct ( $rootPluginFilenameAndPath );
 		
 		// add a hook on the plugins_loaded event
-		add_action ( 'admin_init', array (
-				$this,
-				'on_admin_init' 
-		) );
+		add_action ( 'admin_init', function () : void {
+			$this->on_admin_init();
+		} );
 	}
 	/**
 	 * @return string
@@ -78,8 +77,7 @@ class PostmanSendGridTransport extends PostmanAbstractModuleTransport implements
 	 */
 	public function createMailEngine() {
 		$apiKey = $this->options->getSendGridApiKey ();
-		$engine = new PostmanSendGridMailEngine ( $apiKey );
-		return $engine;
+		return new PostmanSendGridMailEngine ( $apiKey );
 	}
 	/**
 	 * @return string
@@ -103,11 +101,11 @@ class PostmanSendGridTransport extends PostmanAbstractModuleTransport implements
 		$messages = parent::validateTransportConfiguration ();
 		$apiKey = $this->options->getSendGridApiKey ();
 		if (empty ( $apiKey )) {
-			array_push ( $messages, __ ( 'API Key can not be empty', 'post-smtp' ) . '.' );
+			$messages[] = __ ( 'API Key can not be empty', 'post-smtp' ) . '.';
 			$this->setNotConfiguredAndReady ();
 		}
 		if (! $this->isSenderConfigured ()) {
-			array_push ( $messages, __ ( 'Message From Address can not be empty', 'post-smtp' ) . '.' );
+			$messages[] = __ ( 'Message From Address can not be empty', 'post-smtp' ) . '.';
 			$this->setNotConfiguredAndReady ();
 		}
 		return $messages;
@@ -138,8 +136,7 @@ class PostmanSendGridTransport extends PostmanAbstractModuleTransport implements
 	}
 	
 	public function populateConfiguration($hostname) {
-		$response = parent::populateConfiguration ( $hostname );
-		return $response;
+		return parent::populateConfiguration ( $hostname );
 	}
 	
 	/**
@@ -182,15 +179,13 @@ class PostmanSendGridTransport extends PostmanAbstractModuleTransport implements
 	 */
 	public function addSettings(): void {
 		// the SendGrid Auth section
-		add_settings_section ( PostmanSendGridTransport::SENDGRID_AUTH_SECTION, __ ( 'Authentication', 'post-smtp' ), array (
-				$this,
-				'printSendGridAuthSectionInfo' 
-		), PostmanSendGridTransport::SENDGRID_AUTH_OPTIONS );
+		add_settings_section ( PostmanSendGridTransport::SENDGRID_AUTH_SECTION, __ ( 'Authentication', 'post-smtp' ), function () : void {
+			$this->printSendGridAuthSectionInfo();
+		}, PostmanSendGridTransport::SENDGRID_AUTH_OPTIONS );
 		
-		add_settings_field ( PostmanOptions::SENDGRID_API_KEY, __ ( 'API Key', 'post-smtp' ), array (
-				$this,
-				'sendgrid_api_key_callback' 
-		), PostmanSendGridTransport::SENDGRID_AUTH_OPTIONS, PostmanSendGridTransport::SENDGRID_AUTH_SECTION );
+		add_settings_field ( PostmanOptions::SENDGRID_API_KEY, __ ( 'API Key', 'post-smtp' ), function () : void {
+			$this->sendgrid_api_key_callback();
+		}, PostmanSendGridTransport::SENDGRID_AUTH_OPTIONS, PostmanSendGridTransport::SENDGRID_AUTH_SECTION );
 	}
 	public function printSendGridAuthSectionInfo(): void {
 		/* Translators: Where (1) is the service URL and (2) is the service name and (3) is a api key URL */

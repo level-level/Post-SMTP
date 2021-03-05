@@ -161,7 +161,7 @@ class PostmanTransportRegistry {
 			}
 			$hosts = array_merge( $hosts, $socketsToTest );
 			if ( $this->logger->isDebug() ) {
-				$this->logger->debug( sprintf( 'Transport %s returns %d sockets ', $transport->getName(), sizeof( $socketsToTest ) ) );
+				$this->logger->debug( sprintf( 'Transport %s returns %d sockets ', $transport->getName(), count( $socketsToTest ) ) );
 			}
 		}
 		return $hosts;
@@ -199,20 +199,14 @@ class PostmanTransportRegistry {
 		}
 
 		// validate the userAuthOverride
-		if ( ! $hostData->auth_xoauth ) {
-			if ( $userAuthOverride == 'oauth2' ) {
-				$userAuthOverride = null;
-			}
+		if ( ! $hostData->auth_xoauth && $userAuthOverride == 'oauth2' ) {
+			$userAuthOverride = null;
 		}
-		if ( ! $hostData->auth_crammd5 && ! $hostData->authPlain && ! $hostData->auth_login ) {
-			if ( $userAuthOverride == 'password' ) {
-				$userAuthOverride = null;
-			}
+		if ( ! $hostData->auth_crammd5 && ! $hostData->authPlain && ! $hostData->auth_login && $userAuthOverride == 'password' ) {
+			$userAuthOverride = null;
 		}
-		if ( ! $hostData->auth_none ) {
-			if ( $userAuthOverride == 'none' ) {
-				$userAuthOverride = null;
-			}
+		if ( ! $hostData->auth_none && $userAuthOverride == 'none' ) {
+			$userAuthOverride = null;
 		}
 		$this->logger->trace( 'after scrubbing userAuthOverride: ' . $userAuthOverride );
 		return $userAuthOverride;

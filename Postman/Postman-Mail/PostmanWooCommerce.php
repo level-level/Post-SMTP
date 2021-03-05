@@ -15,9 +15,15 @@ if ( ! class_exists( 'PostmanWoocommerce' ) ) {
 		}
 
 		public function hooks(): void {
-			add_filter( 'option_woocommerce_email_from_address', array( $this, 'set_postman_from_address' ), 10, 2 );
-			add_filter( 'woocommerce_email_from_address', array( $this, 'set_postman_from_address' ), 10, 2 );
-			add_filter( 'woocommerce_get_settings_email', array( $this, 'overide_email_settings' ) );
+			add_filter( 'option_woocommerce_email_from_address', function ($from_address, $WC_Email) {
+				return $this->set_postman_from_address($from_address, $WC_Email);
+			}, 10, 2 );
+			add_filter( 'woocommerce_email_from_address', function ($from_address, $WC_Email) {
+				return $this->set_postman_from_address($from_address, $WC_Email);
+			}, 10, 2 );
+			add_filter( 'woocommerce_get_settings_email', function ($settings) : array {
+				return $this->overide_email_settings($settings);
+			} );
 		}
 
 		public function set_postman_from_address( $from_address, $WC_Email ) {

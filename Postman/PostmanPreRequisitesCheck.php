@@ -36,41 +36,41 @@ if (! class_exists ( 'PostmanPreRequisitesCheck' )) {
 		 */
 		public static function getState(): array {
 			$state = array ();
-			array_push ( $state, array (
+			$state[] = array (
 					'name' => 'iconv',
 					'ready' => self::checkIconv (),
 					'required' => true 
-			) );
-			array_push ( $state, array (
+			);
+			$state[] = array (
 					'name' => 'spl_autoload',
 					'ready' => self::checkSpl (),
 					'required' => true 
-			) );
-			array_push ( $state, array (
+			);
+			$state[] = array (
 					'name' => 'openssl',
 					'ready' => self::checkOpenSsl (),
 					'required' => false 
-			) );
-			array_push ( $state, array (
+			);
+			$state[] = array (
 					'name' => 'sockets',
 					'ready' => self::checkSockets (),
 					'required' => false 
-			) );
-			array_push ( $state, array (
+			);
+			$state[] = array (
 					'name' => 'allow_url_fopen',
 					'ready' => self::checkAllowUrlFopen (),
 					'required' => false 
-			) );
-			array_push ( $state, array (
+			);
+			$state[] = array (
 					'name' => 'mcrypt',
 					'ready' => self::checkMcrypt (),
 					'required' => false 
-			) );
-			array_push ( $state, array (
+			);
+			$state[] = array (
 					'name' => 'zlib_encode',
 					'ready' => self::checkZlibEncode (),
 					'required' => false 
-			) );
+			);
 			return $state;
 		}
 		/**

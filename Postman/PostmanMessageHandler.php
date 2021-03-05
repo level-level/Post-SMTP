@@ -13,10 +13,9 @@ if (! class_exists ( 'PostmanMessageHandler' )) {
 			$this->logger = new PostmanLogger ( get_class ( $this ) );
 
 			// we'll let the 'init' functions run first; some of them may end the request
-			add_action ( 'admin_notices', Array (
-					$this,
-					'displayAllMessages'
-			) );
+			add_action ( 'admin_notices', function () : void {
+				$this->displayAllMessages();
+			} );
 		}
 
 		/**
@@ -76,7 +75,7 @@ if (! class_exists ( 'PostmanMessageHandler' )) {
 						'type' => $type,
 						'message' => $message
 				);
-				array_push ( $messageArray, $m );
+				$messageArray[] = $m;
 				PostmanSession::getInstance ()->setMessage ( $messageArray );
 			}
 		}

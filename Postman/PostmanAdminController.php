@@ -116,27 +116,23 @@ if ( ! class_exists( 'PostmanAdminController' ) ) {
 			}
 
 			// continue to initialize the AdminController
-			add_action( 'init', array(
-					$this,
-					'on_init',
-			) );
+			add_action( 'init', function () : void {
+				$this->on_init();
+			} );
 
             // continue to initialize the AdminController
-            add_action( 'wpmu_options', array(
-                $this,
-                'wpmu_options',
-            ) );
+            add_action( 'wpmu_options', function () : void {
+													$this->wpmu_options();
+												} );
 
-            add_action( 'update_wpmu_options', array(
-                $this,
-                'update_wpmu_options',
-            ) );
+            add_action( 'update_wpmu_options', function () : void {
+													$this->update_wpmu_options();
+												} );
 
 			// Adds "Settings" link to the plugin action page
-			add_filter( 'plugin_action_links_' . plugin_basename( $this->rootPluginFilenameAndPath ), array(
-					$this,
-					'postmanModifyLinksOnPluginsListPage',
-			) );
+			add_filter( 'plugin_action_links_' . plugin_basename( $this->rootPluginFilenameAndPath ), function ($links) {
+				return $this->postmanModifyLinksOnPluginsListPage($links);
+			} );
 
 		}
 

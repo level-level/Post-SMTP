@@ -48,7 +48,7 @@ if ( ! class_exists( 'PostmanMailgunMailEngine' ) ) {
 		 */
 		public function send( PostmanMessage $message ) {
 			$options = PostmanOptions::getInstance();
-			$this->api_endpoint = ! is_null( $options->getMailgunRegion() ) ? 'https://api.eu.mailgun.net' : 'https://api.mailgun.net';
+			$this->api_endpoint = is_null( $options->getMailgunRegion() ) ? 'https://api.mailgun.net' : 'https://api.eu.mailgun.net';
 
 			// add the Postman signature - append it to whatever the user may have set
 			if ( ! $options->isStealthModeEnabled() ) {
@@ -76,7 +76,7 @@ if ( ! class_exists( 'PostmanMailgunMailEngine' ) ) {
 				$senderName = $sender->getName();
 				assert( ! empty( $senderEmail ) );
 
-				$senderText = ! empty( $senderName ) ? $senderName : $senderEmail;
+				$senderText = empty( $senderName ) ? $senderEmail : $senderName;
 				$this->mailgunMessage ['from'] = "{$senderText} <{$senderEmail}>";
 				// now log it
 				$sender->log( $this->logger, 'From' );

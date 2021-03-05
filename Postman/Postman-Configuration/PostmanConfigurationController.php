@@ -32,16 +32,14 @@ class PostmanConfigurationController {
 		PostmanUtils::registerAdminMenu( $this, 'addSetupWizardSubmenu' );
 
 		// hook on the init event
-		add_action( 'init', array(
-				$this,
-				'on_init',
-		) );
+		add_action( 'init', function () : void {
+			$this->on_init();
+		} );
 
 		// initialize the scripts, stylesheets and form fields
-		add_action( 'admin_init', array(
-				$this,
-				'on_admin_init',
-		) );
+		add_action( 'admin_init', function () : void {
+			$this->on_admin_init();
+		} );
 	}
 
 	/**
@@ -129,16 +127,14 @@ class PostmanConfigurationController {
 	 * @return void
 	 */
 	public function addConfigurationSubmenu(): void {
-		$page = add_submenu_page( PostmanViewController::POSTMAN_MENU_SLUG, sprintf( __( '%s Setup', 'post-smtp' ), __( 'Postman SMTP', 'post-smtp' ) ), __( 'Configuration', 'post-smtp' ), Postman::MANAGE_POSTMAN_CAPABILITY_NAME, PostmanConfigurationController::CONFIGURATION_SLUG, array(
-				$this,
-				'outputManualConfigurationContent',
-			) 
+		$page = add_submenu_page( PostmanViewController::POSTMAN_MENU_SLUG, sprintf( __( '%s Setup', 'post-smtp' ), __( 'Postman SMTP', 'post-smtp' ) ), __( 'Configuration', 'post-smtp' ), Postman::MANAGE_POSTMAN_CAPABILITY_NAME, PostmanConfigurationController::CONFIGURATION_SLUG, function () : void {
+			$this->outputManualConfigurationContent();
+		} 
 		);
 		// When the plugin options page is loaded, also load the stylesheet
-		add_action( 'admin_print_styles-' . $page, array(
-				$this,
-				'enqueueConfigurationResources',
-		) );
+		add_action( 'admin_print_styles-' . $page, function () : void {
+			$this->enqueueConfigurationResources();
+		} );
 	}
 
 	/**
@@ -156,15 +152,13 @@ class PostmanConfigurationController {
 	 * @return void
 	 */
 	public function addSetupWizardSubmenu(): void {
-		$page = add_submenu_page( PostmanViewController::POSTMAN_MENU_SLUG, sprintf( __( '%s Setup', 'post-smtp' ), __( 'Postman SMTP', 'post-smtp' ) ), __( 'Setup wizard', 'post-smtp' ), Postman::MANAGE_POSTMAN_CAPABILITY_NAME, PostmanConfigurationController::CONFIGURATION_WIZARD_SLUG, array(
-				$this,
-				'outputWizardContent',
-		) );
+		$page = add_submenu_page( PostmanViewController::POSTMAN_MENU_SLUG, sprintf( __( '%s Setup', 'post-smtp' ), __( 'Postman SMTP', 'post-smtp' ) ), __( 'Setup wizard', 'post-smtp' ), Postman::MANAGE_POSTMAN_CAPABILITY_NAME, PostmanConfigurationController::CONFIGURATION_WIZARD_SLUG, function () : void {
+			$this->outputWizardContent();
+		} );
 		// When the plugin options page is loaded, also load the stylesheet
-		add_action( 'admin_print_styles-' . $page, array(
-				$this,
-				'enqueueWizardResources',
-		) );
+		add_action( 'admin_print_styles-' . $page, function () : void {
+			$this->enqueueWizardResources();
+		} );
 	}
 
 	/**
@@ -211,7 +205,7 @@ class PostmanConfigurationController {
 
 		// account_config
 		print '<section id="account_config">';
-		if ( sizeof( PostmanTransportRegistry::getInstance()->getTransports() ) > 1 ) {
+		if ( count( PostmanTransportRegistry::getInstance()->getTransports() ) > 1 ) {
 			do_settings_sections( 'transport_options' );
 		} else {
 			printf( '<input id="input_%2$s" type="hidden" name="%1$s[%2$s]" value="%3$s"/>', PostmanOptions::POSTMAN_OPTIONS, PostmanOptions::TRANSPORT_TYPE, PostmanSmtpModuleTransport::SLUG );
@@ -695,7 +689,7 @@ class PostmanManageConfigurationAjaxHandler extends PostmanAbstractAjaxHandler {
 		$queryHostData = $this->getHostDataFromRequest();
 		$sockets = array();
 		foreach ( $queryHostData as $id => $datum ) {
-			array_push( $sockets, new PostmanWizardSocket( $datum ) );
+			$sockets[] = new PostmanWizardSocket( $datum );
 		}
 		$this->logger->error( $sockets );
 		$userPortOverride = $this->getUserPortOverride();
@@ -826,7 +820,7 @@ class PostmanManageConfigurationAjaxHandler extends PostmanAbstractAjaxHandler {
 		krsort( $overrideMenu );
 		$sortedMenu = array();
 		foreach ( $overrideMenu as $menu ) {
-			array_push( $sortedMenu, $menu );
+			$sortedMenu[] = $menu;
 		}
 
 		return $sortedMenu;
@@ -843,8 +837,7 @@ class PostmanManageConfigurationAjaxHandler extends PostmanAbstractAjaxHandler {
 		if ( $socket->success ) {
 			$transport = PostmanTransportRegistry::getInstance()->getTransport( $socket->transport );
 			$this->logger->debug( sprintf( 'Transport %s is building the override menu for socket', $transport->getSlug() ) );
-			$overrideItem = $transport->createOverrideMenu( $socket, $winningRecommendation, $userSocketOverride, $userAuthOverride );
-			return $overrideItem;
+			return $transport->createOverrideMenu( $socket, $winningRecommendation, $userSocketOverride, $userAuthOverride );
 		}
 		return null;
 	}

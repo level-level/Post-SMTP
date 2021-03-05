@@ -87,7 +87,7 @@ if ( ! class_exists( 'PostmanMandrillMailEngine' ) ) {
 						'name' => $recipient->getName(),
 						'type' => 'to',
 				);
-				array_push( $this->mandrillMessage ['to'], $recipient );
+				$this->mandrillMessage ['to'][] = $recipient;
 			}
 
 			// add the cc recipients
@@ -98,7 +98,7 @@ if ( ! class_exists( 'PostmanMandrillMailEngine' ) ) {
 						'name' => $recipient->getName(),
 						'type' => 'cc',
 				);
-				array_push( $this->mandrillMessage ['to'], $recipient );
+				$this->mandrillMessage ['to'][] = $recipient;
 			}
 
 			// add the bcc recipients
@@ -109,7 +109,7 @@ if ( ! class_exists( 'PostmanMandrillMailEngine' ) ) {
 						'name' => $recipient->getName(),
 						'type' => 'bcc',
 				);
-				array_push( $this->mandrillMessage ['to'], $recipient );
+				$this->mandrillMessage ['to'][] = $recipient;
 			}
 
 			// add the reply-to
@@ -191,23 +191,14 @@ if ( ! class_exists( 'PostmanMandrillMailEngine' ) ) {
 		private function addHeader( string $key, $value, bool $append = false ): void {
 			$this->logger->debug( 'Adding header: ' . $key . ' = ' . $value );
 			$header = &$this->mandrillMessage ['headers'];
-			if ( $append && ! empty( $header [ $key ] ) ) {
-				$header [ $key ] = $header [ $key ] . ', ' . $value;
-			} else {
-				$header [ $key ] = $value;
-			}
+			$header [ $key ] = $append && ! empty( $header [ $key ] ) ? $header [ $key ] . ', ' . $value : $value;
 		}
 
 		private function addAttachmentsToMail( PostmanMessage $message ): void {
 			$attachments = $message->getAttachments();
 			if ( isset( $attachments ) ) {
 				$this->mandrillMessage ['attachments'] = array();
-				if ( ! is_array( $attachments ) ) {
-					// WordPress may a single filename or a newline-delimited string list of multiple filenames
-					$attArray = explode( PHP_EOL, $attachments );
-				} else {
-					$attArray = $attachments;
-				}
+				$attArray = is_array( $attachments ) ? $attachments : explode( PHP_EOL, $attachments );
 				// otherwise WordPress sends an array
 				foreach ( $attArray as $file ) {
 					if ( ! empty( $file ) ) {
@@ -217,7 +208,7 @@ if ( ! class_exists( 'PostmanMandrillMailEngine' ) ) {
 								'name' => basename( $file ),
 								'content' => base64_encode( file_get_contents( $file ) ),
 						);
-						array_push( $this->mandrillMessage ['attachments'], $attachment );
+						$this->mandrillMessage ['attachments'][] = $attachment;
 					}
 				}
 			}

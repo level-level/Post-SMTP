@@ -41,8 +41,8 @@ if ( ! class_exists( 'PostmanSendGridMailEngine' ) ) {
             // add the From Header
 			$sender = $message->getFromAddress();
 
-			$senderEmail = ! empty( $sender->getEmail() ) ? $sender->getEmail() : $options->getMessageSenderEmail();
-			$senderName = ! empty( $sender->getName() ) ? $sender->getName() : $options->getMessageSenderName();
+			$senderEmail = empty( $sender->getEmail() ) ? $options->getMessageSenderEmail() : $sender->getEmail();
+			$senderName = empty( $sender->getName() ) ? $options->getMessageSenderName() : $sender->getName();
 
             $email->setFrom($senderEmail, $senderName);
 
@@ -157,11 +157,11 @@ if ( ! class_exists( 'PostmanSendGridMailEngine' ) ) {
 				$response_body = json_decode( $response->body() );
 
                 $response_code = $response->statusCode();
-				$email_sent = ( $response_code >= 200 and $response_code < 300 );
+				$email_sent = ( $response_code >= 200 && $response_code < 300 );
 
-				if ( isset( $response_body->errors[0]->message ) || ! $email_sent ) {
+				if ( property_exists($response_body->errors[0], 'message') && $response_body->errors[0]->message !== null || ! $email_sent ) {
 
-					$e = ! $email_sent ? $this->errorCodesMap($response_code) : $response_body->errors[0]->message;
+					$e = $email_sent ? $response_body->errors[0]->message : $this->errorCodesMap($response_code);
 					$this->transcript = $e;
 					$this->transcript .= PostmanModuleTransport::RAW_MESSAGE_FOLLOWS;
 					$this->transcript .= print_r( $email, true );
@@ -221,12 +221,7 @@ if ( ! class_exists( 'PostmanSendGridMailEngine' ) ) {
 		 */
 		private function addAttachmentsToMail( PostmanMessage $message ): array {
 			$attachments = $message->getAttachments();
-			if ( ! is_array( $attachments ) ) {
-				// WordPress may a single filename or a newline-delimited string list of multiple filenames
-				$attArray = explode( PHP_EOL, $attachments );
-			} else {
-				$attArray = $attachments;
-			}
+			$attArray = is_array( $attachments ) ? $attachments : explode( PHP_EOL, $attachments );
 			// otherwise WordPress sends an array
 			$attachments = array();
 			foreach ( $attArray as $file ) {

@@ -17,11 +17,7 @@ if (! class_exists ( "PostmanLogger" )) {
 		function __construct($name) {
 			$this->name = $name;
 			$this->wpDebug = defined ( 'WP_DEBUG' );
-			if (class_exists ( 'PostmanOptions' )) {
-				$this->logLevel = PostmanOptions::getInstance ()->getLogLevel ();
-			} else {
-				$this->logLevel = self::OFF_INT;
-			}
+			$this->logLevel = class_exists ( 'PostmanOptions' ) ? PostmanOptions::getInstance ()->getLogLevel () : self::OFF_INT;
 		}
 		/**
 		 * @param false|string $text

@@ -92,10 +92,9 @@ abstract class PostmanAbstractModuleTransport implements PostmanModuleTransport 
 	 * @psalm-return array{0: mixed}
 	 */
 	public function getSocketsForSetupWizardToProbe($hostname, $smtpServerGuess) {
-		$hosts = array (
+		return array (
 				self::createSocketDefinition ( $this->getHostname (), $this->getPort () ) 
 		);
-		return $hosts;
 	}
 	
 	/**
@@ -139,8 +138,7 @@ abstract class PostmanAbstractModuleTransport implements PostmanModuleTransport 
 	 * @return PostmanNonOAuthScribe
 	 */
 	protected function createScribe($hostname) {
-		$scribe = new PostmanNonOAuthScribe ( $hostname );
-		return $scribe;
+		return new PostmanNonOAuthScribe ( $hostname );
 	}
 	
 	/**
@@ -152,8 +150,7 @@ abstract class PostmanAbstractModuleTransport implements PostmanModuleTransport 
 	
 	protected function validateTransportConfiguration() {
 		$this->configuredAndReady = true;
-		$messages = array ();
-		return $messages;
+		return array ();
 	}
 	
 	/**
@@ -289,8 +286,7 @@ abstract class PostmanAbstractModuleTransport implements PostmanModuleTransport 
 	}
 
 	public function populateConfiguration($hostname) {
-		$configuration = array ();
-		return $configuration;
+		return array ();
 	}
 	/**
 	 * 	 *
@@ -425,7 +421,7 @@ abstract class PostmanAbstractModuleTransport implements PostmanModuleTransport 
 	protected final function isHostConfigured(PostmanOptions $options): bool {
 		$hostname = $options->getHostname ();
 		$port = $options->getPort ();
-		return ! (empty ( $hostname ) || empty ( $port ));
+		return !empty ( $hostname ) && !empty ( $port );
 	}
 	/**
 	 * 	 *
@@ -515,9 +511,9 @@ abstract class PostmanAbstractZendModuleTransport extends PostmanAbstractModuleT
 		$scribe = null;
 		if ($this->isServiceProviderGoogle ( $hostname )) {
 			$scribe = new PostmanGoogleOAuthScribe ();
-		} else if ($this->isServiceProviderMicrosoft ( $hostname )) {
+		} elseif ($this->isServiceProviderMicrosoft ( $hostname )) {
 			$scribe = new PostmanMicrosoftOAuthScribe ();
-		} else if ($this->isServiceProviderYahoo ( $hostname )) {
+		} elseif ($this->isServiceProviderYahoo ( $hostname )) {
 			$scribe = new PostmanYahooOAuthScribe ();
 		} else {
 			$scribe = new PostmanNonOAuthScribe ( $hostname );
@@ -577,7 +573,7 @@ abstract class PostmanAbstractZendModuleTransport extends PostmanAbstractModuleT
 		if ($encType == PostmanOptions::SECURITY_TYPE_SMTPS) {
 			/* translators: where %1$s is the Transport type (e.g. SMTP or SMTPS) and %2$s is the encryption type (e.g. SSL or TLS) */
 			$deliveryDetails = '🔐SMTPS';
-		} else if ($encType == PostmanOptions::SECURITY_TYPE_STARTTLS) {
+		} elseif ($encType == PostmanOptions::SECURITY_TYPE_STARTTLS) {
 			/* translators: where %1$s is the Transport type (e.g. SMTP or SMTPS) and %2$s is the encryption type (e.g. SSL or TLS) */
 			$deliveryDetails = '🔐SMTP-STARTTLS';
 		}
@@ -591,7 +587,7 @@ abstract class PostmanAbstractZendModuleTransport extends PostmanAbstractModuleT
 	protected function getAuthenticationDescription($authType) {
 		if (PostmanOptions::AUTHENTICATION_TYPE_OAUTH2 == $authType) {
 			return 'OAuth 2.0';
-		} else if (PostmanOptions::AUTHENTICATION_TYPE_NONE == $authType) {
+		} elseif (PostmanOptions::AUTHENTICATION_TYPE_NONE == $authType) {
 			return _x ( 'no', 'as in "There is no Spoon"', 'post-smtp' );
 		} else {
 			switch ($authType) {
@@ -630,15 +626,13 @@ abstract class PostmanAbstractZendModuleTransport extends PostmanAbstractModuleT
 		parent::validateTransportConfiguration ();
 		$messages = parent::validateTransportConfiguration ();
 		if (! $this->isSenderConfigured ()) {
-			array_push ( $messages, __ ( 'Message From Address can not be empty', 'post-smtp' ) . '.' );
+			$messages[] = __ ( 'Message From Address can not be empty', 'post-smtp' ) . '.';
 			$this->setNotConfiguredAndReady ();
 		}
-		if ($this->getAuthenticationType () == PostmanOptions::AUTHENTICATION_TYPE_OAUTH2) {
-			if (! $this->isOAuth2ClientIdAndClientSecretConfigured ()) {
-				/* translators: %1$s is the Client ID label, and %2$s is the Client Secret label (e.g. Warning: OAuth 2.0 authentication requires an OAuth 2.0-capable Outgoing Mail Server, Sender Email Address, Client ID, and Client Secret.) */
-				array_push ( $messages, sprintf ( __ ( 'OAuth 2.0 authentication requires a %1$s and %2$s.', 'post-smtp' ), $this->getScribe ()->getClientIdLabel (), $this->getScribe ()->getClientSecretLabel () ) );
-				$this->setNotConfiguredAndReady ();
-			}
+		if ($this->getAuthenticationType () == PostmanOptions::AUTHENTICATION_TYPE_OAUTH2 && ! $this->isOAuth2ClientIdAndClientSecretConfigured ()) {
+			/* translators: %1$s is the Client ID label, and %2$s is the Client Secret label (e.g. Warning: OAuth 2.0 authentication requires an OAuth 2.0-capable Outgoing Mail Server, Sender Email Address, Client ID, and Client Secret.) */
+			$messages[] = sprintf ( __ ( 'OAuth 2.0 authentication requires a %1$s and %2$s.', 'post-smtp' ), $this->getScribe ()->getClientIdLabel (), $this->getScribe ()->getClientSecretLabel () );
+			$this->setNotConfiguredAndReady ();
 		}
 		return $messages;
 	}
@@ -651,7 +645,7 @@ abstract class PostmanAbstractZendModuleTransport extends PostmanAbstractModuleT
 		$options = PostmanOptions::getInstance ();
 		$clientId = $options->getClientId ();
 		$clientSecret = $options->getClientSecret ();
-		return ! (empty ( $clientId ) || empty ( $clientSecret ));
+		return !empty ( $clientId ) && !empty ( $clientSecret );
 	}
 	
 	/**
@@ -661,7 +655,7 @@ abstract class PostmanAbstractZendModuleTransport extends PostmanAbstractModuleT
 	protected function isPasswordAuthenticationConfigured(PostmanOptions $options) {
 		$username = $options->getUsername ();
 		$password = $options->getPassword ();
-		return $this->options->isAuthTypePassword () && ! (empty ( $username ) || empty ( $password ));
+		return $this->options->isAuthTypePassword () && (!empty ( $username ) && !empty ( $password ));
 	}
 	
 	/**
@@ -682,10 +676,8 @@ abstract class PostmanAbstractZendModuleTransport extends PostmanAbstractModuleT
 		// IP addresses are not allowed in the Redirect URL
 		$urlParts = parse_url ( $scribe->getCallbackUrl () );
 		$response ['dot_notation_url'] = false;
-		if (isset ( $urlParts ['host'] )) {
-			if (PostmanUtils::isHostAddressNotADomainName ( $urlParts ['host'] )) {
-				$response ['dot_notation_url'] = true;
-			}
+		if (isset ( $urlParts ['host'] ) && PostmanUtils::isHostAddressNotADomainName ( $urlParts ['host'] )) {
+			$response ['dot_notation_url'] = true;
 		}
 		$response ['redirect_url'] = $scribe->getCallbackUrl ();
 		$response ['callback_domain'] = $scribe->getCallbackDomain ();
@@ -737,36 +729,34 @@ abstract class PostmanAbstractZendModuleTransport extends PostmanAbstractModuleT
 			} else {
 				$noAuthMode = true;
 			}
-		} else {
-			if ($winningRecommendation ['display_auth'] == 'password') {
-				$passwordMode = true;
-			} elseif ($winningRecommendation ['display_auth'] == 'oauth2') {
+		} elseif ($winningRecommendation ['display_auth'] == 'password') {
+			$passwordMode = true;
+		} elseif ($winningRecommendation ['display_auth'] == 'oauth2') {
 				$oauth2Mode = true;
 			} else {
 				$noAuthMode = true;
 			}
-		}
 		if ($selected) {
 			if ($socket->auth_crammd5 || $socket->auth_login || $socket->authPlain) {
-				array_push ( $overrideAuthItems, array (
+				$overrideAuthItems[] = array (
 						'selected' => $passwordMode,
 						'name' => __ ( 'Password (requires username and password)', 'post-smtp' ),
 						'value' => 'password' 
-				) );
+				);
 			}
 			if ($socket->auth_xoauth || $winningRecommendation ['auth'] == 'oauth2') {
-				array_push ( $overrideAuthItems, array (
+				$overrideAuthItems[] = array (
 						'selected' => $oauth2Mode,
 						'name' => __ ( 'OAuth 2.0 (requires Client ID and Client Secret)', 'post-smtp' ),
 						'value' => 'oauth2' 
-				) );
+				);
 			}
 			if ($socket->auth_none) {
-				array_push ( $overrideAuthItems, array (
+				$overrideAuthItems[] = array (
 						'selected' => $noAuthMode,
 						'name' => __ ( 'None', 'post-smtp' ),
 						'value' => 'none' 
-				) );
+				);
 			}
 			
 			// marks at least one item as selected if none are selected

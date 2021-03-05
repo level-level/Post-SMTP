@@ -16,10 +16,9 @@ class PostmanGmailApiModuleTransport extends PostmanAbstractZendModuleTransport 
 		parent::__construct ( $rootPluginFilenameAndPath );
 		
 		// add a hook on the plugins_loaded event
-		add_action ( 'admin_init', array (
-				$this,
-				'on_admin_init' 
-		) );
+		add_action ( 'admin_init', function () : void {
+			$this->on_admin_init();
+		} );
 	}
 	/**
 	 * @return string
@@ -187,7 +186,7 @@ class PostmanGmailApiModuleTransport extends PostmanAbstractZendModuleTransport 
 				/* translators: %1$s is the Client ID label, and %2$s is the Client Secret label */
 				$message = sprintf ( __ ( 'You have configured OAuth 2.0 authentication, but have not received permission to use it.', 'post-smtp' ), $this->getScribe ()->getClientIdLabel (), $this->getScribe ()->getClientSecretLabel () );
 				$message .= sprintf ( ' <a href="%s">%s</a>.', PostmanUtils::getGrantOAuthPermissionUrl (), $this->getScribe ()->getRequestPermissionLinkText () );
-				array_push ( $messages, $message );
+				$messages[] = $message;
 				$this->setNotConfiguredAndReady ();
 			}
 		}
@@ -206,7 +205,7 @@ class PostmanGmailApiModuleTransport extends PostmanAbstractZendModuleTransport 
 	public function getSocketsForSetupWizardToProbe($hostname, $smtpServerGuess) {
 		$hosts = array ();
 		if ($smtpServerGuess == null || PostmanUtils::isGoogle ( $smtpServerGuess )) {
-			array_push ( $hosts, parent::createSocketDefinition ( $this->getHostname (), $this->getPort () ) );
+			$hosts[] = parent::createSocketDefinition ( $this->getHostname (), $this->getPort () );
 		}
 		return $hosts;
 	}

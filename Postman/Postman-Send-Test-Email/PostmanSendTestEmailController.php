@@ -27,16 +27,14 @@ class PostmanSendTestEmailController {
 		PostmanUtils::registerAdminMenu( $this, 'addEmailTestSubmenu' );
 
 		// hook on the init event
-		add_action( 'init', array(
-				$this,
-				'on_init',
-		) );
+		add_action( 'init', function () : void {
+			$this->on_init();
+		} );
 
 		// initialize the scripts, stylesheets and form fields
-		add_action( 'admin_init', array(
-				$this,
-				'on_admin_init',
-		) );
+		add_action( 'admin_init', function () : void {
+			$this->on_admin_init();
+		} );
 	}
 
 	/**
@@ -103,15 +101,13 @@ class PostmanSendTestEmailController {
 	 * @return void
 	 */
 	public function addEmailTestSubmenu(): void {
-		$page = add_submenu_page( PostmanViewController::POSTMAN_MENU_SLUG, sprintf( __( '%s Setup', 'post-smtp' ), __( 'Postman SMTP', 'post-smtp' ) ), __( 'Email test', 'post-smtp' ), Postman::MANAGE_POSTMAN_CAPABILITY_NAME, PostmanSendTestEmailController::EMAIL_TEST_SLUG, array(
-				$this,
-				'outputTestEmailContent',
-		) );
+		$page = add_submenu_page( PostmanViewController::POSTMAN_MENU_SLUG, sprintf( __( '%s Setup', 'post-smtp' ), __( 'Postman SMTP', 'post-smtp' ) ), __( 'Email test', 'post-smtp' ), Postman::MANAGE_POSTMAN_CAPABILITY_NAME, PostmanSendTestEmailController::EMAIL_TEST_SLUG, function () : void {
+			$this->outputTestEmailContent();
+		} );
 		// When the plugin options page is loaded, also load the stylesheet
-		add_action( 'admin_print_styles-' . $page, array(
-				$this,
-				'enqueueEmailTestResources',
-		) );
+		add_action( 'admin_print_styles-' . $page, function () : void {
+			$this->enqueueEmailTestResources();
+		} );
 	}
 
 	/**
@@ -221,10 +217,9 @@ class PostmanSendTestEmailAjaxController extends PostmanAbstractAjaxHandler {
 		$subject = sprintf( _x( 'Postman SMTP Test (%s)', 'Test Email Subject', 'post-smtp' ), $serverName );
 
 		// Postman API: indicate to Postman this is just for testing
-		add_filter( 'postman_test_email', array(
-				$this,
-				'test_mode',
-		) );
+		add_filter( 'postman_test_email', function () {
+			return $this->test_mode();
+		} );
 
 		// this header specifies that there are many parts (one text part, one html part)
 		$header = 'Content-Type: multipart/alternative;';
@@ -236,10 +231,9 @@ class PostmanSendTestEmailAjaxController extends PostmanAbstractAjaxHandler {
 		$success = wp_mail( $email, $subject, $message, $header );
 
 		// Postman API: remove the testing indicator
-		remove_filter( 'postman_test_email', array(
-				$this,
-				'test_mode',
-		) );
+		remove_filter( 'postman_test_email', function () {
+			return $this->test_mode();
+		} );
 
 		// Postman API: retrieve the result of sending this message from Postman
 		$result = apply_filters( 'postman_wp_mail_result', null );

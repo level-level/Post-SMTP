@@ -5,11 +5,9 @@ if (! class_exists ( 'PostmanEmailAddress' )) {
 		private $email;
 		public function __construct($email, $name = null) {
 			// Break $recipient into name and address parts if in the format "Foo <bar@baz.com>"
-			if (preg_match ( '/(.*)<(.+)>/', $email, $matches )) {
-				if (count ( $matches ) == 3) {
-					$name = $matches [1];
-					$email = $matches [2];
-				}
+			if (preg_match ( '/(.*)<(.+)>/', $email, $matches ) && count ( $matches ) == 3) {
+				$name = $matches [1];
+				$email = $matches [2];
 			}
 			$this->setEmail ( trim ( $email ) );
 			$this->setName ( trim ( $name ) );
@@ -84,7 +82,7 @@ if (! class_exists ( 'PostmanEmailAddress' )) {
 						$t [$k] = '"' . str_replace ( ' <', '" <', $v );
 					}
 					$tokenizedEmail = trim ( $t [$k] );
-					array_push ( $emails, $tokenizedEmail );
+					$emails[] = $tokenizedEmail;
 				}
 			}
 			return $emails;

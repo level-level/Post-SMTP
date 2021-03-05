@@ -1,6 +1,6 @@
 <?php
-require_once ("registered-domain-libs-master/PHP/effectiveTLDs.inc.php");
-require_once ("registered-domain-libs-master/PHP/regDomain.inc.php");
+require_once (__DIR__ . "/registered-domain-libs-master/PHP/effectiveTLDs.inc.php");
+require_once (__DIR__ . "/registered-domain-libs-master/PHP/regDomain.inc.php");
 
 /**
  *
@@ -222,7 +222,7 @@ class PostmanPortTest {
 	 */
 	private function sendSmtpCommand($stream, string $message): void {
 		$this->trace ( 'tx: ' . $message );
-		fputs ( $stream, $message . "\r\n" );
+		fwrite ( $stream, $message . "\r\n" );
 	}
 	/**
 	 * @return false|string

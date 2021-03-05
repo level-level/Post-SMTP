@@ -10,10 +10,9 @@ class PostmanSmtpModuleTransport extends PostmanAbstractZendModuleTransport impl
 		parent::__construct( $rootPluginFilenameAndPath );
 
 		// add a hook on the plugins_loaded event
-		add_action( 'admin_init', array(
-				$this,
-				'on_admin_init',
-		) );
+		add_action( 'admin_init', function () : void {
+			$this->on_admin_init();
+		} );
 	}
 
 	/**
@@ -99,23 +98,21 @@ class PostmanSmtpModuleTransport extends PostmanAbstractZendModuleTransport impl
 	protected function validateTransportConfiguration() {
 		$messages = parent::validateTransportConfiguration();
 		if ( ! $this->isHostConfigured( $this->options ) ) {
-			array_push( $messages, __( 'Outgoing Mail Server Hostname and Port can not be empty.', 'post-smtp' ) );
+			$messages[] = __( 'Outgoing Mail Server Hostname and Port can not be empty.', 'post-smtp' );
 			$this->setNotConfiguredAndReady();
 		}
 		if ( ! $this->isEnvelopeFromConfigured() ) {
-			array_push( $messages, __( 'Envelope-From Email Address can not be empty', 'post-smtp' ) . '.' );
+			$messages[] = __( 'Envelope-From Email Address can not be empty', 'post-smtp' ) . '.';
 			$this->setNotConfiguredAndReady();
 		}
 		if ( $this->options->isAuthTypePassword() && ! $this->isPasswordAuthenticationConfigured( $this->options ) ) {
-			array_push( $messages, __( 'Username and password can not be empty.', 'post-smtp' ) );
+			$messages[] = __( 'Username and password can not be empty.', 'post-smtp' );
 			$this->setNotConfiguredAndReady();
 		}
-		if ( $this->getAuthenticationType() == PostmanOptions::AUTHENTICATION_TYPE_OAUTH2 ) {
-			if ( ! $this->isOAuth2SupportedHostConfigured() ) {
-				/* translators: %1$s is the Client ID label, and %2$s is the Client Secret label (e.g. Warning: OAuth 2.0 authentication requires an OAuth 2.0-capable Outgoing Mail Server, Sender Email Address, Client ID, and Client Secret.) */
-				array_push( $messages, sprintf( __( 'OAuth 2.0 authentication requires a supported OAuth 2.0-capable Outgoing Mail Server.', 'post-smtp' ) ) );
-				$this->setNotConfiguredAndReady();
-			}
+		if ($this->getAuthenticationType() == PostmanOptions::AUTHENTICATION_TYPE_OAUTH2 && ! $this->isOAuth2SupportedHostConfigured()) {
+			/* translators: %1$s is the Client ID label, and %2$s is the Client Secret label (e.g. Warning: OAuth 2.0 authentication requires an OAuth 2.0-capable Outgoing Mail Server, Sender Email Address, Client ID, and Client Secret.) */
+			$messages[] = sprintf( __( 'OAuth 2.0 authentication requires a supported OAuth 2.0-capable Outgoing Mail Server.', 'post-smtp' ) );
+			$this->setNotConfiguredAndReady();
 		}
 		if ( empty( $messages ) ) {
 			$this->setReadyForOAuthGrant();
@@ -123,7 +120,7 @@ class PostmanSmtpModuleTransport extends PostmanAbstractZendModuleTransport impl
 				/* translators: %1$s is the Client ID label, and %2$s is the Client Secret label */
 				$message = sprintf( __( 'You have configured OAuth 2.0 authentication, but have not received permission to use it.', 'post-smtp' ), $this->getScribe()->getClientIdLabel(), $this->getScribe()->getClientSecretLabel() );
 				$message .= sprintf( ' <a href="%s">%s</a>.', PostmanUtils::getGrantOAuthPermissionUrl(), $this->getScribe()->getRequestPermissionLinkText() );
-				array_push( $messages, $message );
+				$messages[] = $message;
 				$this->setNotConfiguredAndReady();
 			}
 		}
@@ -137,8 +134,7 @@ class PostmanSmtpModuleTransport extends PostmanAbstractZendModuleTransport impl
 	private function isOAuth2SupportedHostConfigured() {
 		$options = PostmanOptions::getInstance();
 		$hostname = $options->getHostname();
-		$supportedOAuthProvider = $this->isServiceProviderGoogle( $hostname ) || $this->isServiceProviderMicrosoft( $hostname ) || $this->isServiceProviderYahoo( $hostname );
-		return $supportedOAuthProvider;
+		return $this->isServiceProviderGoogle( $hostname ) || $this->isServiceProviderMicrosoft( $hostname ) || $this->isServiceProviderYahoo( $hostname );
 	}
 
 	/**
@@ -151,13 +147,11 @@ class PostmanSmtpModuleTransport extends PostmanAbstractZendModuleTransport impl
 	 * @psalm-return array{0: mixed, 1: mixed, 2: mixed}
 	 */
 	public function getSocketsForSetupWizardToProbe( $hostname, $smtpServerGuess ) {
-		$hosts = array(
+		return array(
 				$this->createSocketDefinition( $hostname, 25 ),
 				$this->createSocketDefinition( $hostname, 465 ),
 				$this->createSocketDefinition( $hostname, 587 ),
 		);
-
-		return $hosts;
 	}
 
 	/**
@@ -251,7 +245,7 @@ class PostmanSmtpModuleTransport extends PostmanAbstractZendModuleTransport impl
 					$this->logger->debug( 'Losing points for sending credentials in the clear' );
 					$score -= 10000;
 				}
-			} else if ( empty( $userAuthOverride ) || $userAuthOverride == 'none' ) {
+			} elseif (empty( $userAuthOverride ) || $userAuthOverride == 'none') {
 				$recommendation ['auth'] = PostmanOptions::AUTHENTICATION_TYPE_NONE;
 				$recommendation ['display_auth'] = 'none';
 				$score += 100;
@@ -349,76 +343,62 @@ class PostmanSmtpModuleTransport extends PostmanAbstractZendModuleTransport impl
 		$oauthScribe = $transport->getScribe();
 
 		// Sanitize
-		add_settings_section( PostmanAdminController::SMTP_SECTION, __( 'Transport Settings', 'post-smtp' ), array(
-				$this,
-				'printSmtpSectionInfo',
-		), PostmanAdminController::SMTP_OPTIONS );
+		add_settings_section( PostmanAdminController::SMTP_SECTION, __( 'Transport Settings', 'post-smtp' ), function () : void {
+			$this->printSmtpSectionInfo();
+		}, PostmanAdminController::SMTP_OPTIONS );
 
-		add_settings_field( PostmanOptions::HOSTNAME, __( 'Outgoing Mail Server Hostname', 'post-smtp' ), array(
-				$this,
-				'hostname_callback',
-		), PostmanAdminController::SMTP_OPTIONS, PostmanAdminController::SMTP_SECTION );
+		add_settings_field( PostmanOptions::HOSTNAME, __( 'Outgoing Mail Server Hostname', 'post-smtp' ), function () : void {
+			$this->hostname_callback();
+		}, PostmanAdminController::SMTP_OPTIONS, PostmanAdminController::SMTP_SECTION );
 
-		add_settings_field( PostmanOptions::PORT, __( 'Outgoing Mail Server Port', 'post-smtp' ), array(
-				$this,
-				'port_callback',
-		), PostmanAdminController::SMTP_OPTIONS, PostmanAdminController::SMTP_SECTION );
+		add_settings_field( PostmanOptions::PORT, __( 'Outgoing Mail Server Port', 'post-smtp' ), function ($args) : void {
+			$this->port_callback($args);
+		}, PostmanAdminController::SMTP_OPTIONS, PostmanAdminController::SMTP_SECTION );
 
-		add_settings_field( PostmanOptions::ENVELOPE_SENDER, __( 'Envelope-From Email Address', 'post-smtp' ), array(
-				$this,
-				'sender_email_callback',
-		), PostmanAdminController::SMTP_OPTIONS, PostmanAdminController::SMTP_SECTION );
+		add_settings_field( PostmanOptions::ENVELOPE_SENDER, __( 'Envelope-From Email Address', 'post-smtp' ), function () : void {
+			$this->sender_email_callback();
+		}, PostmanAdminController::SMTP_OPTIONS, PostmanAdminController::SMTP_SECTION );
 
-		add_settings_field( PostmanOptions::SECURITY_TYPE, _x( 'Security', 'Configuration Input Field', 'post-smtp' ), array(
-				$this,
-				'encryption_type_callback',
-		), PostmanAdminController::SMTP_OPTIONS, PostmanAdminController::SMTP_SECTION );
+		add_settings_field( PostmanOptions::SECURITY_TYPE, _x( 'Security', 'Configuration Input Field', 'post-smtp' ), function () : void {
+			$this->encryption_type_callback();
+		}, PostmanAdminController::SMTP_OPTIONS, PostmanAdminController::SMTP_SECTION );
 
-		add_settings_field( PostmanOptions::AUTHENTICATION_TYPE, __( 'Authentication', 'post-smtp' ), array(
-				$this,
-				'authentication_type_callback',
-		), PostmanAdminController::SMTP_OPTIONS, PostmanAdminController::SMTP_SECTION );
+		add_settings_field( PostmanOptions::AUTHENTICATION_TYPE, __( 'Authentication', 'post-smtp' ), function () : void {
+			$this->authentication_type_callback();
+		}, PostmanAdminController::SMTP_OPTIONS, PostmanAdminController::SMTP_SECTION );
 
-		add_settings_section( PostmanAdminController::BASIC_AUTH_SECTION, __( 'Authentication', 'post-smtp' ), array(
-				$this,
-				'printBasicAuthSectionInfo',
-		), PostmanAdminController::BASIC_AUTH_OPTIONS );
+		add_settings_section( PostmanAdminController::BASIC_AUTH_SECTION, __( 'Authentication', 'post-smtp' ), function () : void {
+			$this->printBasicAuthSectionInfo();
+		}, PostmanAdminController::BASIC_AUTH_OPTIONS );
 
-		add_settings_field( PostmanOptions::BASIC_AUTH_USERNAME, __( 'Username', 'post-smtp' ), array(
-				$this,
-				'basic_auth_username_callback',
-		), PostmanAdminController::BASIC_AUTH_OPTIONS, PostmanAdminController::BASIC_AUTH_SECTION );
+		add_settings_field( PostmanOptions::BASIC_AUTH_USERNAME, __( 'Username', 'post-smtp' ), function () : void {
+			$this->basic_auth_username_callback();
+		}, PostmanAdminController::BASIC_AUTH_OPTIONS, PostmanAdminController::BASIC_AUTH_SECTION );
 
-		add_settings_field( PostmanOptions::BASIC_AUTH_PASSWORD, __( 'Password', 'post-smtp' ), array(
-				$this,
-				'basic_auth_password_callback',
-		), PostmanAdminController::BASIC_AUTH_OPTIONS, PostmanAdminController::BASIC_AUTH_SECTION );
+		add_settings_field( PostmanOptions::BASIC_AUTH_PASSWORD, __( 'Password', 'post-smtp' ), function () : void {
+			$this->basic_auth_password_callback();
+		}, PostmanAdminController::BASIC_AUTH_OPTIONS, PostmanAdminController::BASIC_AUTH_SECTION );
 
 		// the OAuth section
-		add_settings_section( PostmanAdminController::OAUTH_SECTION, __( 'Authentication', 'post-smtp' ), array(
-				$this,
-				'printOAuthSectionInfo',
-		), PostmanAdminController::OAUTH_AUTH_OPTIONS );
+		add_settings_section( PostmanAdminController::OAUTH_SECTION, __( 'Authentication', 'post-smtp' ), function () : void {
+			$this->printOAuthSectionInfo();
+		}, PostmanAdminController::OAUTH_AUTH_OPTIONS );
 
-		add_settings_field( 'callback_domain', sprintf( '<span id="callback_domain">%s</span>', $oauthScribe->getCallbackDomainLabel() ), array(
-				$this,
-				'callback_domain_callback',
-		), PostmanAdminController::OAUTH_AUTH_OPTIONS, PostmanAdminController::OAUTH_SECTION );
+		add_settings_field( 'callback_domain', sprintf( '<span id="callback_domain">%s</span>', $oauthScribe->getCallbackDomainLabel() ), function () : void {
+			$this->callback_domain_callback();
+		}, PostmanAdminController::OAUTH_AUTH_OPTIONS, PostmanAdminController::OAUTH_SECTION );
 
-		add_settings_field( 'redirect_url', sprintf( '<span id="redirect_url">%s</span>', $oauthScribe->getCallbackUrlLabel() ), array(
-				$this,
-				'redirect_url_callback',
-		), PostmanAdminController::OAUTH_AUTH_OPTIONS, PostmanAdminController::OAUTH_SECTION );
+		add_settings_field( 'redirect_url', sprintf( '<span id="redirect_url">%s</span>', $oauthScribe->getCallbackUrlLabel() ), function () : void {
+			$this->redirect_url_callback();
+		}, PostmanAdminController::OAUTH_AUTH_OPTIONS, PostmanAdminController::OAUTH_SECTION );
 
-		add_settings_field( PostmanOptions::CLIENT_ID, $oauthScribe->getClientIdLabel(), array(
-				$this,
-				'oauth_client_id_callback',
-		), PostmanAdminController::OAUTH_AUTH_OPTIONS, PostmanAdminController::OAUTH_SECTION );
+		add_settings_field( PostmanOptions::CLIENT_ID, $oauthScribe->getClientIdLabel(), function () : void {
+			$this->oauth_client_id_callback();
+		}, PostmanAdminController::OAUTH_AUTH_OPTIONS, PostmanAdminController::OAUTH_SECTION );
 
-		add_settings_field( PostmanOptions::CLIENT_SECRET, $oauthScribe->getClientSecretLabel(), array(
-				$this,
-				'oauth_client_secret_callback',
-		), PostmanAdminController::OAUTH_AUTH_OPTIONS, PostmanAdminController::OAUTH_SECTION );
+		add_settings_field( PostmanOptions::CLIENT_SECRET, $oauthScribe->getClientSecretLabel(), function () : void {
+			$this->oauth_client_secret_callback();
+		}, PostmanAdminController::OAUTH_AUTH_OPTIONS, PostmanAdminController::OAUTH_SECTION );
 	}
 
 	/**

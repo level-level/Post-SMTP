@@ -35,10 +35,18 @@ if ( ! class_exists( 'PostmanViewController' ) ) {
 			PostmanUtils::registerAdminMenu( $this, 'addPurgeDataSubmenu' );
 
 			// initialize the scripts, stylesheets and form fields
-			add_action( 'admin_init', array( $this, 'registerStylesAndScripts' ), 0 );
-			add_action( 'wp_ajax_delete_lock_file', array( $this, 'delete_lock_file' ) );
-			add_action( 'wp_ajax_dismiss_version_notify', array( $this, 'dismiss_version_notify' ) );
-			add_action( 'wp_ajax_dismiss_donation_notify', array( $this, 'dismiss_donation_notify' ) );
+			add_action( 'admin_init', function () : void {
+				$this->registerStylesAndScripts();
+			}, 0 );
+			add_action( 'wp_ajax_delete_lock_file', function () : void {
+				$this->delete_lock_file();
+			} );
+			add_action( 'wp_ajax_dismiss_version_notify', function () : void {
+				$this->dismiss_version_notify();
+			} );
+			add_action( 'wp_ajax_dismiss_donation_notify', function () : void {
+				$this->dismiss_donation_notify();
+			} );
 
 			//add_action( 'admin_init', array( $this, 'do_activation_redirect' ) );
 
@@ -113,16 +121,14 @@ if ( ! class_exists( 'PostmanViewController' ) ) {
 			$pageTitle = sprintf( __( '%s Setup', 'post-smtp' ), __( 'Post SMTP', 'post-smtp' ) );
 			$pluginName = __( 'Post SMTP', 'post-smtp' );
 			$uniqueId = self::POSTMAN_MENU_SLUG;
-			$pageOptions = array(
-					$this,
-					'outputDefaultContent',
-			);
+			$pageOptions = function () : void {
+				$this->outputDefaultContent();
+			};
 			$mainPostmanSettingsPage = add_menu_page( $pageTitle, $pluginName, Postman::MANAGE_POSTMAN_CAPABILITY_NAME, $uniqueId, $pageOptions );
 			// When the plugin options page is loaded, also load the stylesheet
-			add_action( 'admin_print_styles-' . $mainPostmanSettingsPage, array(
-					$this,
-					'enqueueHomeScreenStylesheet',
-			) );
+			add_action( 'admin_print_styles-' . $mainPostmanSettingsPage, function () : void {
+				$this->enqueueHomeScreenStylesheet();
+			} );
 		}
 		function enqueueHomeScreenStylesheet(): void {
 			wp_enqueue_style( PostmanViewController::POSTMAN_STYLE );
@@ -135,15 +141,13 @@ if ( ! class_exists( 'PostmanViewController' ) ) {
 		 * @return void
 		 */
 		public function addPurgeDataSubmenu(): void {
-			$page = add_submenu_page( self::POSTMAN_MENU_SLUG, sprintf( __( '%s Setup', 'post-smtp' ), __( 'Post SMTP', 'post-smtp' ) ), __( 'Import/Export/Reset', 'post-smtp' ), Postman::MANAGE_POSTMAN_CAPABILITY_NAME, PostmanAdminController::MANAGE_OPTIONS_PAGE_SLUG, array(
-					$this,
-					'outputPurgeDataContent',
-			) );
+			$page = add_submenu_page( self::POSTMAN_MENU_SLUG, sprintf( __( '%s Setup', 'post-smtp' ), __( 'Post SMTP', 'post-smtp' ) ), __( 'Import/Export/Reset', 'post-smtp' ), Postman::MANAGE_POSTMAN_CAPABILITY_NAME, PostmanAdminController::MANAGE_OPTIONS_PAGE_SLUG, function () : void {
+				$this->outputPurgeDataContent();
+			} );
 			// When the plugin options page is loaded, also load the stylesheet
-			add_action( 'admin_print_styles-' . $page, array(
-					$this,
-					'enqueueHomeScreenStylesheet',
-			) );
+			add_action( 'admin_print_styles-' . $page, function () : void {
+				$this->enqueueHomeScreenStylesheet();
+			} );
 		}
 
 		/**
@@ -295,7 +299,7 @@ if ( ! class_exists( 'PostmanViewController' ) ) {
 			printf( '<p><span>%s</span></p>', __( 'Copy this data into another instance of Postman to duplicate the configuration.', 'post-smtp' ) );
 			$data = '';
 			if ( ! PostmanPreRequisitesCheck::checkZlibEncode() ) {
-				$extraDeleteButtonAttributes = sprintf( 'disabled="true"' );
+				$extraDeleteButtonAttributes = 'disabled="true"';
 				$data = '';
 			} else {
 				$extraDeleteButtonAttributes = '';
@@ -388,7 +392,7 @@ if ( ! class_exists( 'PostmanViewController' ) ) {
                 $exportTile = __( 'Export', 'post-smtp' );
                 $resetTitle = __( 'Reset Plugin', 'post-smtp' );
                 $importExportReset = sprintf( '%s/%s/%s', $importTitle, $exportTile, $resetTitle );
-                printf( $purgeLinkPattern, $this->getPageUrl( PostmanAdminController::MANAGE_OPTIONS_PAGE_SLUG ), sprintf( '%s', $importExportReset ) );
+                printf( $purgeLinkPattern, $this->getPageUrl( PostmanAdminController::MANAGE_OPTIONS_PAGE_SLUG ), $importExportReset );
                 print '</ul>';
                 print '</div>';
                 print '<div class="welcome-panel-column welcome-panel-last">';

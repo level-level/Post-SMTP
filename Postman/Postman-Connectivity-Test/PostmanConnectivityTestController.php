@@ -26,16 +26,14 @@ class PostmanConnectivityTestController {
 		PostmanUtils::registerAdminMenu( $this, 'addPortTestSubmenu' );
 
 		// hook on the init event
-		add_action( 'init', array(
-				$this,
-				'on_init',
-		) );
+		add_action( 'init', function () : void {
+			$this->on_init();
+		} );
 
 		// initialize the scripts, stylesheets and form fields
-		add_action( 'admin_init', array(
-				$this,
-				'on_admin_init',
-		) );
+		add_action( 'admin_init', function () : void {
+			$this->on_admin_init();
+		} );
 	}
 
 	/**
@@ -83,15 +81,13 @@ class PostmanConnectivityTestController {
 	 * @return void
 	 */
 	public function addPortTestSubmenu(): void {
-		$page = add_submenu_page( PostmanViewController::POSTMAN_MENU_SLUG, sprintf( __( '%s Setup', 'post-smtp' ), __( 'Postman SMTP', 'post-smtp' ) ), __( 'Connectivity test', 'post-smtp' ), Postman::MANAGE_POSTMAN_CAPABILITY_NAME, PostmanConnectivityTestController::PORT_TEST_SLUG, array(
-				$this,
-				'outputPortTestContent',
-		) );
+		$page = add_submenu_page( PostmanViewController::POSTMAN_MENU_SLUG, sprintf( __( '%s Setup', 'post-smtp' ), __( 'Postman SMTP', 'post-smtp' ) ), __( 'Connectivity test', 'post-smtp' ), Postman::MANAGE_POSTMAN_CAPABILITY_NAME, PostmanConnectivityTestController::PORT_TEST_SLUG, function () : void {
+			$this->outputPortTestContent();
+		} );
 		// When the plugin options page is loaded, also load the stylesheet
-		add_action( 'admin_print_styles-' . $page, array(
-				$this,
-				'enqueuePortTestResources',
-		) );
+		add_action( 'admin_print_styles-' . $page, function () : void {
+			$this->enqueuePortTestResources();
+		} );
 	}
 
 	/**
@@ -235,7 +231,7 @@ class PostmanPortTestAjaxController {
 	 */
 	function runPortQuizTest(): void {
 		$hostname = 'portquiz.net';
-		$port = intval( PostmanUtils::getRequestParameter( 'port' ) );
+		$port = (int) PostmanUtils::getRequestParameter( 'port' );
 		$this->logger->debug( 'testing TCP port: hostname ' . $hostname . ' port ' . $port );
 		$portTest = new PostmanPortTest( $hostname, $port );
 		$success = $portTest->genericConnectionTest();
@@ -250,14 +246,14 @@ class PostmanPortTestAjaxController {
 	 */
 	function runSmtpTest(): void {
 		$hostname = trim( PostmanUtils::getRequestParameter( 'hostname' ) );
-		$port = intval( PostmanUtils::getRequestParameter( 'port' ) );
+		$port = (int) PostmanUtils::getRequestParameter( 'port' );
 		$transport = trim( PostmanUtils::getRequestParameter( 'transport' ) );
 		$timeout = PostmanUtils::getRequestParameter( 'timeout' );
 		$this->logger->trace( $timeout );
 		$portTest = new PostmanPortTest( $hostname, $port );
 		if ( isset( $timeout ) ) {
-			$portTest->setConnectionTimeout( intval( $timeout ) );
-			$portTest->setReadTimeout( intval( $timeout ) );
+			$portTest->setConnectionTimeout( (int) $timeout );
+			$portTest->setReadTimeout( (int) $timeout );
 		}
 		if ( $port != 443 ) {
 			$this->logger->debug( sprintf( 'testing SMTP socket %s:%s (%s)', $hostname, $port, $transport ) );
@@ -275,7 +271,7 @@ class PostmanPortTestAjaxController {
 	 */
 	function runSmtpsTest(): void {
 		$hostname = trim( PostmanUtils::getRequestParameter( 'hostname' ) );
-		$port = intval( PostmanUtils::getRequestParameter( 'port' ) );
+		$port = (int) PostmanUtils::getRequestParameter( 'port' );
 		$transport = trim( PostmanUtils::getRequestParameter( 'transport' ) );
 		$transportName = trim( PostmanUtils::getRequestParameter( 'transport_name' ) );
 		$this->logger->debug( sprintf( 'testing SMTPS socket %s:%s (%s)', $hostname, $port, $transport ) );

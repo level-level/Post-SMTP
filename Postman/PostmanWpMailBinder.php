@@ -12,10 +12,9 @@ if (! class_exists ( 'PostmanWpMailBinder' )) {
 			$this->logger = new PostmanLogger ( get_class ( $this ) );
 			
 			// register the bind status hook
-			add_filter ( 'postman_wp_mail_bind_status', array (
-					$this,
-					'postman_wp_mail_bind_status' 
-			) );
+			add_filter ( 'postman_wp_mail_bind_status', function () : array {
+				return $this->postman_wp_mail_bind_status();
+			} );
 		}
 		
 		/**
@@ -39,11 +38,10 @@ if (! class_exists ( 'PostmanWpMailBinder' )) {
 		 * @psalm-return array{bound: mixed, bind_error: mixed}
 		 */
 		public function postman_wp_mail_bind_status(): array {
-			$result = array (
+			return array (
 					'bound' => $this->bound,
 					'bind_error' => $this->bindError 
 			);
-			return $result;
 		}
 		
 		/**

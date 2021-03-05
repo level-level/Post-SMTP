@@ -36,7 +36,7 @@ if (! class_exists ( 'PostmanOAuthToken.php' )) {
 		public function isValid(): bool {
 			$accessToken = $this->getAccessToken ();
 			$refreshToken = $this->getRefreshToken ();
-			return ! (empty ( $accessToken ) || empty ( $refreshToken ));
+			return !empty ( $accessToken ) && !empty ( $refreshToken );
 		}
 		
 		/**
