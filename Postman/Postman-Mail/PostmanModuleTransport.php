@@ -173,13 +173,6 @@ abstract class PostmanAbstractModuleTransport implements PostmanModuleTransport 
 		// no-op, this for subclasses
 	}
 	
-	/**
-	 * 	 * This method is for internal use
-	 *
-	 * @return array
-	 *
-	 * @psalm-return array<empty, empty>
-	 */
 	protected function validateTransportConfiguration() {
 		$this->configuredAndReady = true;
 		$messages = array ();
@@ -676,11 +669,6 @@ abstract class PostmanAbstractZendModuleTransport extends PostmanAbstractModuleT
 		return ! empty ( $envelopeFrom );
 	}
 	
-	/**
-	 * (non-PHPdoc)
-	 *
-	 * @see PostmanTransport::getMisconfigurationMessage()
-	 */
 	protected function validateTransportConfiguration() {
 		parent::validateTransportConfiguration ();
 		$messages = parent::validateTransportConfiguration ();

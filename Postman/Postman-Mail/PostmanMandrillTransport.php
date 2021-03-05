@@ -159,11 +159,6 @@ class PostmanMandrillTransport extends PostmanAbstractModuleTransport implements
 		return sprintf ( __ ( 'Postman will send mail via the <b>%1$s %2$s</b>.', 'post-smtp' ), '🔐', $this->getName () );
 	}
 	
-	/**
-	 * (non-PHPdoc)
-	 *
-	 * @see PostmanAbstractModuleTransport::validateTransportConfiguration()
-	 */
 	protected function validateTransportConfiguration() {
 		$messages = parent::validateTransportConfiguration ();
 		$apiKey = $this->options->getMandrillApiKey ();

@@ -98,11 +98,6 @@ class PostmanSmtpModuleTransport extends PostmanAbstractZendModuleTransport impl
 		}
 	}
 
-	/**
-	 * (non-PHPdoc)
-	 *
-	 * @see PostmanTransport::getMisconfigurationMessage()
-	 */
 	protected function validateTransportConfiguration() {
 		$messages = parent::validateTransportConfiguration();
 		if ( ! $this->isHostConfigured( $this->options ) ) {

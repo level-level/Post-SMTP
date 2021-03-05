@@ -103,11 +103,6 @@ class PostmanMailgunTransport extends PostmanAbstractModuleTransport implements 
 		return $data;
 	}
 
-	/**
-	 * (non-PHPdoc)
-	 *
-	 * @see PostmanTransport::getMisconfigurationMessage()
-	 */
 	protected function validateTransportConfiguration() {
 		$messages = parent::validateTransportConfiguration();
 		$apiKey = $this->options->getMailgunApiKey();

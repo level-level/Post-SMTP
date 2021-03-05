@@ -69,14 +69,8 @@ if (! class_exists ( 'PostmanSmtpModuleTransport' )) {
 			return false;
 		}
 		
-		/**
-		 * @see PostmanAbstractZendModuleTransport::validateTransportConfiguration()
-		 *
-		 * @return array
-		 */
 		protected function validateTransportConfiguration() {
 			return array();
-			// no-op, always valid
 		}
 		
 		/**
