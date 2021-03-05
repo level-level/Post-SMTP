@@ -184,13 +184,16 @@ if (! class_exists ( 'PostmanGmailApiModuleZendMailTransport' )) {
 				$chunkSizeBytes = 1 * 1024 * 1024;
 
 				// create mediafile upload
-				$media = new Google_Http_MediaFileUpload(
+				$media = new Google_Http_MediaFileUpload( 
 					$googleClient,
 					$result,
 					'message/rfc822',
 					$message,
 					true,
-					$chunkSizeBytes
+					// chunkSizeBytes has an invalid doctype.
+					// @see https://github.com/googleapis/google-api-php-client/issues/1881
+					// @phpstan-ignore-next-line
+					$chunkSizeBytes 
 				);
 				$media->setFileSize($file_size);
 
