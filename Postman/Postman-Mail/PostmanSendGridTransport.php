@@ -100,7 +100,12 @@ class PostmanSendGridTransport extends PostmanAbstractModuleTransport implements
 		return $data;
 	}
 	
-	protected function validateTransportConfiguration() {
+	/**
+	 * @return string[]
+	 *
+	 * @psalm-return list<string>
+	 */
+	protected function validateTransportConfiguration(): array {
 		$messages = parent::validateTransportConfiguration ();
 		$apiKey = $this->options->getSendGridApiKey ();
 		if (empty ( $apiKey )) {

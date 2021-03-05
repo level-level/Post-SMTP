@@ -95,7 +95,12 @@ class PostmanSmtpModuleTransport extends PostmanAbstractZendModuleTransport impl
 		}
 	}
 
-	protected function validateTransportConfiguration() {
+	/**
+	 * @return string[]
+	 *
+	 * @psalm-return list<string>
+	 */
+	protected function validateTransportConfiguration(): array {
 		$messages = parent::validateTransportConfiguration();
 		if ( ! $this->isHostConfigured( $this->options ) ) {
 			$messages[] = __( 'Outgoing Mail Server Hostname and Port can not be empty.', 'post-smtp' );

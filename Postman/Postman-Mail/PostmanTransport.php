@@ -629,7 +629,12 @@ abstract class PostmanAbstractZendModuleTransport extends PostmanAbstractModuleT
 		return ! empty ( $envelopeFrom );
 	}
 	
-	protected function validateTransportConfiguration() {
+	/**
+	 * @return string[]
+	 *
+	 * @psalm-return list<string>
+	 */
+	protected function validateTransportConfiguration(): array {
 		parent::validateTransportConfiguration ();
 		$messages = parent::validateTransportConfiguration ();
 		if (! $this->isSenderConfigured ()) {
@@ -675,7 +680,12 @@ abstract class PostmanAbstractZendModuleTransport extends PostmanAbstractModuleT
 		return $this->isOAuthUsed ( PostmanOptions::getInstance ()->getAuthenticationType () ) && (empty ( $accessToken ) || empty ( $refreshToken ));
 	}
 	
-	public function populateConfiguration($hostname) {
+	/**
+	 * @return (bool|string)[]
+	 *
+	 * @psalm-return array{dot_notation_url: bool, redirect_url: string, callback_domain: string, help_text: string, client_id_label: string, client_secret_label: string, redirect_url_label: string, callback_domain_label: string}
+	 */
+	public function populateConfiguration($hostname): array {
 		$response = parent::populateConfiguration ( $hostname );
 		$this->logger->debug ( sprintf ( 'populateConfigurationFromRecommendation for hostname %s', $hostname ) );
 		$scribe = $this->createScribe ( $hostname );
