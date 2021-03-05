@@ -265,7 +265,7 @@ class Postman {
 	 */
 	public function check_for_configuration_errors(): void {
 		$options = PostmanOptions::getInstance();
-		$authToken = PostmanOAuthToken::getInstance();
+		PostmanOAuthToken::getInstance();
 
 		// did Postman fail binding to wp_mail()?
 		if ( $this->wpMailBinder->isUnboundDueToException() ) {
@@ -309,9 +309,9 @@ class Postman {
 			}
 		} else {
 			$transport = PostmanTransportRegistry::getInstance()->getCurrentTransport();
-			$scribe = $transport->getScribe();
+			$transport->getScribe();
 
-			$virgin = $options->isNew();
+			$options->isNew();
 			if ( ! $transport->isConfiguredAndReady() ) {
 				// if the configuration is broken, and the user has started to configure the plugin
 				// show this error message

@@ -222,7 +222,7 @@ class PostmanGetDiagnosticsViaAjax {
 		$this->addToDiagnostics( 'WordPress Theme', wp_get_theme() );
 		$this->addToDiagnostics( 'WordPress Plugins', $this->getActivePlugins() );
 
-        $bindResult = apply_filters( 'postman_wp_mail_bind_status', null );
+        apply_filters( 'postman_wp_mail_bind_status', null );
         $wp_mail_file_name = 'n/a';
 		if ( class_exists( 'ReflectionFunction' ) ) {
 			$wp_mail = new ReflectionFunction( 'wp_mail' );

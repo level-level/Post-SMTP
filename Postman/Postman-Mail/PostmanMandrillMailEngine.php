@@ -154,7 +154,6 @@ if ( ! class_exists( 'PostmanMandrillMailEngine' ) ) {
 			$this->logger->debug( 'Adding attachments' );
 			$this->addAttachmentsToMail( $message );
 
-			$result = array();
 			try {
 				if ( $this->logger->isDebug() ) {
 					$this->logger->debug( 'Creating Mandrill service with apiKey=' . $this->apiKey );
@@ -190,7 +189,7 @@ if ( ! class_exists( 'PostmanMandrillMailEngine' ) ) {
 		 */
 		private function addHeader( string $key, $value, bool $append = false ): void {
 			$this->logger->debug( 'Adding header: ' . $key . ' = ' . $value );
-			$header = &$this->mandrillMessage ['headers'];
+			$this->mandrillMessage ['headers'];
 			$header [ $key ] = $append && ! empty( $header [ $key ] ) ? $header [ $key ] . ', ' . $value : $value;
 		}
 

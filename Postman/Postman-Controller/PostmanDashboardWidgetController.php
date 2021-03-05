@@ -133,7 +133,6 @@ if (! class_exists ( "PostmanDashboardWidgetController" )) {
 					
 					if ($num_posts > 0) {
 						
-						$published = (int) $num_posts->publish;
 						$privated = (int) $num_posts->private;
 						$post_type = get_post_type_object ( $type );
 						

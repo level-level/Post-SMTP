@@ -87,7 +87,7 @@ class PostmanConfigurationController {
 	}
 
 	private function addLocalizeScriptsToPage(): void {
-		$warning = __( 'Warning', 'post-smtp' );
+		__( 'Warning', 'post-smtp' );
 		// user input
 		wp_localize_script( PostmanViewController::POSTMAN_SCRIPT, 'postman_data', array(
 			'host_element_name'=>'#input_' . PostmanOptions::HOSTNAME,
@@ -225,7 +225,7 @@ class PostmanConfigurationController {
                         </label>
                         &nbsp;
                         <label>
-                            <?php $checked = checked( $this->options->getFallbackIsEnabled(), 'yes', false ); ?>
+                            <?php checked( $this->options->getFallbackIsEnabled(), 'yes', false ); ?>
                             <input name="postman_options[<?php echo PostmanOptions::FALLBACK_SMTP_ENABLED; ?>]" type="radio"
                                    value="yes"<?php echo checked( $this->options->getFallbackIsEnabled(), 'yes' ); ?>>
                             <?php _e( 'Yes', 'post-smtp' ); ?>
@@ -564,7 +564,6 @@ class PostmanConfigurationController {
 		// Get PHPmailer recommendation
 		Postman::getMailerTypeRecommend();
 
-		$in_wizard = true;
 		include_once POST_PATH . '/Postman/extra/donation.php';
 
 		print '</section>';

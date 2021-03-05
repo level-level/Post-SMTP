@@ -151,7 +151,6 @@ if ( ! class_exists( 'PostmanMailgunMailEngine' ) ) {
 			$this->logger->debug( 'Adding attachments' );
 			$this->addAttachmentsToMail( $message );
 
-			$result = array();
 			try {
 				if ( $this->logger->isDebug() ) {
 					$this->logger->debug( 'Creating Mailgun service with apiKey=' . $this->apiKey );

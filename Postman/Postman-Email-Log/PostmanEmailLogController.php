@@ -268,7 +268,7 @@ class PostmanEmailLogController {
 		if ( PostmanUtils::isAdmin() ) {
 			$this->logger->trace( 'handling view transcript item' );
 			$postid = $_REQUEST ['email'];
-			$post = get_post( $postid );
+			get_post( $postid );
 			$meta_values = PostmanEmailLogs::get_data( $postid );
 			// https://css-tricks.com/examples/hrs/
 			print '<html><head><style>body {font-family: monospace;} hr {

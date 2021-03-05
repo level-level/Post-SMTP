@@ -52,13 +52,13 @@ if ( ! class_exists( 'PostmanViewController' ) ) {
 		function dismiss_version_notify(): void {
 			check_ajax_referer( 'postsmtp', 'security' );
 
-			$result = update_option('postman_release_version', true );
+			update_option('postman_release_version', true );
 		}
 
         function dismiss_donation_notify(): void {
             check_ajax_referer( 'postsmtp', 'security' );
 
-            $result = update_option('postman_dismiss_donation', true );
+            update_option('postman_dismiss_donation', true );
         }
 
 		function delete_lock_file(): void {

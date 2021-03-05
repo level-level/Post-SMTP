@@ -87,29 +87,22 @@ if (! class_exists ( 'PostmanAbstractPluginOptions' )) {
 		
 		public function isValid(): bool {
 			$valid = true;
-			$host = $this->getHostname ();
+			$this->getHostname ();
 			$port = $this->getPort ();
-			$fromEmail = $this->getMessageSenderEmail ();
-			$fromName = $this->getMessageSenderName ();
+			$this->getMessageSenderEmail ();
+			$this->getMessageSenderName ();
 			$auth = $this->getAuthenticationType ();
-			$enc = $this->getEncryptionType ();
-			$username = $this->getUsername ();
-			$password = $this->getPassword ();
-			$valid &= ! empty ( $host );
+			$this->getEncryptionType ();
+			$this->getUsername ();
+			$this->getPassword ();
 			$this->logger->trace ( 'host ok ' . $valid );
-			$valid &= ! empty ( $port ) && absint ( $port ) > 0 && absint ( $port ) <= 65535;
+			! empty ( $port ) && absint ( $port ) > 0 && absint ( $port ) <= 65535;
 			$this->logger->trace ( 'port ok ' . $valid );
-			$valid &= ! empty ( $fromEmail );
 			$this->logger->trace ( 'from email ok ' . $valid );
-			$valid &= ! empty ( $fromName );
 			$this->logger->trace ( 'from name ok ' . $valid );
-			$valid &= ! empty ( $auth );
 			$this->logger->trace ( 'auth ok ' . $valid );
-			$valid &= ! empty ( $enc );
 			$this->logger->trace ( 'enc ok ' . $valid );
 			if ($auth != PostmanOptions::AUTHENTICATION_TYPE_NONE) {
-				$valid &= ! empty ( $username );
-				$valid &= ! empty ( $password );
 			}
 			$this->logger->trace ( 'user/pass ok ' . $valid );
 			return (bool) $valid;

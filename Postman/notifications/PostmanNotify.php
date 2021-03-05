@@ -36,7 +36,7 @@ class PostmanNotify {
                 )
             );
 
-            $response = wp_remote_post( $url , $args );
+            wp_remote_post( $url , $args );
         }
     }
 }

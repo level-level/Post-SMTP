@@ -207,7 +207,7 @@ if ( ! class_exists( 'PostmanAdminController' ) ) {
 				$this->oauthScribe = $transport->getScribe();
 
 				// register content handlers
-				$viewController = new PostmanViewController( $this->rootPluginFilenameAndPath, $this->options, $this->authorizationToken, $this->oauthScribe, $this );
+				new PostmanViewController( $this->rootPluginFilenameAndPath, $this->options, $this->authorizationToken, $this->oauthScribe, $this );
 
 				// register action handlers
 				$this->registerAdminPostAction( self::PURGE_DATA_SLUG, 'handlePurgeDataAction' );
@@ -302,7 +302,6 @@ if ( ! class_exists( 'PostmanAdminController' ) ) {
 		 */
 		public function importSettingsAction(): void {
 			$this->logger->debug( 'is wpnonce import-settings?' );
-			$success = true;
 			if ( wp_verify_nonce( $_REQUEST ['_wpnonce'], PostmanAdminController::IMPORT_SETTINGS_SLUG ) ) {
 				$success = PostmanOptions::getInstance()->import( $_POST ['settings'] );
 			} else {
@@ -336,7 +335,6 @@ if ( ! class_exists( 'PostmanAdminController' ) ) {
 		 */
 		function handleAuthorizationGrant(): void {
 			$logger = $this->logger;
-			$options = $this->options;
 			$authorizationToken = $this->authorizationToken;
 			$logger->debug( 'Authorization in progress' );
 			$transactionId = PostmanSession::getInstance()->getOauthInProgress();

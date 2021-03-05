@@ -158,14 +158,12 @@ if (! class_exists ( 'PostmanGmailApiModuleZendMailTransport' )) {
 			$this->message = $message;
 
 			// The message needs to be encoded in Base64URL
-			$encodedMessage = rtrim ( strtr ( base64_encode ( $message ), '+/', '-_' ), '=' );
 			$googleApiMessage = new Google_Service_Gmail_Message ();
 			$googleService = $this->_config [self::SERVICE_OPTION];
 			$googleClient = $googleService->getClient();
 
 			$file_size = strlen($message);
 
-			$result = array ();
 			try {
 				$googleClient->setDefer(true);
 				$result = $googleService->users_messages->send ( 'me', $googleApiMessage, array('uploadType' => 'resumable') );
@@ -195,7 +193,7 @@ if (! class_exists ( 'PostmanGmailApiModuleZendMailTransport' )) {
 				// Reset to the client to execute requests immediately in the future.
 				$googleClient->setDefer(false);
 
-				$googleMessageId = $status->getId();
+				$status->getId();
 
 				if ($this->logger->isInfo ()) {
 					$this->logger->info ( sprintf ( 'Message %d accepted for delivery', PostmanState::getInstance ()->getSuccessfulDeliveries () + 1 ) );

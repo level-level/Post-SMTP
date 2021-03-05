@@ -168,7 +168,7 @@ abstract class PostmanAbstractModuleTransport implements PostmanModuleTransport 
 	 * @return string
 	 */
 	public function getPublicTransportUri() {
-		$name = $this->getSlug ();
+		$this->getSlug ();
 		$host = $this->getHostname ();
 		$port = $this->getPort ();
 		$protocol = $this->getProtocol ();
@@ -512,7 +512,6 @@ abstract class PostmanAbstractZendModuleTransport extends PostmanAbstractModuleT
 	 * @return PostmanGoogleOAuthScribe|PostmanMicrosoftOAuthScribe|PostmanNonOAuthScribe|PostmanYahooOAuthScribe
 	 */
 	protected function createScribe($hostname) {
-		$scribe = null;
 		if ($this->isServiceProviderGoogle ( $hostname )) {
 			$scribe = new PostmanGoogleOAuthScribe ();
 		} elseif ($this->isServiceProviderMicrosoft ( $hostname )) {
@@ -531,8 +530,8 @@ abstract class PostmanAbstractZendModuleTransport extends PostmanAbstractModuleT
 	 * @return string
 	 */
 	public function getPublicTransportUri() {
-		$transportName = $this->getSlug ();
-		$options = PostmanOptions::getInstance ();
+		$this->getSlug ();
+		PostmanOptions::getInstance ();
 		$auth = $this->getAuthenticationType();
 		$protocol = $this->getProtocol ();
 		$security = $this->getSecurityType ();

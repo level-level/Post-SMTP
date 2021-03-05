@@ -207,7 +207,6 @@ if ( ! class_exists( 'PostmanEmailLogService' ) ) {
 			preg_match_all( '/(.*)From/s', $log->sessionTranscript, $matches );
 
 			if ( isset( $matches[1][0] ) && ! empty( $matches[1][0] ) && stripos( $matches[1][0], 'error' ) !== false ) {
-				$message .= $log->sessionTranscript;
 			}
 		}
 

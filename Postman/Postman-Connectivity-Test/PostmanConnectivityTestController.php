@@ -85,7 +85,7 @@ class PostmanConnectivityTestController {
 	function enqueuePortTestResources(): void {
 		wp_enqueue_style( PostmanViewController::POSTMAN_STYLE );
 		wp_enqueue_script( 'postman_port_test_script' );
-		$warning = __( 'Warning', 'post-smtp' );
+		__( 'Warning', 'post-smtp' );
 		wp_localize_script( PostmanViewController::POSTMAN_SCRIPT, 'postman_data',array('host_element_name' => '#input_' . PostmanOptions::HOSTNAME ));
 		PostmanConnectivityTestController::addLocalizeScriptForPortTest();
 	}
@@ -249,7 +249,7 @@ class PostmanPortTestAjaxController {
 		$hostname = trim( PostmanUtils::getRequestParameter( 'hostname' ) );
 		$port = (int) PostmanUtils::getRequestParameter( 'port' );
 		$transport = trim( PostmanUtils::getRequestParameter( 'transport' ) );
-		$transportName = trim( PostmanUtils::getRequestParameter( 'transport_name' ) );
+		trim( PostmanUtils::getRequestParameter( 'transport_name' ) );
 		$this->logger->debug( sprintf( 'testing SMTPS socket %s:%s (%s)', $hostname, $port, $transport ) );
 		$portTest = new PostmanPortTest( $hostname, $port );
 		$success = $portTest->testSmtpsPorts();
