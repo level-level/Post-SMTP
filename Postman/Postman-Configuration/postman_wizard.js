@@ -7,7 +7,7 @@ portTestInProgress = false;
  * Functions to run on document load
  */
 jQuery(document).ready(function() {
-	jQuery(postman_input_sender_email).focus();
+	jQuery(postman_data.input_sender_email).focus();
 	initializeJQuerySteps();
 	// add an event on the plugin selection
 	jQuery('input[name="input_plugin"]').click(function() {
@@ -119,7 +119,7 @@ function initializeJQuerySteps() {
 
 				},
 				onInit : function() {
-					jQuery(postman_input_sender_email).focus();
+					jQuery(postman_data.input_sender_email).focus();
 				},
 				onStepChanged : function(event, currentIndex, priorIndex) {
 					return postHandleStepChange(event, currentIndex,
@@ -189,7 +189,7 @@ function handleStepChange(event, currentIndex, newIndex, form) {
 	if (currentIndex === 1) {
 		// page 1 : look-up the email
 		// address for the smtp server
-		checkGoDaddyAndCheckEmail(jQuery(postman_input_sender_email).val());
+		checkGoDaddyAndCheckEmail(jQuery(postman_data.input_sender_email).val());
 
 	} else if (currentIndex === 2) {
 
@@ -217,9 +217,9 @@ function handleStepChange(event, currentIndex, newIndex, form) {
 		if (!valid) {
 			return false;
 		}
-		var chosenPort = jQuery(postman_port_element_name).val();
+		var chosenPort = jQuery(postman_data.port_element_name).val();
 		var hostname = jQuery(postman_data.host_element_name).val();
-		var authType = jQuery(postman_input_auth_type).val()
+		var authType = jQuery(postman_data.input_auth_type).val()
 
 	}
 
@@ -251,7 +251,7 @@ function postHandleStepChange(event, currentIndex, priorIndex, myself) {
 	}
 	if (currentIndex === 4) {
 		if (redirectUrlWarning) {
-			alert(postman_wizard_bad_redirect_url);
+			alert(postman_data.wizard_bad_redirect_url);
 		}
 		if (chosenPort == 'none') {
 			if (priorIndex === 5) {
@@ -554,21 +554,21 @@ function getConfiguration() {
 							if (response.success) {
 								jQuery('select#input_transport_type').val(
 										'smtp');
-								jQuery(postman_input_sender_email).val(
+								jQuery(postman_data.input_sender_email).val(
 										response.sender_email);
-								jQuery(postman_input_sender_name).val(
+								jQuery(postman_data.input_sender_name).val(
 										response.sender_name);
 								jQuery(postman_data.host_element_name).val(
 										response.hostname);
-								jQuery(postman_port_element_name).val(
+								jQuery(postman_data.port_element_name).val(
 										response.port);
-								jQuery(postman_input_auth_type).val(
+								jQuery(postman_data.input_auth_type).val(
 										response.auth_type);
 								jQuery('#input_enc_type')
 										.val(response.enc_type);
-								jQuery(postman_input_basic_username).val(
+								jQuery(postman_data.input_basic_username).val(
 										response.basic_auth_username);
-								jQuery(postman_input_basic_password).val(
+								jQuery(postman_data.input_basic_password).val(
 										response.basic_auth_password);
 								switchBetweenPasswordAndOAuth();
 							}
@@ -576,14 +576,14 @@ function getConfiguration() {
 					ajaxFailed(response);
 				});
 	} else {
-		jQuery(postman_input_sender_email).val('');
-		jQuery(postman_input_sender_name).val('');
-		jQuery(postman_input_basic_username).val('');
-		jQuery(postman_input_basic_password).val('');
+		jQuery(postman_data.input_sender_email).val('');
+		jQuery(postman_data.input_sender_name).val('');
+		jQuery(postman_data.input_basic_username).val('');
+		jQuery(postman_data.input_basic_password).val('');
 		jQuery(postman_data.host_element_name).val('');
-		jQuery(postman_port_element_name).val('');
-		jQuery(postman_input_auth_type).val('none');
-		jQuery(postman_enc_for_password_el).val('none');
+		jQuery(postman_data.port_element_name).val('');
+		jQuery(postman_data.input_auth_type).val('none');
+		jQuery(postman_data.enc_for_password_el).val('none');
 		switchBetweenPasswordAndOAuth();
 	}
 }

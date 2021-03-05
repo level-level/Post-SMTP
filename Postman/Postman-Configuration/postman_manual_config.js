@@ -67,7 +67,7 @@ jQuery(document).ready(
 
 			// user is "finished typing," do something
 			function doneTyping() {
-				if (jQuery(postman_input_auth_type).val() == 'oauth2') {
+				if (jQuery(postman_data.input_auth_type).val() == 'oauth2') {
 					reloadOauthSection();
 				}
 			}
