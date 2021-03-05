@@ -280,8 +280,14 @@ class PostmanSmtpModuleTransport extends PostmanAbstractZendModuleTransport impl
 
 			// create the recommendation message for the user
 			// this can only be set if there is a valid ['auth'] and ['enc']
-			$transportDescription = $this->getTransportDescription( $recommendation ['enc'] );
-			$authDesc = $this->getAuthenticationDescription( $recommendation ['auth'] );
+			$transportDescription = __('Unknown', 'post-smtp');
+			if(isset($recommendation['enc'])){
+				$transportDescription = $this->getTransportDescription( $recommendation ['enc'] );	
+			}
+			$authDesc = __('Unknown', 'post-smtp');
+			if(isset($recommendation['auth'])){
+				$authDesc = $this->getAuthenticationDescription( $recommendation ['auth'] );
+			}
 			$recommendation ['label'] = sprintf( 'SMTP - %2$s:%3$d', $transportDescription, $hostData->hostnameDomainOnly, $port );
 			/* translators: where %1$s is a description of the transport (eg. SMTPS-SSL), %2$s is a description of the authentication (eg. Password-CRAMMD5), %3$d is the TCP port (eg. 465), %4$d is the hostname */
 			$recommendation ['message'] = sprintf( __( 'Postman recommends %1$s with %2$s authentication to host %4$s on port %3$d.', 'post-smtp' ), $transportDescription, $authDesc, $port, $hostname );
