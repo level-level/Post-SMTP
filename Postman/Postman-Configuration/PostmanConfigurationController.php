@@ -138,10 +138,11 @@ class PostmanConfigurationController {
 	 * @return void
 	 */
 	public function addConfigurationSubmenu(): void {
-		$page = add_submenu_page( null, sprintf( __( '%s Setup', 'post-smtp' ), __( 'Postman SMTP', 'post-smtp' ) ), __( 'Postman SMTP', 'post-smtp' ), Postman::MANAGE_POSTMAN_CAPABILITY_NAME, PostmanConfigurationController::CONFIGURATION_SLUG, array(
+		$page = add_submenu_page( PostmanViewController::POSTMAN_MENU_SLUG, sprintf( __( '%s Setup', 'post-smtp' ), __( 'Postman SMTP', 'post-smtp' ) ), __( 'Configuration', 'post-smtp' ), Postman::MANAGE_POSTMAN_CAPABILITY_NAME, PostmanConfigurationController::CONFIGURATION_SLUG, array(
 				$this,
 				'outputManualConfigurationContent',
-		) );
+			) 
+		);
 		// When the plugin options page is loaded, also load the stylesheet
 		add_action( 'admin_print_styles-' . $page, array(
 				$this,
@@ -164,7 +165,7 @@ class PostmanConfigurationController {
 	 * @return void
 	 */
 	public function addSetupWizardSubmenu(): void {
-		$page = add_submenu_page( null, sprintf( __( '%s Setup', 'post-smtp' ), __( 'Postman SMTP', 'post-smtp' ) ), __( 'Postman SMTP', 'post-smtp' ), Postman::MANAGE_POSTMAN_CAPABILITY_NAME, PostmanConfigurationController::CONFIGURATION_WIZARD_SLUG, array(
+		$page = add_submenu_page( PostmanViewController::POSTMAN_MENU_SLUG, sprintf( __( '%s Setup', 'post-smtp' ), __( 'Postman SMTP', 'post-smtp' ) ), __( 'Setup wizard', 'post-smtp' ), Postman::MANAGE_POSTMAN_CAPABILITY_NAME, PostmanConfigurationController::CONFIGURATION_WIZARD_SLUG, array(
 				$this,
 				'outputWizardContent',
 		) );

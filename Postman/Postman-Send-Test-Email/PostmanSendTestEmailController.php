@@ -83,7 +83,12 @@ class PostmanSendTestEmailController {
 				$pluginData = apply_filters( 'postman_get_plugin_metadata', null );
 
 		// register the stylesheet resource
-		wp_register_style( 'postman_send_test_email', plugins_url( 'Postman/Postman-Send-Test-Email/postman_send_test_email.css', $this->rootPluginFilenameAndPath ), PostmanViewController::POSTMAN_STYLE, $pluginData ['version'] );
+		wp_register_style( 
+			'postman_send_test_email', 
+			plugins_url( 'Postman/Postman-Send-Test-Email/postman_send_test_email.css', $this->rootPluginFilenameAndPath ), 
+			array( PostmanViewController::POSTMAN_STYLE ), 
+			$pluginData ['version'] 
+		);
 
 		// register the javascript resource
 		wp_register_script( 'postman_test_email_wizard_script', plugins_url( 'Postman/Postman-Send-Test-Email/postman_send_test_email.js', $this->rootPluginFilenameAndPath ), array(
@@ -98,7 +103,7 @@ class PostmanSendTestEmailController {
 	 * @return void
 	 */
 	public function addEmailTestSubmenu(): void {
-		$page = add_submenu_page( null, sprintf( __( '%s Setup', 'post-smtp' ), __( 'Postman SMTP', 'post-smtp' ) ), __( 'Postman SMTP', 'post-smtp' ), Postman::MANAGE_POSTMAN_CAPABILITY_NAME, PostmanSendTestEmailController::EMAIL_TEST_SLUG, array(
+		$page = add_submenu_page( PostmanViewController::POSTMAN_MENU_SLUG, sprintf( __( '%s Setup', 'post-smtp' ), __( 'Postman SMTP', 'post-smtp' ) ), __( 'Email test', 'post-smtp' ), Postman::MANAGE_POSTMAN_CAPABILITY_NAME, PostmanSendTestEmailController::EMAIL_TEST_SLUG, array(
 				$this,
 				'outputTestEmailContent',
 		) );

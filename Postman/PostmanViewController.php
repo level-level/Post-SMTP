@@ -31,7 +31,7 @@ if ( ! class_exists( 'PostmanViewController' ) ) {
 			$this->oauthScribe = $oauthScribe;
 			$this->adminController = $adminController;
 			$this->logger = new PostmanLogger( get_class( $this ) );
-			PostmanUtils::registerAdminMenu( $this, 'generateDefaultContent' );
+			PostmanUtils::registerAdminMenu( $this, 'generateDefaultContent', 1 );
 			PostmanUtils::registerAdminMenu( $this, 'addPurgeDataSubmenu' );
 
 			// initialize the scripts, stylesheets and form fields
@@ -135,7 +135,7 @@ if ( ! class_exists( 'PostmanViewController' ) ) {
 		 * @return void
 		 */
 		public function addPurgeDataSubmenu(): void {
-			$page = add_submenu_page( self::POSTMAN_MENU_SLUG, sprintf( __( '%s Setup', 'post-smtp' ), __( 'Post SMTP', 'post-smtp' ) ), __( 'Post SMTP', 'post-smtp' ), Postman::MANAGE_POSTMAN_CAPABILITY_NAME, PostmanAdminController::MANAGE_OPTIONS_PAGE_SLUG, array(
+			$page = add_submenu_page( self::POSTMAN_MENU_SLUG, sprintf( __( '%s Setup', 'post-smtp' ), __( 'Post SMTP', 'post-smtp' ) ), __( 'Import/Export/Reset', 'post-smtp' ), Postman::MANAGE_POSTMAN_CAPABILITY_NAME, PostmanAdminController::MANAGE_OPTIONS_PAGE_SLUG, array(
 					$this,
 					'outputPurgeDataContent',
 			) );

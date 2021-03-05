@@ -313,7 +313,14 @@ class PostmanEmailLogController {
 			$pageTitle = sprintf( __( '%s Email Log', 'post-smtp' ), __( 'Post SMTP', 'post-smtp' ) );
 			$pluginName = _x( 'Email Log', 'The log of Emails that have been delivered', 'post-smtp' );
 
-			$page = add_submenu_page( PostmanViewController::POSTMAN_MENU_SLUG, $pageTitle, $pluginName, Postman::MANAGE_POSTMAN_CAPABILITY_LOGS, 'postman_email_log', array( $this, 'postman_render_email_page' ) );
+			$page = add_submenu_page( 
+				PostmanViewController::POSTMAN_MENU_SLUG, 
+				$pageTitle, 
+				$pluginName, 
+				Postman::MANAGE_POSTMAN_CAPABILITY_LOGS, 
+				'postman_email_log', 
+				array( $this, 'postman_render_email_page' ) 
+			);
 
 			// When the plugin options page is loaded, also load the stylesheet
 			add_action( 'admin_print_styles-' . $page, array(

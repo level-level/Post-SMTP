@@ -83,7 +83,7 @@ class PostmanConnectivityTestController {
 	 * @return void
 	 */
 	public function addPortTestSubmenu(): void {
-		$page = add_submenu_page( null, sprintf( __( '%s Setup', 'post-smtp' ), __( 'Postman SMTP', 'post-smtp' ) ), __( 'Postman SMTP', 'post-smtp' ), Postman::MANAGE_POSTMAN_CAPABILITY_NAME, PostmanConnectivityTestController::PORT_TEST_SLUG, array(
+		$page = add_submenu_page( PostmanViewController::POSTMAN_MENU_SLUG, sprintf( __( '%s Setup', 'post-smtp' ), __( 'Postman SMTP', 'post-smtp' ) ), __( 'Connectivity test', 'post-smtp' ), Postman::MANAGE_POSTMAN_CAPABILITY_NAME, PostmanConnectivityTestController::PORT_TEST_SLUG, array(
 				$this,
 				'outputPortTestContent',
 		) );

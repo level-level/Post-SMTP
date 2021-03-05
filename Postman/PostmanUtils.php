@@ -412,7 +412,7 @@ class PostmanUtils {
 	 *
 	 * @return void
 	 */
-	public static function registerAdminMenu( $viewController, $callbackName ): void {
+	public static function registerAdminMenu( $viewController, $callbackName, $priority = 10 ): void {
 		$logger = PostmanUtils::$logger;
 		if ( $logger->isTrace() ) {
 			$logger->trace( 'Registering admin menu ' . $callbackName );
@@ -421,7 +421,7 @@ class PostmanUtils {
 		add_action( 'admin_menu', array(
 				$viewController,
 				$callbackName,
-		) );
+		), $priority );
 	}
 
 	/**

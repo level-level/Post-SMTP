@@ -85,7 +85,7 @@ class PostmanDiagnosticTestController {
 	 * @return void
 	 */
 	public function addDiagnosticsSubmenu(): void {
-		$page = add_submenu_page( null, sprintf( __( '%s Setup', 'post-smtp' ), __( 'Postman SMTP', 'post-smtp' ) ), __( 'Postman SMTP', 'post-smtp' ), Postman::MANAGE_POSTMAN_CAPABILITY_NAME, PostmanDiagnosticTestController::DIAGNOSTICS_SLUG, array(
+		$page = add_submenu_page( PostmanViewController::POSTMAN_MENU_SLUG, sprintf( __( '%s Setup', 'post-smtp' ), __( 'Postman SMTP', 'post-smtp' ) ), __( 'Diagnostic', 'post-smtp' ), Postman::MANAGE_POSTMAN_CAPABILITY_NAME, PostmanDiagnosticTestController::DIAGNOSTICS_SLUG, array(
 				$this,
 				'outputDiagnosticsContent',
 		) );
