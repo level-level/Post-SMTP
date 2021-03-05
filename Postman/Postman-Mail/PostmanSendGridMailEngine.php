@@ -17,11 +17,6 @@ if ( ! class_exists( 'PostmanSendGridMailEngine' ) ) {
 
 		private $apiKey;
 
-		/**
-		 *
-		 * @param mixed $senderEmail
-		 * @param mixed $accessToken
-		 */
 		function __construct( $apiKey ) {
 			assert( ! empty( $apiKey ) );
 			$this->apiKey = $apiKey;
@@ -216,8 +211,6 @@ if ( ! class_exists( 'PostmanSendGridMailEngine' ) ) {
 		/**
 		 * 		 * Add attachments to the message
 		 * 		 *
-		 *
-		 * @param Zend_Mail $mail
 		 *
 		 * @return (mixed|string)[][]
 		 *
