@@ -219,10 +219,13 @@ class PostmanInstaller {
 			if ( isset( $authOptions ['access_token'] ) && isset( $options ['oauth_client_id'] ) ) {
 				// if there is a stored token..
 				if ( PostmanUtils::endsWith( $options ['oauth_client_id'], 'googleusercontent.com' ) ) {
-					$authOptions ['vendor_name'] = 'google'; } else if ( strlen( $options ['oauth_client_id'] < strlen( $options ['oauth_client_secret'] ) ) ) {
+					$authOptions ['vendor_name'] = 'google'; 
+				} else if ( strlen( $options ['oauth_client_id']) < strlen( $options ['oauth_client_secret'] ) ) { // TODO: ?
 					$authOptions ['vendor_name'] = 'microsoft';
-					} else { 					$authOptions ['vendor_name'] = 'yahoo'; }
-					update_option( 'postman_auth_token', $authOptions );
+				} else {
+					$authOptions ['vendor_name'] = 'yahoo'; 
+				}
+				update_option( 'postman_auth_token', $authOptions );
 			}
 		}
 
