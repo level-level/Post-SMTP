@@ -61,11 +61,11 @@ class PostmanPortTest {
 	}
 	public function setConnectionTimeout(int $timeout): void {
 		$this->connectionTimeout = $timeout;
-		$this->logger->trace ( $this->connectionTimeout );
+		$this->logger->trace ( (string) $this->connectionTimeout );
 	}
 	public function setReadTimeout(int $timeout): void {
 		$this->readTimeout = $timeout;
-		$this->logger->trace ( $this->readTimeout );
+		$this->logger->trace ( (string) $this->readTimeout );
 	}
 	/**
 	 * @return false|resource
@@ -102,7 +102,7 @@ class PostmanPortTest {
 		try {
 			$response = PostmanUtils::remotePost ( $connectionString );
 			$this->trace ( 'wp_remote_retrieve_headers:' );
-			$this->logger->trace ( wp_remote_retrieve_headers ( $response ) );
+			$this->logger->trace ( json_encode(wp_remote_retrieve_headers ( $response )) );
 			$this->trace ( wp_remote_retrieve_response_code ( $response ) );
 			$this->protocol = 'HTTPS';
 			$this->http = true;
