@@ -155,10 +155,6 @@ abstract class PostmanAbstractModuleTransport implements PostmanModuleTransport 
 	}
 	
 	/**
-	 * 	 *
-	 *
-	 * @param mixed $queryHostname        	
-	 *
 	 * @return PostmanNonOAuthScribe
 	 */
 	protected function createScribe($hostname) {
@@ -189,7 +185,6 @@ abstract class PostmanAbstractModuleTransport implements PostmanModuleTransport 
 	/**
 	 * A short-hand way of showing the complete delivery method
 	 *
-	 * @param PostmanModuleTransport $transport        	
 	 * @return string
 	 */
 	public function getPublicTransportUri() {
@@ -225,8 +220,6 @@ abstract class PostmanAbstractModuleTransport implements PostmanModuleTransport 
 	
 	/**
 	 * Make sure the Senders are configured
-	 *
-	 * @param PostmanOptions $options        	
 	 * @return boolean
 	 */
 	protected function isSenderConfigured() {
@@ -322,7 +315,6 @@ abstract class PostmanAbstractModuleTransport implements PostmanModuleTransport 
 	 * 	 *
 	 *
 	 * @param mixed $winningRecommendation        	
-	 * @param mixed $response        	
 	 *
 	 * @return array
 	 *
@@ -536,10 +528,6 @@ abstract class PostmanAbstractZendModuleTransport extends PostmanAbstractModuleT
 	}
 	
 	/**
-	 * 	 *
-	 *
-	 * @param mixed $queryHostname        	
-	 *
 	 * @return PostmanGoogleOAuthScribe|PostmanMicrosoftOAuthScribe|PostmanNonOAuthScribe|PostmanYahooOAuthScribe
 	 */
 	protected function createScribe($hostname) {
@@ -559,7 +547,6 @@ abstract class PostmanAbstractZendModuleTransport extends PostmanAbstractModuleT
 	/**
 	 * A short-hand way of showing the complete delivery method
 	 *
-	 * @param PostmanModuleTransport $transport        	
 	 * @return string
 	 */
 	public function getPublicTransportUri() {
@@ -650,7 +637,6 @@ abstract class PostmanAbstractZendModuleTransport extends PostmanAbstractModuleT
 	/**
 	 * Make sure the Senders are configured
 	 *
-	 * @param PostmanOptions $options        	
 	 * @return boolean
 	 */
 	protected function isEnvelopeFromConfigured() {
@@ -731,10 +717,7 @@ abstract class PostmanAbstractZendModuleTransport extends PostmanAbstractModuleT
 	}
 	
 	/**
-	 * Populate the Ajax response for the Setup Wizard / Manual Configuration
-	 *
-	 * @param mixed $hostname        	
-	 * @param mixed $response        	
+	 * Populate the Ajax response for the Setup Wizard / Manual Configuration    	
 	 */
 	public function populateConfigurationFromRecommendation($winningRecommendation) {
 		$response = parent::populateConfigurationFromRecommendation ( $winningRecommendation );
