@@ -6,11 +6,11 @@ use PHPMailer\PHPMailer\PHPMailer;
 // require_once ABSPATH . WPINC . '/PHPMailer/PHPMailer.php';
 // require_once ABSPATH . WPINC . '/PHPMailer/SMTP.php';
 
-add_action('plugins_loaded', function() {
-    global $phpmailer;
+// add_action('plugins_loaded', function() {
+//     global $phpmailer;
 
-    $phpmailer = new PostsmtpMailer(true);
-});
+//     $phpmailer = new PostsmtpMailer(true);
+// });
 
 class PostsmtpMailer extends PHPMailer {
 

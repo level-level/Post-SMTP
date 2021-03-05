@@ -494,4 +494,3 @@ class PostmanUtils {
 		return str_replace('www.', '', $host );
 	}
 }
-PostmanUtils::staticInit();
