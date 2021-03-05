@@ -177,8 +177,6 @@ class PostmanSmtpModuleTransport extends PostmanAbstractZendModuleTransport impl
 	 * 	 * SendGrid will never recommend it's configuration
 	 * 	 *
 	 *
-	 * @param mixed $hostData
-	 *
 	 * @return (int|mixed|string|true)[]
 	 *
 	 * @psalm-return array{mitm?: true, enc?: string, auth?: string, display_auth?: string, label?: string, message?: string, transport: string, priority: positive-int, port: mixed, hostname: mixed}
