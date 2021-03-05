@@ -11,6 +11,9 @@
     errorLevel="2"
     phpVersion="7.3"
 >
+    <stubs>
+        <file name="vendor/php-stubs/wordpress-stubs/wordpress-stubs.php" />
+    </stubs>
     <projectFiles>
         <directory name="Postman" />
         <ignoreFiles>

@@ -248,6 +248,9 @@ class PostmanEmailLogController {
 		}
 	}
 
+	/**
+	 * @param null|string $message
+	 */
 	function sanitize_message( $message ) {
 		$allowed_tags = wp_kses_allowed_html( 'post' );
 		$allowed_tags['style'] = array();

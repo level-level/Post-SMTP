@@ -16,13 +16,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters->set(Option::PHP_VERSION_FEATURES, PhpVersion::PHP_72);
     $parameters->set(Option::PHPSTAN_FOR_RECTOR_PATH, getcwd() . '/phpstan.neon.dist');
     // Define what rule sets will be applied
-    $parameters->set(Option::SETS, [
-        SetList::DEAD_DOC_BLOCK,
-    ]);
+    // $parameters->set(Option::SETS, [
+    //     SetList::DEAD_DOC_BLOCK,
+    // ]);
 
     // get services (needed for register a single rule)
     $services = $containerConfigurator->services();
 
     // register a single rule
-    // $services->set(CompleteDynamicPropertiesRector::class);
+    $services->set(TypedPropertyRector::class);
 };

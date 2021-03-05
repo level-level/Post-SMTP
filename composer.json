@@ -25,6 +25,7 @@
         "zf1/zend-mail": "^1.12"
     },
     "require-dev": {
+        "php-stubs/wordpress-stubs": "^5.6",
         "phpmailer/phpmailer": "^6.3",
         "rector/rector": "^0.9.31",
         "szepeviktor/phpstan-wordpress": "^0.7.3",
