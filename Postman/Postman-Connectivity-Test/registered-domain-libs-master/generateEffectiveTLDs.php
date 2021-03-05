@@ -122,7 +122,7 @@ function printNode_C($key, $valueTree): void {
 
 	if (count($keys)>0) {
 
-		if (strcmp($keys['!'], "!")==0) {
+		if (strcmp($keys['!'], "!")==0) { // @phpstan-ignore-line
 			echo "!";
 		} else {
 

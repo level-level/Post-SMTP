@@ -50,7 +50,7 @@ class PostmanEmailLogView extends WP_List_Table {
 	 *
 	 * @param array $item
 	 *        	A singular item (one full row's worth of data)
-	 * @param array $column_name
+	 * @param string $column_name
 	 *        	The name/slug of the column to be processed
 	 * @return string Text or HTML to be placed inside the column <td>
 	 *         ************************************************************************
