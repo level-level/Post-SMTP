@@ -182,9 +182,10 @@ if (! class_exists ( 'PostmanConfigureSmtpOptions' )) {
 					return PostmanOptions::AUTHENTICATION_TYPE_NONE;
 				}
 			}
+			return null;
 		}
 		/**
-		 * @return null|string
+		 * @return string
 		 */
 		public function getEncryptionType() {
 			if (isset ( $this->options [self::ENCRYPTION_TYPE] )) {
@@ -197,6 +198,7 @@ if (! class_exists ( 'PostmanConfigureSmtpOptions' )) {
 						return PostmanOptions::SECURITY_TYPE_NONE;
 				}
 			}
+			return PostmanOptions::SECURITY_TYPE_NONE;
 		}
 	}
 }
@@ -259,12 +261,11 @@ if (! class_exists ( 'PostmanCimySwiftSmtpOptions' )) {
 		public function getAuthenticationType() {
 			if (! empty ( $this->options [self::USERNAME] ) && ! empty ( $this->options [self::PASSWORD] )) {
 				return PostmanOptions::AUTHENTICATION_TYPE_PLAIN;
-			} else {
-				return PostmanOptions::AUTHENTICATION_TYPE_NONE;
 			}
+			return PostmanOptions::AUTHENTICATION_TYPE_NONE;
 		}
 		/**
-		 * @return null|string
+		 * @return string
 		 */
 		public function getEncryptionType() {
 			if (isset ( $this->options [self::ENCRYPTION_TYPE] )) {
@@ -277,6 +278,7 @@ if (! class_exists ( 'PostmanCimySwiftSmtpOptions' )) {
 						return PostmanOptions::SECURITY_TYPE_NONE;
 				}
 			}
+			return PostmanOptions::SECURITY_TYPE_NONE;
 		}
 	}
 }
@@ -366,6 +368,7 @@ if (! class_exists ( 'PostmanEasyWpSmtpOptions' )) {
 						return PostmanOptions::AUTHENTICATION_TYPE_NONE;
 				}
 			}
+			return null;
 		}
 		/**
 		 * @return null|string
@@ -381,6 +384,7 @@ if (! class_exists ( 'PostmanEasyWpSmtpOptions' )) {
 						return PostmanOptions::SECURITY_TYPE_NONE;
 				}
 			}
+			return null;
 		}
 	}
 }
@@ -428,6 +432,7 @@ if (! class_exists ( 'PostmanWpMailBankOptions' )) {
 			if (isset ( $this->options->from_name )) {
 				return stripslashes ( htmlspecialchars_decode ( $this->options->from_name, ENT_QUOTES ) );
 			}
+			return null;
 		}
 		public function getHostname() {
 			if (isset ( $this->options->smtp_host ))
@@ -459,6 +464,7 @@ if (! class_exists ( 'PostmanWpMailBankOptions' )) {
 					return PostmanOptions::AUTHENTICATION_TYPE_NONE;
 				}
 			}
+			return null;
 		}
 		/**
 		 * @return null|string
@@ -476,6 +482,7 @@ if (! class_exists ( 'PostmanWpMailBankOptions' )) {
 					}
 				}
 			}
+			return null;
 		}
 	}
 }
@@ -555,6 +562,7 @@ if (! class_exists ( 'PostmanWpMailSmtpOptions' )) {
 						return PostmanOptions::AUTHENTICATION_TYPE_NONE;
 				}
 			}
+			return null;
 		}
 		/**
 		 * @return null|string
@@ -570,6 +578,7 @@ if (! class_exists ( 'PostmanWpMailSmtpOptions' )) {
 						return PostmanOptions::SECURITY_TYPE_NONE;
 				}
 			}
+			return null;
 		}
 	}
 }
@@ -639,6 +648,7 @@ if (! class_exists ( 'PostmanWpSmtpOptions' )) {
 						return PostmanOptions::AUTHENTICATION_TYPE_NONE;
 				}
 			}
+			return null;
 		}
 		/**
 		 * @return null|string
@@ -654,6 +664,7 @@ if (! class_exists ( 'PostmanWpSmtpOptions' )) {
 						return PostmanOptions::SECURITY_TYPE_NONE;
 				}
 			}
+			return null;
 		}
 	}
 }
