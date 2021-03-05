@@ -1,7 +1,7 @@
 <?php
 if (! interface_exists ( 'PostmanZendMailTransportConfigurationFactory' )) {
 	interface PostmanZendMailTransportConfigurationFactory {
-		static function createConfig(PostmanTransport $transport);
+		static function createConfig(PostmanZendModuleTransport $transport);
 	}
 }
 
@@ -12,7 +12,7 @@ if (! class_exists ( 'PostmanBasicAuthConfigurationFactory' )) {
 		 *
 		 * @psalm-return array{port: mixed, ssl?: mixed, auth?: mixed, username?: mixed, password?: mixed}
 		 */
-		public static function createConfig(PostmanTransport $transport) {
+		public static function createConfig(PostmanZendModuleTransport $transport) {
 			
 			// create Logger
 			$logger = new PostmanLogger ( "PostmanBasicAuthConfigurationFactory" );
@@ -53,7 +53,7 @@ if (! class_exists ( 'PostmanBasicAuthConfigurationFactory' )) {
 
 if (! class_exists ( 'PostmanOAuth2ConfigurationFactory' )) {
 	class PostmanOAuth2ConfigurationFactory implements PostmanZendMailTransportConfigurationFactory {
-		public static function createConfig(PostmanTransport $transport) {
+		public static function createConfig(PostmanZendModuleTransport $transport) {
 			
 			// create Logger
 			$logger = new PostmanLogger ( 'PostmanOAuth2ConfigurationFactory' );
