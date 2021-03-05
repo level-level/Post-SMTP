@@ -485,6 +485,9 @@ if ( ! class_exists( 'PostmanOptions' ) ) {
 			}
 		}
 
+		/**
+		 * @return false|null|string
+		 */
 		public function getPushoverUser() {
 			if ( isset( $this->options [ PostmanOptions::PUSHOVER_USER ] ) ) {
 				return base64_decode( $this->options [ PostmanOptions::PUSHOVER_USER ] );
@@ -492,12 +495,18 @@ if ( ! class_exists( 'PostmanOptions' ) ) {
 		}
 
 
+		/**
+		 * @return false|null|string
+		 */
 		public function getPushoverToken() {
 			if ( isset( $this->options [ PostmanOptions::PUSHOVER_TOKEN ] ) ) {
 				return base64_decode( $this->options [ PostmanOptions::PUSHOVER_TOKEN ] );
 			}
 		}
 
+		/**
+		 * @return false|null|string
+		 */
 		public function getSlackToken() {
 			if ( isset( $this->options [ PostmanOptions::SLACK_TOKEN ] ) ) {
 				return base64_decode( $this->options [ PostmanOptions::SLACK_TOKEN ] );
@@ -510,6 +519,9 @@ if ( ! class_exists( 'PostmanOptions' ) ) {
             }
         }
 
+        /**
+         * @return false|null|string
+         */
         public function getNotificationChromeUid() {
             if ( isset( $this->options [ PostmanOptions::NOTIFICATION_CHROME_UID ] ) ) {
                 return base64_decode( $this->options [ PostmanOptions::NOTIFICATION_CHROME_UID ] );
@@ -645,6 +657,9 @@ if ( ! class_exists( 'PostmanOptions' ) ) {
 			return $this->getMessageSenderName();
 		}
 
+		/**
+		 * @return null|string
+		 */
 		public function export() {
 			if ( PostmanPreRequisitesCheck::checkZlibEncode() ) {
 				$data = $this->options;
@@ -657,10 +672,12 @@ if ( ! class_exists( 'PostmanOptions' ) ) {
 		}
 
 		/**
+		 * 		 * 		 *
 		 * 		 *
 		 *
 		 * @param mixed $data
 		 *
+		 * @return bool|null
 		 */
 		public function import( $data ) {
 			if ( PostmanPreRequisitesCheck::checkZlibEncode() ) {

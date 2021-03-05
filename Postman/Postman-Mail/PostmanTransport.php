@@ -148,6 +148,11 @@ abstract class PostmanAbstractModuleTransport implements PostmanModuleTransport 
 		// no-op, this for subclasses
 	}
 	
+	/**
+	 * @return array
+	 *
+	 * @psalm-return array<empty, empty>
+	 */
 	protected function validateTransportConfiguration() {
 		$this->configuredAndReady = true;
 		return array ();
@@ -282,6 +287,11 @@ abstract class PostmanAbstractModuleTransport implements PostmanModuleTransport 
 		return $this->scribe;
 	}
 
+	/**
+	 * @return array
+	 *
+	 * @psalm-return array<empty, empty>
+	 */
 	public function populateConfiguration($hostname) {
 		return array ();
 	}
@@ -575,8 +585,11 @@ abstract class PostmanAbstractZendModuleTransport extends PostmanAbstractModuleT
 	}
 	
 	/**
+	 * 	 *
 	 *
 	 * @param mixed $authType        	
+	 *
+	 * @return string
 	 */
 	protected function getAuthenticationDescription($authType) {
 		if (PostmanOptions::AUTHENTICATION_TYPE_OAUTH2 == $authType) {

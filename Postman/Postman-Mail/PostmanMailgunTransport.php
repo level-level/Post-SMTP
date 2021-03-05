@@ -39,6 +39,9 @@ class PostmanMailgunTransport extends PostmanAbstractModuleTransport implements 
 	public function getSlug() {
 		return self::SLUG;
 	}
+	/**
+	 * @return string
+	 */
 	public function getName() {
 		return __( 'Mailgun API', 'post-smtp' );
 	}

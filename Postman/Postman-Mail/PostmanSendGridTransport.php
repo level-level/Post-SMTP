@@ -39,6 +39,9 @@ class PostmanSendGridTransport extends PostmanAbstractModuleTransport implements
 	public function getSlug() {
 		return self::SLUG;
 	}
+	/**
+	 * @return string
+	 */
 	public function getName() {
 		return __ ( 'SendGrid API', 'post-smtp' );
 	}

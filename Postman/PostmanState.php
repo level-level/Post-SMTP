@@ -52,8 +52,10 @@ if (! class_exists ( "PostmanState" )) {
 			$this->options = get_option ( self::SLUG );
 		}
 		/**
-		 * Shows the review feature of Postman up to thirty days after install
+		 * 		 * Shows the review feature of Postman up to thirty days after install
+		 * 		 *
 		 *
+		 * @return bool|null
 		 */
 		public function isTimeToReviewPostman() {
 			if (! empty ( $this->options [self::INSTALL_DATE] )) {

@@ -56,6 +56,11 @@ if (! class_exists ( 'PostmanImportableConfiguration' )) {
 				$this->logger->debug ( $slug . ' is not importable' );
 			}
 		}
+		/**
+		 * @return PostmanPluginOptions[]
+		 *
+		 * @psalm-return array<array-key, PostmanPluginOptions>
+		 */
 		public function getAvailableOptions() {
 			$this->init ();
 			return $this->availableOptions;
@@ -109,6 +114,9 @@ if (! class_exists ( 'PostmanAbstractPluginOptions' )) {
 			$this->logger->trace ( 'user/pass ok ' . $valid );
 			return (bool) $valid;
 		}
+		/**
+		 * @return bool
+		 */
 		public function isImportable() {
 			return $this->isValid ();
 		}

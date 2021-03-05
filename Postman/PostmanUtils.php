@@ -49,14 +49,18 @@ class PostmanUtils {
 	}
 
 	/**
-	 * Returns an escaped URL
+	 * 	 * Returns an escaped URL
+	 *
+	 * @return string
 	 */
 	public static function getEmailLogPageUrl() {
 		return menu_page_url( self::POSTMAN_EMAIL_LOG_PAGE_STUB, self::NO_ECHO );
 	}
 
 	/**
-	 * Returns an escaped URL
+	 * 	 * Returns an escaped URL
+	 *
+	 * @return string
 	 */
 	public static function getSettingsPageUrl() {
 		return menu_page_url( self::POSTMAN_SETTINGS_PAGE_STUB, self::NO_ECHO );

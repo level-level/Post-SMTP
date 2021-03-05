@@ -56,9 +56,9 @@ if ( ! class_exists( 'PostmanWpMail' ) ) {
 		}
 
         /**
-         * @param PostmanMessage $message
-         */
-		private function apply_default_headers( $message ) {
+		 * @param PostmanMessage $message
+		 */
+		private function apply_default_headers( $message ): void {
             $headers[] = 'Message-ID: ' . $this->createMessageId();
             $message->addHeaders($headers);
         }

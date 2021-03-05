@@ -106,6 +106,9 @@ class PostmanGmailApiModuleTransport extends PostmanAbstractZendModuleTransport 
 	public function getSlug() {
 		return self::SLUG;
 	}
+	/**
+	 * @return string
+	 */
 	public function getName() {
 		return __ ( 'Gmail API', 'post-smtp' );
 	}

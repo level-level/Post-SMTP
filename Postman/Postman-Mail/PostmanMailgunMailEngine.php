@@ -188,6 +188,10 @@ if ( ! class_exists( 'PostmanMailgunMailEngine' ) ) {
 
 		/**
 		 * @param Mailgun $mg
+		 *
+		 * @return \Mailgun\Model\Message\SendResponse|\Mailgun\Model\Message\SendResponse[]
+		 *
+		 * @psalm-return \Mailgun\Model\Message\SendResponse|list<\Mailgun\Model\Message\SendResponse>
 		 */
 		private function processSend( $mg ) {
 

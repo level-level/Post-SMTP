@@ -498,6 +498,7 @@ class PostmanSmtpModuleTransport extends PostmanAbstractZendModuleTransport impl
 	}
 
 	/**
+	 * @return string
 	 */
 	private function getCallbackDomain() {
 		try {

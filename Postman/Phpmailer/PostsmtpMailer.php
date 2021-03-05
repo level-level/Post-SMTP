@@ -88,7 +88,12 @@ class PostsmtpMailer extends PHPMailer {
         return $data;
     }
 
-    private function getHeaders() {
+    /**
+     * @return string[]
+     *
+     * @psalm-return list<string>
+     */
+    private function getHeaders(): array {
         $headers = array();
         foreach ( $this->getCustomHeaders() as $header ) {
             $headers[] = "{$header[0]}: {$header[1]}";
@@ -97,7 +102,12 @@ class PostsmtpMailer extends PHPMailer {
         return $headers;
     }
 
-    public function postman_wp_mail_result() {
+    /**
+     * @return (mixed|string)[]
+     *
+     * @psalm-return array{time: string, exception: mixed, transcript: string}
+     */
+    public function postman_wp_mail_result(): array {
         return [
             'time' => '',
             'exception' => $this->error,
@@ -107,6 +117,8 @@ class PostsmtpMailer extends PHPMailer {
 
     /**
      * @param array $arr
+     *
+     * @return string
      */
     private function flatArray($arr) {
         $result = [];

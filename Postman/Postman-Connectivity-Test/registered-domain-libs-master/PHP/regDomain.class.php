@@ -40,7 +40,7 @@ class regDomain {
 	protected $tldTree = array();
 
 	/* main function */
-	public function getRegisteredDomain($signingDomain, $fallback = TRUE) {
+	public function getRegisteredDomain($signingDomain, $fallback = TRUE): ?string {
 		$signingDomainParts = explode('.', $signingDomain);
 
 		$result = $this->findRegisteredDomain($signingDomainParts, $this->tldTree);
@@ -82,7 +82,7 @@ class regDomain {
 	/**
 	 * @param string[] $remainingSigningDomainParts
 	 */
-	public function findRegisteredDomain(array $remainingSigningDomainParts, &$treeNode) {
+	public function findRegisteredDomain(array $remainingSigningDomainParts, &$treeNode): ?string {
 		$sub = array_pop($remainingSigningDomainParts);
 
 		$result = NULL;

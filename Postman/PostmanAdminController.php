@@ -267,11 +267,13 @@ if ( ! class_exists( 'PostmanAdminController' ) ) {
 		}
 
 		/**
-		 * 		 * Add "Settings" link to the plugin action page
+		 * 		 * 		 * Add "Settings" link to the plugin action page
+		 * 		 * 		 *
 		 * 		 *
 		 *
 		 * @param mixed $links
 		 *
+		 * @return array|null
 		 */
 		public function postmanModifyLinksOnPluginsListPage( $links ) {
 			// only administrators should be able to trigger this

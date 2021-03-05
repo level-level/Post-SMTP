@@ -15,10 +15,16 @@ if (! class_exists ( "PostmanAuthenticationManagerFactory" )) {
 		private function __construct() {
 			$this->logger = new PostmanLogger ( get_class ( $this ) );
 		}
+		/**
+		 * @return PostmanGoogleAuthenticationManager|PostmanMicrosoftAuthenticationManager|PostmanNonOAuthAuthenticationManager|PostmanYahooAuthenticationManager
+		 */
 		public function createAuthenticationManager() {
 			$transport = PostmanTransportRegistry::getInstance ()->getSelectedTransport ();
 			return $this->createManager ( $transport );
 		}
+		/**
+		 * @return PostmanGoogleAuthenticationManager|PostmanMicrosoftAuthenticationManager|PostmanNonOAuthAuthenticationManager|PostmanYahooAuthenticationManager
+		 */
 		private function createManager(PostmanModuleTransport $transport) {
 			$options = PostmanOptions::getInstance ();
 			$authorizationToken = PostmanOAuthToken::getInstance ();

@@ -118,9 +118,9 @@ class PostmanPortTest {
 	}
 	
 	/**
-	 * Given a hostname, test if it has open ports	
+	 * 	 * Given a hostname, test if it has open ports
 	 */
-	public function testSmtpPorts() {
+	public function testSmtpPorts(): bool {
 		$this->logger->trace ( 'testSmtpPorts()' );
 		if ($this->port == 8025) {
 			$this->debug ( 'Executing test code for port 8025' );
@@ -143,7 +143,9 @@ class PostmanPortTest {
 	}
 	
 	/**
-	 * Given a hostname, test if it has open ports     	
+	 * 	 * Given a hostname, test if it has open ports
+	 *
+	 * @return bool|false
 	 */
 	public function testSmtpsPorts() {
 		$this->logger->trace ( 'testSmtpsPorts()' );

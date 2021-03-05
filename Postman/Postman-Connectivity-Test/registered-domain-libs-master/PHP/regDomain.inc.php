@@ -46,7 +46,7 @@ function getRegisteredDomain($signingDomain, $fallback = TRUE) {
 	/* return object method */
 	return $regDomainObj->getRegisteredDomain ( $signingDomain, $fallback );
 }
-function validDomainPart($domPart) {
+function validDomainPart($domPart): bool {
 	/* pull in object */
 	$regDomainObj = new regDomain ();
 	/* return object method */
@@ -54,7 +54,7 @@ function validDomainPart($domPart) {
 }
 
 // recursive helper method
-function findRegisteredDomain($remainingSigningDomainParts, &$treeNode) {
+function findRegisteredDomain($remainingSigningDomainParts, &$treeNode): ?string {
 	/* pull in object */
 	$regDomainObj = new regDomain ();
 	/* return object method */

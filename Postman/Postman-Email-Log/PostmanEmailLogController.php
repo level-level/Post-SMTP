@@ -250,6 +250,8 @@ class PostmanEmailLogController {
 
 	/**
 	 * @param null|string $message
+	 *
+	 * @return string
 	 */
 	function sanitize_message( $message ) {
 		$allowed_tags = wp_kses_allowed_html( 'post' );

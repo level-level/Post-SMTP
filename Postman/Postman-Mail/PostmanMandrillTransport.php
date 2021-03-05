@@ -44,6 +44,9 @@ class PostmanMandrillTransport extends PostmanAbstractModuleTransport implements
 	public function getSlug() {
 		return self::SLUG;
 	}
+	/**
+	 * @return string
+	 */
 	public function getName() {
 		return __ ( 'Mandrill API', 'post-smtp' );
 	}

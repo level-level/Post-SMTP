@@ -53,6 +53,11 @@ if (! class_exists ( 'PostmanBasicAuthConfigurationFactory' )) {
 
 if (! class_exists ( 'PostmanOAuth2ConfigurationFactory' )) {
 	class PostmanOAuth2ConfigurationFactory implements PostmanZendMailTransportConfigurationFactory {
+		/**
+		 * @return array
+		 *
+		 * @psalm-return array{ssl: mixed, port: mixed, auth: mixed, xoauth2_request: mixed}
+		 */
 		public static function createConfig(PostmanZendModuleTransport $transport) {
 			
 			// create Logger
