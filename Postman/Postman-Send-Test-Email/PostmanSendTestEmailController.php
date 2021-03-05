@@ -188,10 +188,6 @@ class PostmanSendTestEmailAjaxController extends PostmanAbstractAjaxHandler {
 
 	/**
 	 * Constructor
-	 *
-	 * @param PostmanOptions          $options
-	 * @param PostmanOAuthToken       $authorizationToken
-	 * @param PostmanConfigTextHelper $oauthScribe
 	 */
 	function __construct() {
 		parent::__construct();
