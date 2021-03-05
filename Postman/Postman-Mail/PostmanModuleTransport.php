@@ -49,6 +49,7 @@ interface PostmanModuleTransport extends PostmanTransport {
 	public function getPort();
 	public function init();
 	public function getScribe();
+	public function getPublicTransportUri();
 }
 interface PostmanZendModuleTransport extends PostmanModuleTransport {
 	public function getAuthenticationType();

@@ -88,9 +88,6 @@ class PostmanTransportRegistry {
 	}
 
 	/**
-	 *
-	 * @param PostmanOptions    $options
-	 * @param PostmanOAuthToken $token
 	 * @return boolean
 	 */
 	public function getActiveTransport() {
@@ -148,7 +145,7 @@ class PostmanTransportRegistry {
 	 * 	 *
 	 *
 	 * @param mixed $hostname
-	 * @param mixed $isGmail
+	 * @param mixed $smtpServerGuess
 	 *
 	 * @return array
 	 */
@@ -182,8 +179,6 @@ class PostmanTransportRegistry {
 	 * $hostData includes ['host'] and ['port']
 	 *
 	 * response should include ['success'], ['message'], ['priority']
-	 *
-	 * @param mixed $hostData
 	 */
 	public function getRecommendation( PostmanWizardSocket $hostData, $userAuthOverride, $originalSmtpServer ) {
 		$scrubbedUserAuthOverride = $this->scrubUserOverride( $hostData, $userAuthOverride );
