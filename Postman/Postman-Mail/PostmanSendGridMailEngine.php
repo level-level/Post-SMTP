@@ -112,7 +112,7 @@ if ( ! class_exists( 'PostmanSendGridMailEngine' ) ) {
             $bccEmails = array();
 			foreach ( ( array ) $message->getBccRecipients() as $recipient ) {
                 $recipient->log($this->logger, 'Bcc');
-                $bccEmails[] = new \SendGrid\Mail\Cc( $recipient->getEmail(), $recipient->getName() );
+                $bccEmails[] = new \SendGrid\Mail\Bcc( $recipient->getEmail(), $recipient->getName() );
 			}
             $email->addBccs($bccEmails);
 
