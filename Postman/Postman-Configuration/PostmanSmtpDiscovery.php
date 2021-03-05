@@ -138,9 +138,7 @@ if (! class_exists ( 'PostmanSmtpDiscovery' )) {
 		public function getSmtpServer() {
 			return $this->smtpServer;
 		}
-		public function getPrimaryMx() {
-			return $this->primaryMx;
-		}
+
 		/**
 		 *
 		 * @param mixed $email

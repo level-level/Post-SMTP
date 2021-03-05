@@ -299,13 +299,6 @@ class PostmanSettingsRegistry {
 	}
 
 	/**
-	 * 	 * Print the Section text
-	 */
-	public function printMessageSenderSectionInfo(): void {
-		print sprintf( __( 'This address, like the <b>return address</b> printed on an envelope, identifies the account owner to the SMTP server.', 'post-smtp' ), 'https://support.google.com/mail/answer/22370?hl=en' );
-	}
-
-	/**
 	 * 	 * Get the settings option array and print one of its values
 	 */
 	public function prevent_from_email_override_callback(): void {
@@ -472,12 +465,5 @@ class PostmanSettingsRegistry {
 	 */
 	public function read_timeout_callback(): void {
 		printf( '<input type="text" id="input_read_timeout" name="%s[%s]" value="%s" />', PostmanOptions::POSTMAN_OPTIONS, PostmanOptions::READ_TIMEOUT, $this->options->getReadTimeout() );
-	}
-
-	/**
-	 * 	 * Get the settings option array and print one of its values
-	 */
-	public function port_callback( $args ): void {
-		printf( '<input type="text" id="input_port" name="postman_options[port]" value="%s" %s placeholder="%s"/>', null !== $this->options->getPort() ? esc_attr( $this->options->getPort() ) : '', isset( $args ['style'] ) ? $args ['style'] : '', __( 'Required', 'post-smtp' ) );
 	}
 }

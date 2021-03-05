@@ -52,17 +52,6 @@ class PostmanTransportRegistry {
 	}
 
 	/**
-	 * 	 * Determine if a specific transport is registered in the directory.
-	 * 	 *
-	 *
-	 * @param mixed $slug
-	 */
-	public function isRegistered( $slug ): bool {
-		$transports = $this->getTransports();
-		return isset( $transports [ $slug ] );
-	}
-
-	/**
 	 * Retrieve the transport Postman is currently configured with.
 	 *
 	 * @return PostmanModuleTransport
@@ -106,28 +95,6 @@ class PostmanTransportRegistry {
 		} else {
 			return $transports ['default'];
 		}
-	}
-
-	/**
-	 * Determine whether to show the Request Permission link on the main menu
-	 *
-	 * This link is displayed if
-	 * 1. the current transport requires OAuth 2.0
-	 * 2. the transport is properly configured
-	 * 3. we have a valid Client ID and Client Secret without an Auth Token
-	 *
-	 * @return boolean
-	 */
-	public function isRequestOAuthPermissionAllowed( PostmanOptions $options, PostmanOAuthToken $authToken ) {
-		// does the current transport use OAuth 2.0
-		$oauthUsed = self::getSelectedTransport()->isOAuthUsed( $options->getAuthenticationType() );
-
-		// is the transport configured
-		if ( $oauthUsed ) {
-			$configured = self::getSelectedTransport()->isConfiguredAndReady();
-		}
-
-		return $oauthUsed && $configured;
 	}
 
 	/**

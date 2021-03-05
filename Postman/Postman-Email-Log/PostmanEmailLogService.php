@@ -16,10 +16,6 @@ if ( ! class_exists( 'PostmanEmailLog' ) ) {
 		public $originalSubject;
 		public $originalMessage;
 		public $originalHeaders;
-
-		public function setStatusMessage( $message ): void {
-		    $this->statusMessage .= $message;
-        }
 	}
 }
 

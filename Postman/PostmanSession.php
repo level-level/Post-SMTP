@@ -64,10 +64,6 @@ if (! class_exists ( 'PostmanSession' )) {
 		public function unsetAction(): void {
 			delete_transient ( self::ACTION );
 		}
-
-		public function isSetErrorMessage(): bool {
-			return get_transient ( self::ERROR_MESSAGE ) != false;
-		}
 		public function setMessage($message): void {
 			set_transient ( self::ERROR_MESSAGE, $message, 30 * self::MINUTES_IN_SECONDS );
 		}

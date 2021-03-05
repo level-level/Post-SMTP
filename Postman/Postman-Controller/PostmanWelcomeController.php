@@ -52,10 +52,6 @@ class PostmanWelcomeController {
 		remove_submenu_page( 'index.php', 'post-credits' );
 	}
 
-	public function postman_about_enqueue_resources(): void {
-		// wp_enqueue_style( 'font-awsome', '' );
-	}
-
 
 	public function about_screen(): void {
 		?>

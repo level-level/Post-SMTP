@@ -10,23 +10,7 @@ if (! class_exists ( 'PostmanAbstractAjaxHandler' )) {
 		function __construct() {
 			$this->logger = new PostmanLogger ( get_class ( $this ) );
 		}
-		/**
-		 * 		 *
-		 *
-		 * @param mixed $actionName        	
-		 * @param mixed $callbackName        	
-		 *
-		 */
-		protected function registerAjaxHandler($actionName, $class, $callbackName): void {
-			if (is_admin ()) {
-				$fullname = 'wp_ajax_' . $actionName;
-				// $this->logger->debug ( 'Registering ' . 'wp_ajax_' . $fullname . ' Ajax handler' );
-				add_action ( $fullname, array (
-						$class,
-						$callbackName 
-				) );
-			}
-		}
+
 		
 		/**
 		 *

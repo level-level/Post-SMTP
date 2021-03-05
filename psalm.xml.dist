@@ -15,6 +15,7 @@
         <file name="vendor/php-stubs/wordpress-stubs/wordpress-stubs.php" />
     </stubs>
     <projectFiles>
+        <file name="postman-smtp.php" />
         <directory name="Postman" />
         <ignoreFiles>
             <directory name="vendor" />

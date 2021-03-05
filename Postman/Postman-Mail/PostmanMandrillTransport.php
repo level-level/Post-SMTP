@@ -82,30 +82,9 @@ class PostmanMandrillTransport extends PostmanAbstractModuleTransport implements
 	public function getAuthenticationType() {
 		return '';
 	}
-	/**
-	 * v0.2.1
-	 *
-	 * @return string
-	 */
-	public function getSecurityType() {
-		return PostmanOptions::SECURITY_TYPE_NONE;
-	}
-	/**
-	 * v0.2.1
-	 *
-	 * @return string
-	 */
-	public function getCredentialsId() {
-		return $this->options->getClientId ();
-	}
-	/**
-	 * v0.2.1
-	 *
-	 * @return string
-	 */
-	public function getCredentialsSecret() {
-		return $this->options->getClientSecret ();
-	}
+
+
+
 	/**
 	 * @return false
 	 */

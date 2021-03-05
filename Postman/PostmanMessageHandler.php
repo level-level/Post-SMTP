@@ -26,14 +26,7 @@ if (! class_exists ( 'PostmanMessageHandler' )) {
 		public function addError($message): void {
 			$this->storeMessage ( $message, 'error' );
 		}
-		/**
-		 * 		 *
-		 *
-		 * @param mixed $message
-		 */
-		public function addWarning($message): void {
-			$this->storeMessage ( $message, 'warning' );
-		}
+
 		/**
 		 * 		 *
 		 *

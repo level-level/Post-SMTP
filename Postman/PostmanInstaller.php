@@ -65,19 +65,6 @@ class PostmanInstaller {
 	}
 
 	/**
-	 * @return void
-	 */
-	function add_activation_redirect() {
-
-		// Bail if activating from network, or bulk
-		if ( is_network_admin() || isset( $_GET['activate-multi'] ) ) {
-			return; }
-
-		// Add the transient to redirect
-	    //set_transient( '_post_activation_redirect', true, 30 );
-	}
-
-	/**
 	 * 	 * Handle deactivation of the plugin
 	 */
 	public function deactivatePostman(): void {

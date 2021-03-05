@@ -131,15 +131,7 @@ if (! class_exists ( 'PostmanGmailApiModuleZendMailTransport' )) {
 			}
 		}
 		
-		/**
-		 * Sets the connection protocol instance
-		 *
-		 *
-		 * @return void
-		 */
-		public function setConnection(Zend_Mail_Protocol_Abstract $connection) {
-			$this->_connection = $connection;
-		}
+
 		
 		/**
 		 * Gets the connection protocol instance
@@ -222,9 +214,7 @@ if (! class_exists ( 'PostmanGmailApiModuleZendMailTransport' )) {
 		public function getMessage() {
 			return $this->message;
 		}
-		public function getTranscript() {
-			return $this->transcript;
-		}
+
 		
 		/**
 		 * Format and fix headers

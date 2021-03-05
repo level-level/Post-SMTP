@@ -22,13 +22,6 @@ class PostmanUtils {
 		const NO_ECHO = false;
 
 	/**
-	 * 	 * Initialize the Logger
-	 */
-	public static function staticInit(): void {
-		PostmanUtils::$logger = new PostmanLogger( 'PostmanUtils' );
-	}
-
-	/**
 	 *
 	 * @param mixed $slug
 	 * @return string
@@ -69,17 +62,7 @@ class PostmanUtils {
 	public static function isCurrentPagePostmanAdmin( string $page = 'postman' ): bool {
 		return isset( $_REQUEST ['page'] ) && substr( $_REQUEST ['page'], 0, strlen( $page ) ) === $page;
 	}
-	/**
-	 * from http://stackoverflow.com/questions/834303/startswith-and-endswith-functions-in-php
-	 *
-	 * @param mixed $haystack
-	 * @param mixed $needle
-	 * @return boolean
-	 */
-	public static function startsWith( $haystack, $needle ) {
-		$length = strlen( $needle );
-		return (substr( $haystack, 0, $length ) === $needle);
-	}
+
 	/**
 	 * from http://stackoverflow.com/questions/834303/startswith-and-endswith-functions-in-php
 	 *
@@ -350,27 +333,6 @@ class PostmanUtils {
 	}
 
 	/**
-	 * 	 * From http://stackoverflow.com/questions/13430120/str-getcsv-alternative-for-older-php-version-gives-me-an-empty-array-at-the-e
-	 * 	 *
-	 *
-	 * @param mixed $string
-	 *
-	 * @return (null|string)[]|false|null
-	 *
-	 * @psalm-return false|non-empty-list<null|string>|null
-	 */
-	static function postman_strgetcsv_impl( $string ) {
-		$fh = fopen( 'php://temp', 'r+' );
-		fwrite( $fh, $string );
-		rewind( $fh );
-
-		$row = fgetcsv( $fh );
-
-		fclose( $fh );
-		return $row;
-	}
-
-	/**
 	 *
 	 * @return string|mixed
 	 */
@@ -440,15 +402,6 @@ class PostmanUtils {
 	 * @param mixed $parameterName
 	 * @return mixed
 	 */
-	public static function getBooleanRequestParameter( $parameterName ) {
-		return filter_var( self::getRequestParameter( $parameterName ), FILTER_VALIDATE_BOOLEAN );
-	}
-
-	/**
-	 *
-	 * @param mixed $parameterName
-	 * @return mixed
-	 */
 	public static function getRequestParameter( $parameterName ) {
 		$logger = PostmanUtils::$logger;
 		if ( isset( $_POST [ $parameterName ] ) ) {
@@ -473,11 +426,5 @@ class PostmanUtils {
         }
 
         return str_replace('www.', '', $host );
-	}
-
-	public static function getHost( $url ): string {
-		$host = parse_url( trim( $url ), PHP_URL_HOST );
-
-		return str_replace('www.', '', $host );
 	}
 }

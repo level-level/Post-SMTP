@@ -23,37 +23,10 @@ class PostmanEmailLogs {
 
     private static $instance;
 
-    public static function get_instance() {
-        if ( ! self::$instance ) {
-            self::$instance = new self();
-        }
-
-        return self::$instance;
-    }
-
     private function __construct() {
         global $wpdb;
 
         $this->db = $wpdb;
-    }
-
-    function install_table(): void {
-
-        global $wpdb;
-
-        $sql = "CREATE TABLE `{$wpdb->prefix}_{$this->db_name}` ( 
-                `id` bigint(20) NOT NULL AUTO_INCREMENT, ";
-
-        foreach ($this->fields as $field ) {
-            if ( $field == 'original_message' || $field == 'session_transcript' ) {
-                $sql .= "`" . $field . "` longtext DEFAULT NULL,";
-                continue;
-            }
-            $sql .= "`" . $field . "` varchar(255) DEFAULT NULL,";
-        }
-        $sql .=  "PRIMARY KEY (`id`)) ENGINE=InnoDB CHARSET={$wpdb->charset} COLLATE={$wpdb->collate}; ";
-
-        dbDelta( $sql );
     }
 
     /**
@@ -68,37 +41,6 @@ class PostmanEmailLogs {
         }
 
         return $fields;
-    }
-
-    public static function get_fields() {
-        return self::$fields;
-    }
-
-    function migrate_data(): void {
-        $args = array(
-            'post_type' => 'postman_sent_mail',
-            'posts_per_page' => -1,
-        );
-
-        $logs = new WP_Query($args);
-
-        $failed_records = 0;
-        foreach ( $logs->posts as $log ) {
-
-            foreach ($this->fields as $key ) {
-                $value = $log->get_meta( $log->ID, $key, true );
-
-                if ( $log->add_meta( $log->ID, $key, $value ) ) {
-                    delete_post_meta( $log->ID, $key );
-                } else {
-                    $failed_records++;
-                }
-            }
-        }
-    }
-
-    function load(): void {
-        $this->db->select();
     }
 
     /**
