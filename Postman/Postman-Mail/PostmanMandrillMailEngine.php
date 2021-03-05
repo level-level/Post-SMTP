@@ -18,11 +18,6 @@ if ( ! class_exists( 'PostmanMandrillMailEngine' ) ) {
 		private $apiKey;
 		private $mandrillMessage;
 
-		/**
-		 *
-		 * @param mixed $senderEmail
-		 * @param mixed $accessToken
-		 */
 		function __construct( $apiKey ) {
 			assert( ! empty( $apiKey ) );
 			$this->apiKey = $apiKey;
@@ -171,7 +166,11 @@ if ( ! class_exists( 'PostmanMandrillMailEngine' ) ) {
 					$this->logger->debug( 'Sending mail' );
 				}
 
-				$result = $mandrill->messages->send( $this->mandrillMessage );
+				if(property_exists($mandrill, 'messages')){
+					$result = $mandrill->messages->send( $this->mandrillMessage );
+				}else{
+					throw new Exception('Could not send. Mandrill did not instantiate \'messages\' property.');
+				}
 				if ( $this->logger->isInfo() ) {
 					$this->logger->info( sprintf( 'Message %d accepted for delivery', PostmanState::getInstance()->getSuccessfulDeliveries() + 1 ) );
 				}
@@ -199,14 +198,6 @@ if ( ! class_exists( 'PostmanMandrillMailEngine' ) ) {
 			}
 		}
 
-		/**
-		 * 		 * Add attachments to the message
-		 * 		 *
-		 *
-		 * @param Zend_Mail $mail
-		 *
-		 * @return void
-		 */
 		private function addAttachmentsToMail( PostmanMessage $message ): void {
 			$attachments = $message->getAttachments();
 			if ( isset( $attachments ) ) {
