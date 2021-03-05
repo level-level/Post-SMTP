@@ -73,9 +73,7 @@ class PostmanConnectivityTestController {
 		$pluginData = apply_filters( 'postman_get_plugin_metadata', null );
 		wp_register_script( 'postman_port_test_script', plugins_url( 'Postman/Postman-Connectivity-Test/postman_port_test.js', $this->rootPluginFilenameAndPath ), array(
 				PostmanViewController::JQUERY_SCRIPT,
-				'jquery_validation',
 				PostmanViewController::POSTMAN_SCRIPT,
-				'sprintf',
 		), $pluginData ['version'] );
 	}
 

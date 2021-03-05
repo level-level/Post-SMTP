@@ -172,29 +172,29 @@ if ( ! class_exists( 'PostmanViewController' ) ) {
 			);
 
 			wp_register_script( PostmanViewController::POSTMAN_SCRIPT, plugins_url( 'script/postman.js', $this->rootPluginFilenameAndPath ), array(
-					PostmanViewController::JQUERY_SCRIPT,
+				PostmanViewController::JQUERY_SCRIPT,
 				'jquery-ui-core',
 				'jquery-ui-datepicker',
+				'jquery_validation',
+				'jquery_steps_script',
+				'sprintf'
 			), $pluginData ['version'] );
 			wp_register_script( 'sprintf', plugins_url( 'script/sprintf/sprintf.min.js', $this->rootPluginFilenameAndPath ), array(), '1.0.2' );
-			wp_register_script( 'jquery_steps_script', plugins_url( 'script/jquery-steps/jquery.steps.min.js', $this->rootPluginFilenameAndPath ), array(
-					PostmanViewController::JQUERY_SCRIPT
-			), '1.1.0' );
-			wp_register_script( 'jquery_validation', plugins_url( 'script/jquery-validate/jquery.validate.min.js', $this->rootPluginFilenameAndPath ), array(
-					PostmanViewController::JQUERY_SCRIPT
-			), '1.13.1' );
+			wp_register_script( 'jquery_steps_script', plugins_url( 'script/jquery-steps/jquery.steps.min.js', $this->rootPluginFilenameAndPath ), array(), '1.1.0' );
+			wp_register_script( 'jquery_validation', plugins_url( 'script/jquery-validate/jquery.validate.min.js', $this->rootPluginFilenameAndPath ), array(), '1.13.1' );
 
 			wp_localize_script( PostmanViewController::POSTMAN_SCRIPT, 'postman_ajax_msg', array(
 					'bad_response' => __( 'An unexpected error occurred', 'post-smtp' ),
 					'corrupt_response' => __( 'Unexpected PHP messages corrupted the Ajax response', 'post-smtp' ),
 			) );
-
-			wp_localize_script( 'jquery_steps_script', 'steps_current_step', 'steps_current_step' );
-			wp_localize_script( 'jquery_steps_script', 'steps_pagination', 'steps_pagination' );
-			wp_localize_script( 'jquery_steps_script', 'steps_finish', _x( 'Finish', 'Press this button to Finish this task', 'post-smtp' ) );
-			wp_localize_script( 'jquery_steps_script', 'steps_next', _x( 'Next', 'Press this button to go to the next step', 'post-smtp' ) );
-			wp_localize_script( 'jquery_steps_script', 'steps_previous', _x( 'Previous', 'Press this button to go to the previous step', 'post-smtp' ) );
-			wp_localize_script( 'jquery_steps_script', 'steps_loading', 'steps_loading' );
+			wp_localize_script( 'jquery_steps_script', 'postman_steps', array(
+				'steps_current_step'=> __('Current', 'post-smtp'),
+				'steps_pagination'=> __('Pagination', 'post-smtp'),
+				'steps_finish'=> __( 'Finish', 'post-smtp' ) ,
+				'steps_next'=> __('Next', 'post-smtp'),
+				'steps_previous'=> __('Previous', 'post-smtp'),
+				'steps_loading'=> __('Loading', 'post-smtp'),
+			) );
 		}
 
 		/**

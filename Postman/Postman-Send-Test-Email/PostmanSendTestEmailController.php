@@ -88,8 +88,6 @@ class PostmanSendTestEmailController {
 		// register the javascript resource
 		wp_register_script( 'postman_test_email_wizard_script', plugins_url( 'Postman/Postman-Send-Test-Email/postman_send_test_email.js', $this->rootPluginFilenameAndPath ), array(
 				PostmanViewController::JQUERY_SCRIPT,
-				'jquery_validation',
-				'jquery_steps_script',
 				PostmanViewController::POSTMAN_SCRIPT,
 		), $pluginData ['version'] );
 	}

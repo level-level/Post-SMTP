@@ -86,16 +86,12 @@ class PostmanConfigurationController {
 				PostmanViewController::JQUERY_SCRIPT,
 				'jquery-ui-core',
 				'jquery-ui-tabs',
-				'jquery_validation',
 				PostmanViewController::POSTMAN_SCRIPT,
 		), $pluginData ['version'] );
 
 		wp_register_script( 'postman_wizard_script', plugins_url( 'Postman/Postman-Configuration/postman_wizard.js', $this->rootPluginFilenameAndPath ), array(
 				PostmanViewController::JQUERY_SCRIPT,
-				'jquery_validation',
-				'jquery_steps_script',
 				PostmanViewController::POSTMAN_SCRIPT,
-				'sprintf',
 		), $pluginData ['version'] );
 	}
 

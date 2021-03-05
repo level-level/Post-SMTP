@@ -327,7 +327,6 @@ class PostmanEmailLogController {
 		wp_register_style( 'postman_email_log', plugins_url( 'style/postman-email-log.css', $this->rootPluginFilenameAndPath ), null, $pluginData ['version'] );
 		wp_enqueue_style( 'postman_email_log' );
 		wp_enqueue_script( 'postman_resend_email_script' );
-		wp_enqueue_script( 'sprintf' );
 		wp_localize_script( 'postman_resend_email_script', 'postman_js_email_was_resent', __( 'Email was successfully resent (but without attachments)', 'post-smtp' ) );
 		/* Translators: Where %s is an error message */
 		wp_localize_script( 'postman_resend_email_script', 'postman_js_email_not_resent', __( 'Email could not be resent. Error: %s', 'post-smtp' ) );

@@ -244,7 +244,6 @@ class PostmanMailgunTransport extends PostmanAbstractModuleTransport implements 
 		$pluginData = apply_filters( 'postman_get_plugin_metadata', null );
 		wp_register_script( 'postman_mailgun_script', plugins_url( 'Postman/Postman-Mail/postman_mailgun.js', $this->rootPluginFilenameAndPath ), array(
 				PostmanViewController::JQUERY_SCRIPT,
-				'jquery_validation',
 				PostmanViewController::POSTMAN_SCRIPT,
 		), $pluginData ['version'] );
 	}
