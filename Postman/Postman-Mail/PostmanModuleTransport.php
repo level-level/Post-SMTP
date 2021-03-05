@@ -313,17 +313,7 @@ abstract class PostmanAbstractModuleTransport implements PostmanModuleTransport 
 	public function getScribe() {
 		return $this->scribe;
 	}
-	
-	/**
-	 * 	 *
-	 *
-	 * @param mixed $hostname        	
-	 * @param mixed $response        	
-	 *
-	 * @return array
-	 *
-	 * @psalm-return array<empty, empty>
-	 */
+
 	public function populateConfiguration($hostname) {
 		$configuration = array ();
 		return $configuration;
@@ -717,11 +707,6 @@ abstract class PostmanAbstractZendModuleTransport extends PostmanAbstractModuleT
 		return $this->isOAuthUsed ( PostmanOptions::getInstance ()->getAuthenticationType () ) && (empty ( $accessToken ) || empty ( $refreshToken ));
 	}
 	
-	/**
-	 *
-	 * @param mixed $hostname        	
-	 * @param mixed $response        	
-	 */
 	public function populateConfiguration($hostname) {
 		$response = parent::populateConfiguration ( $hostname );
 		$this->logger->debug ( sprintf ( 'populateConfigurationFromRecommendation for hostname %s', $hostname ) );

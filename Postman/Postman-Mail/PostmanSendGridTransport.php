@@ -139,11 +139,6 @@ class PostmanSendGridTransport extends PostmanAbstractModuleTransport implements
 		return $recommendation;
 	}
 	
-	/**
-	 *
-	 * @param mixed $hostname        	
-	 * @param mixed $response        	
-	 */
 	public function populateConfiguration($hostname) {
 		$response = parent::populateConfiguration ( $hostname );
 		return $response;
