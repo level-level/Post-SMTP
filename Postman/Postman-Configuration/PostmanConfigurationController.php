@@ -923,8 +923,8 @@ class PostmanImportConfigurationAjaxController extends PostmanAbstractAjaxHandle
 		$importableConfiguration = new PostmanImportableConfiguration();
 		$plugin = $this->getRequestParameter( 'plugin' );
 		$this->logger->debug( 'Looking for config=' . $plugin );
-		foreach ( $importableConfiguration->getAvailableOptions() as $this->options ) {
-			if ( $this->options->getPluginSlug() == $plugin ) {
+		foreach ( $importableConfiguration->getAvailableOptions() as $options ) {
+			if ( $options->getPluginSlug() == $plugin ) {
 				$this->logger->debug( 'Sending configuration response' );
 				$response = array(
 						PostmanOptions::MESSAGE_SENDER_EMAIL => $this->options->getMessageSenderEmail(),
@@ -937,6 +937,7 @@ class PostmanImportConfigurationAjaxController extends PostmanAbstractAjaxHandle
 						PostmanOptions::BASIC_AUTH_PASSWORD => $this->options->getPassword(),
 						'success' => true,
 				);
+				$this->options = $options;
 				break;
 			}
 		}
