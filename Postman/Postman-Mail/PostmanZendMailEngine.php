@@ -20,11 +20,6 @@ if ( ! class_exists( 'PostmanZendMailEngine' ) ) {
 
 		private $transport;
 
-		/**
-		 *
-		 * @param mixed $senderEmail
-		 * @param mixed $accessToken
-		 */
 		function __construct( PostmanZendModuleTransport $transport ) {
 			$this->transport = $transport;
 
@@ -99,7 +94,7 @@ if ( ! class_exists( 'PostmanZendMailEngine' ) ) {
 			// add the to recipients
 			foreach ( ( array ) $message->getBccRecipients() as $recipient ) {
 				$recipient->log( $this->logger, 'Bcc' );
-				$mail->addBcc( $recipient->getEmail(), $recipient->getName() );
+				$mail->addBcc( $recipient->getEmail() );
 			}
 
 			// add the reply-to
