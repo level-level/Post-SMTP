@@ -106,6 +106,9 @@ class PostsmtpMailer extends PHPMailer {
         return $result;
     }
 
+    /**
+     * @param array $arr
+     */
     private function flatArray($arr) {
         $result = [];
         foreach ( $arr as $key => $value ) {

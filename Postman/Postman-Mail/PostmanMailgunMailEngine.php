@@ -186,6 +186,9 @@ if ( ! class_exists( 'PostmanMailgunMailEngine' ) ) {
 		}
 
 
+		/**
+		 * @param Mailgun $mg
+		 */
 		private function processSend( $mg ) {
 
 			if ( count( $this->mailgunMessage['to'] ) <= 1 ) {

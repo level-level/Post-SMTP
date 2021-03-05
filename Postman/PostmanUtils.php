@@ -131,14 +131,17 @@ class PostmanUtils {
 	}
 
 	/**
-	 * Makes the outgoing HTTP requests
-	 * Inside WordPress we can use wp_remote_post().
-	 * Outside WordPress, not so much.
+	 * 	 * Makes the outgoing HTTP requests
+	 * 	 * Inside WordPress we can use wp_remote_post().
+	 * 	 * Outside WordPress, not so much.
+	 * 	 *
 	 *
 	 * @param mixed $url
+	 * @param (false|mixed|string)[] $parameters
+	 *
 	 * @return array|WP_Error the HTTP response
 	 */
-	static function remotePost( $url, $parameters = array(), array $headers = array() ) {
+	static function remotePost( $url, array $parameters = array(), array $headers = array() ) {
 		$args = array(
 				'timeout' => PostmanOptions::getInstance()->getConnectionTimeout(),
 				'headers' => $headers,
@@ -404,15 +407,17 @@ class PostmanUtils {
 	}
 
 	/**
+	 * 	 * 	 * 	 *
 	 * 	 * 	 *
 	 * 	 *
 	 *
 	 * @param mixed $callbackName
 	 * @param PostmanConfigurationController|PostmanConnectivityTestController|PostmanDiagnosticTestController|PostmanSendTestEmailController|PostmanViewController $viewController
+	 * @param int $priority
 	 *
 	 * @return void
 	 */
-	public static function registerAdminMenu( $viewController, $callbackName, $priority = 10 ): void {
+	public static function registerAdminMenu( $viewController, $callbackName, int $priority = 10 ): void {
 		$logger = PostmanUtils::$logger;
 		if ( $logger->isTrace() ) {
 			$logger->trace( 'Registering admin menu ' . $callbackName );

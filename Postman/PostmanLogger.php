@@ -57,21 +57,19 @@ if (! class_exists ( "PostmanLogger" )) {
 			$this->printLog ( $text, self::FATAL_INT, 'FATAL' );
 		}
 		/**
-		 * 		 * better logging thanks to http://www.smashingmagazine.com/2011/03/08/ten-things-every-wordpress-plugin-developer-should-know/
+		 * 		 * 		 * better logging thanks to http://www.smashingmagazine.com/2011/03/08/ten-things-every-wordpress-plugin-developer-should-know/
+		 * 		 * 		 *
 		 * 		 *
 		 *
 		 * @param mixed $intLogLevel        	
-		 * @param mixed $logLevelName        	
+		 * @param mixed $logLevelName
+		 * @param false|string $text
 		 *
 		 * @return void
 		 */
 		private function printLog($text, $intLogLevel, $logLevelName): void {
 			if ($this->wpDebug && $intLogLevel >= $this->logLevel) {
-				if (is_array ( $text ) || is_object ( $text )) {
-					error_log ( $logLevelName . ' ' . $this->name . ': ' . print_r ( $text, true ) );
-				} else {
-					error_log ( $logLevelName . ' ' . $this->name . ': ' . $text );
-				}
+				error_log ( $logLevelName . ' ' . $this->name . ': ' . print_r ( $text, true ) );
 			}
 		}
 		public function isDebug(): bool {

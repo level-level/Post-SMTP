@@ -399,7 +399,7 @@ if ( ! class_exists( 'PostmanMessage' ) ) {
 		 *
 		 * @return void
 		 */
-		private function processHeader( $name, string $content ): void {
+		private function processHeader( string $name, string $content ): void {
 			$name = trim( $name );
 			$content = trim( $content );
 			switch ( strtolower( $name ) ) {
@@ -533,6 +533,9 @@ if ( ! class_exists( 'PostmanMessage' ) ) {
 		function setSubject( string $subject ): void {
 			$this->subject = $subject;
 		}
+		/**
+		 * @param array $attachments
+		 */
 		function setAttachments( $attachments ): void {
 			$this->attachments = $attachments;
 		}

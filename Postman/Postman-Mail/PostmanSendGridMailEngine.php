@@ -184,6 +184,9 @@ if ( ! class_exists( 'PostmanSendGridMailEngine' ) ) {
 		}
 
 
+		/**
+		 * @param int $error_code
+		 */
 		private function errorCodesMap($error_code): string {
 			switch ($error_code) {
 				case 413:

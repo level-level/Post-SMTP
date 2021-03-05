@@ -161,7 +161,7 @@ if ( ! class_exists( 'PostmanInputSanitizer' ) ) {
 		/**
 		 * @param array $input
 		 */
-		private function sanitizeLogMax( string $desc, string $key, $input, &$new_input ): void {
+		private function sanitizeLogMax( string $desc, string $key, $input, array &$new_input ): void {
 			if ( isset( $input [ $key ] ) ) {
 				$value = absint( $input [ $key ] );
 				if ( $value <= 0 ) {
@@ -177,13 +177,13 @@ if ( ! class_exists( 'PostmanInputSanitizer' ) ) {
 		/**
 		 * @param array $input
 		 */
-		private function sanitizeInt( string $desc, string $key, $input, &$new_input ): void {
+		private function sanitizeInt( string $desc, string $key, $input, array &$new_input ): void {
 			if ( isset( $input [ $key ] ) ) {
 				$this->logSanitize( $desc, $input [ $key ] );
 				$new_input [ $key ] = absint( $input [ $key ] );
 			}
 		}
-		private function logSanitize( $desc, $value ): void {
+		private function logSanitize( string $desc, $value ): void {
 			$this->logger->trace( 'Sanitize ' . $desc . ' ' . $value );
 		}
 	}
