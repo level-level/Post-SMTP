@@ -77,7 +77,7 @@ if ( ! class_exists( 'PostmanWpMail' ) ) {
          */
         public function createMessageId() {
 
-            $id = md5(uniqid(time()));
+            $id = md5(uniqid((string)time()));
 
             if (isset($_SERVER["SERVER_NAME"])) {
                 $hostName = $_SERVER["SERVER_NAME"];
