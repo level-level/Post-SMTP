@@ -24,11 +24,6 @@ if ( ! class_exists( 'PostmanMailgunMailEngine' ) ) {
 		private $domainName;
 		private $mailgunMessage;
 
-		/**
-		 *
-		 * @param mixed $senderEmail
-		 * @param mixed $accessToken
-		 */
 		function __construct( $apiKey, $domainName ) {
 			assert( ! empty( $apiKey ) );
 			$this->apiKey = $apiKey;
@@ -237,14 +232,6 @@ if ( ! class_exists( 'PostmanMailgunMailEngine' ) ) {
 			}
 		}
 
-		/**
-		 * 		 * Add attachments to the message
-		 * 		 *
-		 *
-		 * @param Zend_Mail $mail
-		 *
-		 * @return void
-		 */
 		private function addAttachmentsToMail( PostmanMessage $message ): void {
 			$attachments = $message->getAttachments();
 			if ( ! is_array( $attachments ) ) {
