@@ -188,21 +188,6 @@ class PostmanEmailLogView extends WP_List_Table {
 	 */
 	function get_sortable_columns() {
 		return array();
-		$sortable_columns = array(
-				'title' => array(
-						'title',
-						false,
-				), // true means it's already sorted
-				'status' => array(
-						'status',
-						false,
-				),
-				'date' => array(
-						'date',
-						false,
-				),
-		);
-		return $sortable_columns;
 	}
 
 	/**

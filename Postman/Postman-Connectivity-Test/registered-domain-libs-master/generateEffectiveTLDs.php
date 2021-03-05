@@ -101,7 +101,7 @@ function printNode($key, $valueTree, $isAssignment = false) {
 		if ($i+1 != count($valueTree)) {
 			echo ",\n";
 		} else {
-			"\n";
+			echo "\n";
 		}
 	}
 

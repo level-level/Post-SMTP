@@ -169,13 +169,10 @@ if ( ! class_exists( 'PostmanEmailLogService' ) ) {
 			}
 			update_post_meta( $post_id, 'transport_uri', $log->transportUri );
 
-			if ( ! $log->success || true ) {
-				// alwas add the meta data so we can re-send it
-				update_post_meta( $post_id, 'original_to', $log->originalTo );
-				update_post_meta( $post_id, 'original_subject', $log->originalSubject );
-				update_post_meta( $post_id, 'original_message', $log->originalMessage );
-				update_post_meta( $post_id, 'original_headers', $log->originalHeaders );
-			}
+			update_post_meta( $post_id, 'original_to', $log->originalTo );
+			update_post_meta( $post_id, 'original_subject', $log->originalSubject );
+			update_post_meta( $post_id, 'original_message', $log->originalMessage );
+			update_post_meta( $post_id, 'original_headers', $log->originalHeaders );
 
 			// we do not sanitize the session transcript - let the reader decide how to handle the data
 			update_post_meta( $post_id, 'session_transcript', $log->sessionTranscript );

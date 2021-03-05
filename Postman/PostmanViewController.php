@@ -373,11 +373,7 @@ if ( ! class_exists( 'PostmanViewController' ) ) {
                 }
 
                 // import-export-reset menu item
-                if ( ! $this->options->isNew() || true ) {
-                    $purgeLinkPattern = '<li><a href="%1$s" class="welcome-icon oauth-authorize">%2$s</a></li>';
-                } else {
-                    $purgeLinkPattern = '<li>%2$s</li>';
-                }
+            	$purgeLinkPattern = '<li><a href="%1$s" class="welcome-icon oauth-authorize">%2$s</a></li>';
                 $importTitle = __( 'Import', 'post-smtp' );
                 $exportTile = __( 'Export', 'post-smtp' );
                 $resetTitle = __( 'Reset Plugin', 'post-smtp' );

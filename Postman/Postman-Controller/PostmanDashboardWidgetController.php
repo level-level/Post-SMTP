@@ -147,7 +147,7 @@ if (! class_exists ( "PostmanDashboardWidgetController" )) {
 					
 					$num_posts = wp_count_posts ( $type );
 					
-					if ($num_posts) {
+					if ($num_posts > 0) {
 						
 						$published = intval ( $num_posts->publish );
 						$privated = intval ( $num_posts->private );

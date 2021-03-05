@@ -21,14 +21,14 @@ if (! class_exists ( "PostmanNonOAuthAuthenticationManager" )) {
 		 */
 		public function requestVerificationCode($transactionId) {
 			// otherwise known as IllegaStateException
-			assert ( false );
+			throw new Exception(__('Verification code call on non-OAuthManager.', 'post-smtp'));
 		}
 		/**
 		 * @return void
 		 */
 		public function processAuthorizationGrantCode($transactionId) {
 			// otherwise known as IllegaStateException
-			assert ( false );
+			throw new Exception(__('Authorization grant code call on non-OAuthManager.', 'post-smtp'));
 		}
 		/**
 		 * @return void
@@ -50,7 +50,7 @@ if (! class_exists ( "PostmanNonOAuthAuthenticationManager" )) {
 		 */
 		public function generateRequestTransactionId() {
 			// otherwise known as IllegaStateException
-			assert ( false );
+			throw new Exception(__('Request transaction ID on non-OAuthManager.', 'post-smtp'));
 		}
 	}
 }

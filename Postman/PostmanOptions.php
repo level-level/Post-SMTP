@@ -202,18 +202,15 @@ if ( ! class_exists( 'PostmanOptions' ) ) {
 			return ! isset( $this->options [ PostmanOptions::TRANSPORT_TYPE ] );
 		}
 		public function isMailLoggingEnabled(): bool {
-			$allowed = $this->isMailLoggingAllowed();
 			$enabled = $this->getMailLoggingEnabled() == self::MAIL_LOG_ENABLED_OPTION_YES;
-			return $allowed && $enabled;
+			return $this->isMailLoggingAllowed() && $enabled;
 		}
 		public function getTempDirectory() {
 			if ( isset( $this->options [ self::TEMPORARY_DIRECTORY ] ) ) {
 				return $this->options [ self::TEMPORARY_DIRECTORY ];
 			} else { 				return self::DEFAULT_TEMP_DIRECTORY; }
 		}
-		/**
-		 * @return true
-		 */
+		
 		public function isMailLoggingAllowed(): bool {
 			return true;
 		}

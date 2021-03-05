@@ -42,12 +42,11 @@ if (! class_exists ( "PostmanAuthenticationManagerFactory" )) {
 				} else if ($transport->isServiceProviderYahoo ( $hostname )) {
 					$authenticationManager = new PostmanYahooAuthenticationManager ( $clientId, $clientSecret, $authorizationToken, $redirectUrl );
 				} else {
-					assert ( false );
+					throw new Exception(__('Invalid authentication manager for oAuth.', 'post-smtp'));
 				}
 			} else {
 				$authenticationManager = new PostmanNonOAuthAuthenticationManager ();
 			}
-			if( ! isset( $authenticationManager ) ) { throw new Exception('Postman authentication failed'); }
 			$this->logger->debug ( 'Created ' . get_class ( $authenticationManager ) );
 			return $authenticationManager;
 		}
