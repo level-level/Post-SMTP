@@ -107,7 +107,7 @@ class PostmanEmailLogController {
 						'transcript' => $transcript,
 				);
 				$this->logger->trace( 'AJAX response' );
-				$this->logger->trace( $response );
+				$this->logger->trace( json_encode($response) );
 				// send the JSON response
 				wp_send_json_success( $response );
 			} else {
@@ -121,7 +121,7 @@ class PostmanEmailLogController {
 						'transcript' => $transcript,
 				);
 				$this->logger->trace( 'AJAX response' );
-				$this->logger->trace( $response );
+				$this->logger->trace( json_encode($response) );
 				// send the JSON response
 				wp_send_json_error( $response );
 			}
@@ -331,13 +331,13 @@ class PostmanEmailLogController {
 	}
 	function postman_email_log_enqueue_resources(): void {
 		$pluginData = apply_filters( 'postman_get_plugin_metadata', null );
-		wp_register_style( 'postman_email_log', plugins_url( 'style/postman-email-log.css', $this->rootPluginFilenameAndPath ), null, $pluginData ['version'] );
+		wp_register_style( 'postman_email_log', plugins_url( 'style/postman-email-log.css', $this->rootPluginFilenameAndPath ), array(), $pluginData ['version'] );
 		wp_enqueue_style( 'postman_email_log' );
 		wp_enqueue_script( 'postman_resend_email_script' );
-		wp_localize_script( 'postman_resend_email_script', 'postman_js_email_was_resent', __( 'Email was successfully resent (but without attachments)', 'post-smtp' ) );
 		/* Translators: Where %s is an error message */
-		wp_localize_script( 'postman_resend_email_script', 'postman_js_email_not_resent', __( 'Email could not be resent. Error: %s', 'post-smtp' ) );
-		wp_localize_script( 'postman_resend_email_script', 'postman_js_resend_label', __( 'Resend', 'post-smtp' ) );
+		wp_localize_script( 'postman_resend_email_script', 'postman_js_resend', array(
+			'postman_js_email_not_resent' => __( 'Email could not be resent. Error: %s', 'post-smtp' ),
+		));
 	}
 
 	/**

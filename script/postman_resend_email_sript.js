@@ -30,9 +30,8 @@ jQuery(document).ready(function($) {
 		jQuery.post(ajaxurl, data, function(response) {
 			if (response.success) {
 				alert(response.data.message);
-	//			jQuery('span#resend-' + emailId).text(postman_js_resend_label);
 			} else {
-				alert(sprintf(postman_js_email_not_resent, response.data.message));
+				alert(sprintf(postman_js_resend.postman_js_email_not_resent, response.data.message));
 			}
 		}).fail(function(response) {
 			ajaxFailed(response);
