@@ -23,8 +23,6 @@ class PostmanUtils {
 
 	/**
 	 * 	 * Initialize the Logger
-	 *
-	 * @return void
 	 */
 	public static function staticInit(): void {
 		PostmanUtils::$logger = new PostmanLogger( 'PostmanUtils' );
@@ -45,8 +43,6 @@ class PostmanUtils {
 
 	/**
 	 * 	 * Returns an escaped URL
-	 *
-	 * @return string
 	 */
 	public static function getGrantOAuthPermissionUrl(): string {
 		return get_admin_url() . self::ADMIN_POST_OAUTH2_GRANT_URL_PART;
@@ -166,8 +162,6 @@ class PostmanUtils {
 	 * 	 *
 	 *
 	 * @param mixed $url
-	 *
-	 * @return void
 	 */
 	static function redirect( $url ): void {
 		// redirections back to THIS SITE should always be relative because of IIS bug
@@ -208,8 +202,6 @@ class PostmanUtils {
 
 	/**
 	 * 	 * Unblock threads waiting on lock()
-	 *
-	 * @return void
 	 */
 	static function unlock(): void {
 		if ( PostmanState::getInstance()->isFileLockingEnabled() ) {
@@ -316,8 +308,6 @@ class PostmanUtils {
 
 	/**
 	 * 	 * Warning! This can only be called on hook 'init' or later
-	 *
-	 * @return bool
 	 */
 	public static function isAdmin(): bool {
 		/**
@@ -408,9 +398,7 @@ class PostmanUtils {
 	 *
 	 * @param mixed $callbackName
 	 * @param PostmanConfigurationController|PostmanConnectivityTestController|PostmanDiagnosticTestController|PostmanSendTestEmailController|PostmanViewController $viewController
-	 * @param int $priority
 	 *
-	 * @return void
 	 */
 	public static function registerAdminMenu( $viewController, $callbackName, int $priority = 10 ): void {
 		$logger = PostmanUtils::$logger;
@@ -431,8 +419,6 @@ class PostmanUtils {
 	 * @param mixed $actionName
 	 * @param mixed $callbackName
 	 * @param PostmanGetDiagnosticsViaAjax|PostmanGetHostnameByEmailAjaxController|PostmanImportConfigurationAjaxController|PostmanManageConfigurationAjaxHandler|PostmanPortTestAjaxController|PostmanSendTestEmailAjaxController $class
-	 *
-	 * @return void
 	 */
 	public static function registerAjaxHandler( $actionName, $class, $callbackName ): void {
 		if ( is_admin() ) {

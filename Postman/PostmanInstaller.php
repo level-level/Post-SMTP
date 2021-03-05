@@ -20,8 +20,6 @@ class PostmanInstaller {
 
 	/**
 	 * 	 * Handle activation of the plugin
-	 *
-	 * @return void
 	 */
 	public function activatePostman(): void {
         delete_option( 'postman_release_version' );
@@ -81,8 +79,6 @@ class PostmanInstaller {
 
 	/**
 	 * 	 * Handle deactivation of the plugin
-	 *
-	 * @return void
 	 */
 	public function deactivatePostman(): void {
 		if ( function_exists( 'is_multisite' ) && is_multisite() ) {
@@ -106,8 +102,6 @@ class PostmanInstaller {
 
 	/**
 	 * 	 * Add the capability to manage postman
-	 *
-	 * @return void
 	 */
 	public function addCapability(): void {
 		if ( $this->logger->isDebug() ) {
@@ -123,8 +117,6 @@ class PostmanInstaller {
 
 	/**
 	 * 	 * Remove the capability to manage postman
-	 *
-	 * @return void
 	 */
 	public function removeCapability(): void {
 		if ( $this->logger->isDebug() ) {
@@ -140,8 +132,6 @@ class PostmanInstaller {
 
 	/**
 	 * 	 * Handle activation of plugin
-	 *
-	 * @return void
 	 */
 	private function handleOptionUpdates(): void {
 		$this->logger->debug( 'Activating plugin' );

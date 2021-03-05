@@ -22,8 +22,6 @@ if (! class_exists ( 'PostmanMessageHandler' )) {
 		 * 		 *
 		 *
 		 * @param mixed $message
-		 *
-		 * @return void
 		 */
 		public function addError($message): void {
 			$this->storeMessage ( $message, 'error' );
@@ -32,8 +30,6 @@ if (! class_exists ( 'PostmanMessageHandler' )) {
 		 * 		 *
 		 *
 		 * @param mixed $message
-		 *
-		 * @return void
 		 */
 		public function addWarning($message): void {
 			$this->storeMessage ( $message, 'warning' );
@@ -42,8 +38,6 @@ if (! class_exists ( 'PostmanMessageHandler' )) {
 		 * 		 *
 		 *
 		 * @param mixed $message
-		 *
-		 * @return void
 		 */
 		public function addMessage($message): void {
 			$this->storeMessage ( $message, 'notify' );
@@ -55,8 +49,6 @@ if (! class_exists ( 'PostmanMessageHandler' )) {
 		 *
 		 * @param mixed $message
 		 * @param mixed $type
-		 *
-		 * @return void
 		 */
 		private function storeMessage($message, $type): void {
 			$messageArray = array ();
@@ -81,8 +73,6 @@ if (! class_exists ( 'PostmanMessageHandler' )) {
 		}
 		/**
 		 * 		 * Retrieve the messages and show them
-		 *
-		 * @return void
 		 */
 		public function displayAllMessages(): void {
 			$messageArray = PostmanSession::getInstance ()->getMessage ();
@@ -113,8 +103,6 @@ if (! class_exists ( 'PostmanMessageHandler' )) {
 		 *
 		 * @param mixed $message
 		 * @param mixed $className
-		 *
-		 * @return void
 		 */
 		public function printMessage($message, $className): void {
 			printf ( '<div class="%s"><p>%s</p></div>', $className, $message );

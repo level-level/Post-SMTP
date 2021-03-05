@@ -17,7 +17,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters->set(Option::PHPSTAN_FOR_RECTOR_PATH, getcwd() . '/phpstan.neon.dist');
     // Define what rule sets will be applied
     $parameters->set(Option::SETS, [
-        SetList::CODE_QUALITY,
+        SetList::DEAD_DOC_BLOCK,
     ]);
 
     // get services (needed for register a single rule)

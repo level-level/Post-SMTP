@@ -258,8 +258,6 @@ class PostmanGmailApiModuleTransport extends PostmanAbstractZendModuleTransport 
 	 * 	 *
 	 * 	 * "Runs at the beginning of every admin page before the page is rendered."
 	 * 	 * ref: http://codex.wordpress.org/Plugin_API/Action_Reference#Actions_Run_During_an_Admin_Page_Request
-	 *
-	 * @return void
 	 */
 	public function on_admin_init(): void {
 		// only administrators should be able to trigger this
@@ -268,9 +266,6 @@ class PostmanGmailApiModuleTransport extends PostmanAbstractZendModuleTransport 
 		}
 	}
 	
-	/**
-	 * @return void
-	 */
 	public function registerStylesAndScripts(): void {
 		// register the stylesheet and javascript external resources
 		$pluginData = apply_filters ( 'postman_get_plugin_metadata', null );

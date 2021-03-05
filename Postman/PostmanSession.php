@@ -38,8 +38,6 @@ if (! class_exists ( 'PostmanSession' )) {
 		 * 		 * transaction ID
 		 * 		 *
 		 *
-		 *
-		 * @return bool
 		 */
 		public function isSetOauthInProgress(): bool {
 			return get_transient ( self::OAUTH_IN_PROGRESS ) != false;
@@ -54,9 +52,6 @@ if (! class_exists ( 'PostmanSession' )) {
 			delete_transient ( self::OAUTH_IN_PROGRESS );
 		}
 
-		/**
-		 * @return bool
-		 */
 		public function isSetAction(): bool {
 			return get_transient ( self::ACTION ) != false;
 		}
@@ -70,9 +65,6 @@ if (! class_exists ( 'PostmanSession' )) {
 			delete_transient ( self::ACTION );
 		}
 
-		/**
-		 * @return bool
-		 */
 		public function isSetErrorMessage(): bool {
 			return get_transient ( self::ERROR_MESSAGE ) != false;
 		}

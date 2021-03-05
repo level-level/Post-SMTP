@@ -43,7 +43,6 @@ if (! class_exists ( 'PostmanEmailAddress' )) {
 		 *
 		 * @throws Exception
 		 *
-		 * @return void
 		 *
 		 * @param string $desc
 		 */

@@ -67,11 +67,8 @@ if ( ! class_exists( 'PostmanEmailLogService' ) ) {
 		 * 		 * Logs successful email attempts
 		 * 		 *
 		 *
-		 * @param PostmanMessage         $message
 		 * @param mixed                $transcript
-		 * @param PostmanModuleTransport $transport
 		 *
-		 * @return void
 		 */
 		public function writeSuccessLog( PostmanEmailLog $log, PostmanMessage $message, $transcript, PostmanModuleTransport $transport ): void {
 			if ( PostmanOptions::getInstance()->isMailLoggingEnabled() ) {
@@ -91,12 +88,9 @@ if ( ! class_exists( 'PostmanEmailLogService' ) ) {
 		 * 		 * Logs failed email attempts, requires more metadata so the email can be resent in the future
 		 * 		 *
 		 *
-		 * @param PostmanMessage         $message
 		 * @param mixed                $transcript
-		 * @param PostmanModuleTransport $transport
 		 * @param mixed                $statusMessage
 		 *
-		 * @return void
 		 */
 		public function writeFailureLog( PostmanEmailLog $log, PostmanMessage $message = null, $transcript, PostmanModuleTransport $transport, $statusMessage ): void {
 			if ( PostmanOptions::getInstance()->isMailLoggingEnabled() ) {
@@ -109,8 +103,6 @@ if ( ! class_exists( 'PostmanEmailLogService' ) ) {
 		 * 		 * Writes an email sending attempt to the Email Log
 		 * 		 *
 		 * 		 * From http://wordpress.stackexchange.com/questions/8569/wp-insert-post-php-function-and-custom-fields
-		 *
-		 * @return void
 		 */
 		private function writeToEmailLog( PostmanEmailLog $log, PostmanMessage $message = null ): void {
 
@@ -182,9 +174,6 @@ if ( ! class_exists( 'PostmanEmailLogService' ) ) {
 			$purger->truncateLogItems( PostmanOptions::getInstance()->getMailLoggingMaxEntries() );
 		}
 
-		/**
-		 * @param PostmanMessage|null $postMessage
-		 */
 		private function checkForLogErrors( PostmanEmailLog $log, ?PostmanMessage $postMessage ): void {
 			$message = __( 'You getting this message because an error detected while delivered your email.', 'post-smtp' );
 			$message .= "\r\n" . sprintf( __( 'For the domain: %1$s','post-smtp' ), get_bloginfo('url') );
@@ -229,11 +218,9 @@ if ( ! class_exists( 'PostmanEmailLogService' ) ) {
 		/**
 		 * Creates a Log object for use by writeToEmailLog()
 		 *
-		 * @param PostmanMessage         $message
 		 * @param mixed                $transcript
 		 * @param mixed                $statusMessage
 		 * @param mixed                $success
-		 * @param PostmanModuleTransport $transport
 		 * @return PostmanEmailLog
 		 */
 		private function createLog( PostmanEmailLog $log, PostmanMessage $message = null, $transcript, $statusMessage, $success, PostmanModuleTransport $transport ) {
@@ -258,7 +245,6 @@ if ( ! class_exists( 'PostmanEmailLogService' ) ) {
 		/**
 		 * Creates a readable "TO" entry based on the recipient header
 		 *
-		 * @param array $addresses
 		 * @return string
 		 */
 		private static function flattenEmails( array $addresses ) {
@@ -341,8 +327,6 @@ if ( ! class_exists( 'PostmanEmailLogPurger' ) ) {
 		 * 		 *
 		 *
 		 * @param mixed $size
-		 *
-		 * @return void
 		 */
 		function truncateLogItems( $size ): void {
 			$index = count( $this->posts );

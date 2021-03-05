@@ -226,8 +226,6 @@ class PostmanMandrillTransport extends PostmanAbstractModuleTransport implements
 	 * 	 *
 	 * 	 * "Runs at the beginning of every admin page before the page is rendered."
 	 * 	 * ref: http://codex.wordpress.org/Plugin_API/Action_Reference#Actions_Run_During_an_Admin_Page_Request
-	 *
-	 * @return void
 	 */
 	public function on_admin_init(): void {
 		// only administrators should be able to trigger this
@@ -237,13 +235,6 @@ class PostmanMandrillTransport extends PostmanAbstractModuleTransport implements
 		}
 	}
 	
-	/*
-	 * What follows in the code responsible for creating the Admin Settings page
-	 */
-	
-	/**
-	 * @return void
-	 */
 	public function addSettings(): void {
 		// the Mandrill Auth section
 		add_settings_section ( PostmanMandrillTransport::MANDRILL_AUTH_SECTION, __ ( 'Authentication', 'post-smtp' ), function () : void {
@@ -255,25 +246,16 @@ class PostmanMandrillTransport extends PostmanAbstractModuleTransport implements
 		}, PostmanMandrillTransport::MANDRILL_AUTH_OPTIONS, PostmanMandrillTransport::MANDRILL_AUTH_SECTION );
 	}
 	
-	/**
-	 * @return void
-	 */
 	public function printMandrillAuthSectionInfo(): void {
 		/* Translators: Where (1) is the service URL and (2) is the service name and (3) is a api key URL */
 		printf ( '<p id="wizard_mandrill_auth_help">%s</p>', sprintf ( __ ( 'Create an account at <a href="%1$s" target="_blank">%2$s</a> and enter <a href="%3$s" target="_blank">an API key</a> below.', 'post-smtp' ), 'https://mandrillapp.com', 'Mandrillapp.com', 'https://mandrillapp.com/settings' ) );
 	}
 	
-	/**
-	 * @return void
-	 */
 	public function mandrill_api_key_callback(): void {
 		printf ( '<input type="password" autocomplete="off" id="mandrill_api_key" name="postman_options[mandrill_api_key]" value="%s" size="60" class="required" placeholder="%s"/>', null !== $this->options->getMandrillApiKey () ? esc_attr ( PostmanUtils::obfuscatePassword ( $this->options->getMandrillApiKey () ) ) : '', __ ( 'Required', 'post-smtp' ) );
 		print ' <input type="button" id="toggleMandrillApiKey" value="Show Password" class="button button-secondary" style="visibility:hidden" />';
 	}
 	
-	/**
-	 * @return void
-	 */
 	public function registerStylesAndScripts(): void {
 		// register the stylesheet and javascript external resources
 		$pluginData = apply_filters ( 'postman_get_plugin_metadata', null );

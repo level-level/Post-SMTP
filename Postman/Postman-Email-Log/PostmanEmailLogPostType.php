@@ -13,8 +13,6 @@ if (! class_exists ( 'PostmanEmailLogPostType' )) {
 		
 		/**
 		 * 		 * Behavior to run on the WordPress 'init' action
-		 *
-		 * @return void
 		 */
 		public static function automaticallyCreatePostType(): void {
 			add_action ( 'init', array (
@@ -32,8 +30,6 @@ if (! class_exists ( 'PostmanEmailLogPostType' )) {
 		 * 		 * created or modified post type will work incorrectly if called later.
 		 * 		 *
 		 * 		 * https://codex.wordpress.org/Function_Reference/register_post_type
-		 *
-		 * @return void
 		 */
 		public static function create_post_type(): void {
 			register_post_type ( self::POSTMAN_CUSTOM_POST_TYPE_SLUG, array (

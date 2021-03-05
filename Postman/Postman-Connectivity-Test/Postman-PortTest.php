@@ -163,9 +163,7 @@ class PostmanPortTest {
 	/**
 	 * Given a hostname, test if it has open ports
 	 *
-	 * @param string $connectionString        	
 	 *
-	 * @return bool
 	 */
 	private function talkToMailServer(string $connectionString): bool {
 		$this->logger->trace ( 'talkToMailServer()' );

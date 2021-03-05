@@ -60,8 +60,6 @@ if (! class_exists ( "PostmanLogger" )) {
 		 * @param mixed $intLogLevel        	
 		 * @param mixed $logLevelName
 		 * @param false|string $text
-		 *
-		 * @return void
 		 */
 		private function printLog($text, $intLogLevel, $logLevelName): void {
 			if ($this->wpDebug && $intLogLevel >= $this->logLevel) {

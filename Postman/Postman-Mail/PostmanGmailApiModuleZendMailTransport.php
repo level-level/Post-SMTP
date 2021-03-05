@@ -94,10 +94,8 @@ if (! class_exists ( 'PostmanGmailApiModuleZendMailTransport' )) {
 		 *
 		 * @param string $host
 		 *        	OPTIONAL (Default: 127.0.0.1)
-		 * @param array $config
 		 *        	OPTIONAL (Default: null)
 		 * @return void
-		 *
 		 * @todo Someone please make this compatible
 		 *       with the SendMail transport class.
 		 */
@@ -136,7 +134,6 @@ if (! class_exists ( 'PostmanGmailApiModuleZendMailTransport' )) {
 		/**
 		 * Sets the connection protocol instance
 		 *
-		 * @param Zend_Mail_Protocol_Abstract $connection        	
 		 *
 		 * @return void
 		 */

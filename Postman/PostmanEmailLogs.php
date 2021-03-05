@@ -103,8 +103,6 @@ class PostmanEmailLogs {
 
     /**
      * @param array $data
-     *
-     * @return void
      */
     function save( $data ): void {
         $this->db->query( $this->db->prepare(

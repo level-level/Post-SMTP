@@ -33,9 +33,7 @@ if (! class_exists ( 'PostmanWpMailBinder' )) {
 		/**
 		 * 		 * Returns the bind result
 		 *
-		 * @return array
 		 *
-		 * @psalm-return array{bound: mixed, bind_error: mixed}
 		 */
 		public function postman_wp_mail_bind_status(): array {
 			return array (
@@ -52,8 +50,6 @@ if (! class_exists ( 'PostmanWpMailBinder' )) {
 		 * 		 * 2) wp_mail is available for use
 		 * 		 * 3) the plugin is properly configured.
 		 * 		 * 4) the plugin's prerequisites are met.
-		 *
-		 * @return void
 		 */
 		function bind(): void {
 			if (! $this->bound) {
@@ -89,8 +85,6 @@ if (! class_exists ( 'PostmanWpMailBinder' )) {
 		 * 		 *
 		 * 		 * If the function does not exist, then the replacement was successful
 		 * 		 * and we set a success flag.
-		 *
-		 * @return void
 		 */
 		private function replacePluggableFunctionWpMail(): void {
 			/**

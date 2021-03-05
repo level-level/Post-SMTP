@@ -42,8 +42,6 @@ class PostmanDiagnosticTestController {
 	 * 	 *
 	 * 	 * "Typically used by plugins to initialize. The current user is already authenticated by this time."
 	 * 	 * ref: http://codex.wordpress.org/Plugin_API/Action_Reference#Actions_Run_During_a_Typical_Request
-	 *
-	 * @return void
 	 */
 	public function on_init(): void {
 		// register Ajax handlers
@@ -52,8 +50,6 @@ class PostmanDiagnosticTestController {
 
 	/**
 	 * 	 * Fires on the admin_init method
-	 *
-	 * @return void
 	 */
 	public function on_admin_init(): void {
 				$this->registerStylesAndScripts();
@@ -61,8 +57,6 @@ class PostmanDiagnosticTestController {
 
 	/**
 	 * 	 * Register and add settings
-	 *
-	 * @return void
 	 */
 	private function registerStylesAndScripts(): void {
 		if ( $this->logger->isTrace() ) {
@@ -79,8 +73,6 @@ class PostmanDiagnosticTestController {
 
 	/**
 	 * 	 * Register the Diagnostics screen
-	 *
-	 * @return void
 	 */
 	public function addDiagnosticsSubmenu(): void {
 		$page = add_submenu_page( PostmanViewController::POSTMAN_MENU_SLUG, sprintf( __( '%s Setup', 'post-smtp' ), __( 'Postman SMTP', 'post-smtp' ) ), __( 'Diagnostic', 'post-smtp' ), Postman::MANAGE_POSTMAN_CAPABILITY_NAME, PostmanDiagnosticTestController::DIAGNOSTICS_SLUG, function () : void {
@@ -96,9 +88,6 @@ class PostmanDiagnosticTestController {
 		wp_enqueue_script( 'postman_diagnostics_script' );
 	}
 
-	/**
-	 * @return void
-	 */
 	public function outputDiagnosticsContent(): void {
 		// test features
 		print '<div class="wrap">';
@@ -219,9 +208,6 @@ class PostmanGetDiagnosticsViaAjax {
 		return implode( ', ', $functionArray );
 	}
 
-	/**
-	 * @return void
-	 */
 	public function getDiagnostics(): void {
 	    $curl = curl_version();
 		$transportRegistry = PostmanTransportRegistry::getInstance();

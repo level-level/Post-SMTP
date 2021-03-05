@@ -79,9 +79,7 @@ if ( ! class_exists( 'PostmanMessage' ) ) {
 		/**
 		 * 		 *
 		 *
-		 * @param PostmanModuleTransport $transport
 		 *
-		 * @return void
 		 */
 		public function validate( PostmanModuleTransport $transport ): void {
 			if ( $transport->isEmailValidationSupported() ) {
@@ -92,8 +90,6 @@ if ( ! class_exists( 'PostmanMessage' ) ) {
 		/**
 		 * 		 * Create body parts based on content type
 		 * 		 * MyMail creates its own body parts
-		 *
-		 * @return void
 		 */
 		public function createBodyParts(): void {
 
@@ -150,8 +146,6 @@ if ( ! class_exists( 'PostmanMessage' ) ) {
 
 		/**
 		 * 		 * Apply the WordPress filters to the email
-		 *
-		 * @return void
 		 */
 		public function applyFilters(): void {
 			if ( $this->logger->isDebug() ) {
@@ -250,8 +244,6 @@ if ( ! class_exists( 'PostmanMessage' ) ) {
 		/**
 		 * 		 * Check all email headers for errors
 		 * 		 * Throw an exception if an error is found
-		 *
-		 * @return void
 		 */
 		private function internalValidate(): void {
 			// check the reply-to address for errors
@@ -300,8 +292,6 @@ if ( ! class_exists( 'PostmanMessage' ) ) {
 		 * 		 *
 		 *
 		 * @param mixed $charset
-		 *
-		 * @return void
 		 */
 		public function setCharset( $charset ): void {
 			$this->charset = $charset;
@@ -336,8 +326,6 @@ if ( ! class_exists( 'PostmanMessage' ) ) {
 		 *        	Array or comma-separated list of email addresses to send message.
 		 *
 		 * @throws Exception
-		 *
-		 * @return void
 		 */
 		private function addRecipients( &$recipientList, $recipients ): void {
 			if ( ! empty( $recipients ) ) {
@@ -355,7 +343,6 @@ if ( ! class_exists( 'PostmanMessage' ) ) {
 		 * 		 * 		 * For the string version, each header line (beginning with From:, Cc:, etc.) is delimited with a newline ("\r\n")
 		 * 		 *
 		 *
-		 * @return void
 		 *
 		 * @param (mixed|string)[] $headers
 		 */
@@ -394,8 +381,6 @@ if ( ! class_exists( 'PostmanMessage' ) ) {
 		 * 		 * Add the headers that were processed in processHeaders()
 		 * 		 * Zend requires that several headers are specially handled.
 		 * 		 *
-		 *
-		 * @return void
 		 */
 		private function processHeader( string $name, string $content ): void {
 			$name = trim( $name );
@@ -483,8 +468,6 @@ if ( ! class_exists( 'PostmanMessage' ) ) {
 		 * @param mixed $desc
 		 * @param mixed $name
 		 * @param mixed $content
-		 *
-		 * @return void
 		 */
 		private function logProcessHeader( $desc, $name, $content ): void {
 			$this->logger->debug( 'Processing ' . $desc . ' Header - ' . $name . ': ' . $content );
@@ -494,9 +477,7 @@ if ( ! class_exists( 'PostmanMessage' ) ) {
 		 * 		 * Add attachments to the message
 		 * 		 *
 		 *
-		 * @param Zend_Mail $mail
 		 *
-		 * @return void
 		 */
 		public function addAttachmentsToMail( Zend_Mail $mail ): void {
 			$attachments = $this->attachments;

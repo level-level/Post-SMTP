@@ -181,8 +181,6 @@ class Postman {
 	 * 	 *
 	 * 	 * "After active plugins and pluggable functions are loaded"
 	 * 	 * ref: http://codex.wordpress.org/Plugin_API/Action_Reference#Actions_Run_During_a_Typical_Request
-	 *
-	 * @return void
 	 */
 	public function on_plugins_loaded(): void {
 		// load the text domain
@@ -200,8 +198,6 @@ class Postman {
 	 * 	 *
 	 * 	 * "After WordPress is fully loaded"
 	 * 	 * ref: http://codex.wordpress.org/Plugin_API/Action_Reference#Actions_Run_During_a_Typical_Request
-	 *
-	 * @return void
 	 */
 	public function on_wp_loaded(): void {
 		// register the check for configuration errors on the wp_loaded hook,
@@ -212,8 +208,6 @@ class Postman {
 	/**
 	 * 	 * Functions to execute on the register_activation_hook
 	 * 	 * ref: https://codex.wordpress.org/Function_Reference/register_activation_hook
-	 *
-	 * @return void
 	 */
 	public function on_activation(): void {
 		if ( $this->logger->isInfo() ) {
@@ -226,8 +220,6 @@ class Postman {
 	/**
 	 * 	 * Functions to execute on the register_deactivation_hook
 	 * 	 * ref: https://codex.wordpress.org/Function_Reference/register_deactivation_hook
-	 *
-	 * @return void
 	 */
 	public function on_deactivation(): void {
 		if ( $this->logger->isInfo() ) {
@@ -239,8 +231,6 @@ class Postman {
 
 	/**
 	 * 	 * If the user is on the WordPress Admin page, creates the Admin screens
-	 *
-	 * @return void
 	 */
 	public function setup_admin(): void {
 		$this->logger->debug( 'Admin start-up sequence' );
@@ -272,8 +262,6 @@ class Postman {
 
 	/**
 	 * 	 * Check for configuration errors and displays messages to the user
-	 *
-	 * @return void
 	 */
 	public function check_for_configuration_errors(): void {
 		$options = PostmanOptions::getInstance();
@@ -386,8 +374,6 @@ class Postman {
 	 * 	 * This is the general message that Postman requires configuration, to warn users who think
 	 * 	 * the plugin is ready-to-go as soon as it is activated.
 	 * 	 * This message only goes away once the plugin is configured.
-	 *
-	 * @return void
 	 */
 	public function display_configuration_required_warning(): void {
 		if ( PostmanUtils::isAdmin() ) {
@@ -418,8 +404,6 @@ class Postman {
 	 * 	 * The Gmail API used to be a separate plugin which was registered when that plugin
 	 * 	 * was loaded. But now both the SMTP, Gmail API and other transports are registered here.
 	 * 	 *
-	 *
-	 * @return void
 	 */
 	private function registerTransports( $rootPluginFilenameAndPath ): void {
 	    $postman_transport_registry = PostmanTransportRegistry::getInstance();
@@ -438,8 +422,6 @@ class Postman {
 	 * 	 * Print the Postman signature on the bottom of the page
 	 * 	 *
 	 * 	 * http://striderweb.com/nerdaphernalia/2008/06/give-your-wordpress-plugin-credit/
-	 *
-	 * @return void
 	 */
 	function print_signature(): void {
 		printf( '<a href="https://wordpress.org/plugins/post-smtp/">%s</a> %s<br/>', $this->pluginData ['name'], $this->pluginData ['version'] );
@@ -447,8 +429,6 @@ class Postman {
 
 	/**
 	 * 	 * Loads the appropriate language file
-	 *
-	 * @return void
 	 */
 	private function loadTextDomain(): void {
 		// had to hardcode the third parameter, Relative path to WP_PLUGIN_DIR,

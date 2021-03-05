@@ -190,8 +190,6 @@ if ( ! class_exists( 'PostmanZendMailEngine' ) ) {
 		/**
 		 * Get the sender from PostmanMessage and add it to the Zend_Mail object
 		 *
-		 * @param PostmanMessage    $message
-		 * @param Zend_Mail $mail
 		 * @return PostmanEmailAddress
 		 */
 		public function addFrom( PostmanMessage $message, Zend_Mail $mail ) {

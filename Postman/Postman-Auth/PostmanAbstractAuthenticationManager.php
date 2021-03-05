@@ -72,8 +72,6 @@ if (! class_exists ( "PostmanAbstractAuthenticationManager" )) {
 		 * @param mixed $response        	
 		 *
 		 * @throws Exception
-		 *
-		 * @return void
 		 */
 		protected function processResponse($response): void {
 			$authToken = json_decode ( stripslashes ( $response ) );
@@ -99,10 +97,8 @@ if (! class_exists ( "PostmanAbstractAuthenticationManager" )) {
 		/**
 		 * Parses the authorization token and extracts the expiry time, accessToken,
 		 * and if this is a first-time authorization, a refresh token.
-		 * 
-		 * This code is identical for Google and Hotmail
 		 *
-		 * @return void
+		 * This code is identical for Google and Hotmail
 		 */
 		protected function decodeReceivedAuthorizationToken($newtoken): void {
 			assert ( ! empty ( $newtoken ) );

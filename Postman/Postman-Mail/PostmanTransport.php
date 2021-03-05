@@ -153,9 +153,6 @@ abstract class PostmanAbstractModuleTransport implements PostmanModuleTransport 
 		return array ();
 	}
 	
-	/**
-	 * @return void
-	 */
 	protected function setNotConfiguredAndReady(): void {
 		$this->configuredAndReady = false;
 	}
@@ -486,9 +483,6 @@ abstract class PostmanAbstractZendModuleTransport extends PostmanAbstractModuleT
 		return $this->isEmailValidationSupported ();
 	}
 	
-	/**
-	 * @return void
-	 */
 	protected function setReadyForOAuthGrant(): void {
 		$this->readyForOAuthGrant = true;
 	}

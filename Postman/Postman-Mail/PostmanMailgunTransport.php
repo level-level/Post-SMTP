@@ -168,8 +168,6 @@ class PostmanMailgunTransport extends PostmanAbstractModuleTransport implements 
 	 * 	 *
 	 * 	 * "Runs at the beginning of every admin page before the page is rendered."
 	 * 	 * ref: http://codex.wordpress.org/Plugin_API/Action_Reference#Actions_Run_During_an_Admin_Page_Request
-	 *
-	 * @return void
 	 */
 	public function on_admin_init(): void {
 		// only administrators should be able to trigger this
@@ -179,13 +177,6 @@ class PostmanMailgunTransport extends PostmanAbstractModuleTransport implements 
 		}
 	}
 
-	/*
-	 * What follows in the code responsible for creating the Admin Settings page
-	 */
-
-	/**
-	 * @return void
-	 */
 	public function addSettings(): void {
 		// the Mailgun Auth section
 		add_settings_section( PostmanMailgunTransport::MAILGUN_AUTH_SECTION, __( 'Authentication', 'post-smtp' ), function () : void {
@@ -209,9 +200,6 @@ class PostmanMailgunTransport extends PostmanAbstractModuleTransport implements 
 		printf( '<p id="wizard_mailgun_auth_help">%s</p>', sprintf( __( 'Create an account at <a href="%1$s" target="_blank">%2$s</a> and enter <a href="%3$s" target="_blank">an API key</a> below.', 'post-smtp' ), 'https://mailgun.com', 'mailgun.com', 'https://app.mailgun.com/app/domains/' ) );
 	}
 
-	/**
-	 * @return void
-	 */
 	public function mailgun_api_key_callback(): void {
 		printf( '<input type="password" autocomplete="off" id="mailgun_api_key" name="postman_options[mailgun_api_key]" value="%s" size="60" class="required" placeholder="%s"/>', null !== $this->options->getMailgunApiKey() ? esc_attr( PostmanUtils::obfuscatePassword( $this->options->getMailgunApiKey() ) ) : '', __( 'Required', 'post-smtp' ) );
 		print '<input type="button" id="toggleMailgunApiKey" value="Show Password" class="button button-secondary" style="visibility:hidden" />';
@@ -226,9 +214,6 @@ class PostmanMailgunTransport extends PostmanAbstractModuleTransport implements 
 		printf( '<input type="checkbox" id="mailgun_region" name="postman_options[mailgun_region]"%s />', null !== $value ? ' checked' : '' );
 	}
 
-	/**
-	 * @return void
-	 */
 	public function registerStylesAndScripts(): void {
 		// register the stylesheet and javascript external resources
 		$pluginData = apply_filters( 'postman_get_plugin_metadata', null );

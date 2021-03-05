@@ -300,8 +300,6 @@ class PostmanSmtpModuleTransport extends PostmanAbstractZendModuleTransport impl
 	 * 	 *
 	 * 	 * "Runs at the beginning of every admin page before the page is rendered."
 	 * 	 * ref: http://codex.wordpress.org/Plugin_API/Action_Reference#Actions_Run_During_an_Admin_Page_Request
-	 *
-	 * @return void
 	 */
 	public function on_admin_init(): void {
 		// only administrators should be able to trigger this
@@ -311,9 +309,6 @@ class PostmanSmtpModuleTransport extends PostmanAbstractZendModuleTransport impl
 		}
 	}
 
-	/**
-	 * @return void
-	 */
 	public function registerStylesAndScripts(): void {
 		// register the stylesheet and javascript external resources
 		$pluginData = apply_filters( 'postman_get_plugin_metadata', null );
@@ -334,9 +329,6 @@ class PostmanSmtpModuleTransport extends PostmanAbstractZendModuleTransport impl
 		wp_enqueue_script( 'postman_smtp_script' );
 	}
 
-	/**
-	 * @return void
-	 */
 	public function addSettings(): void {
 		$transport = $this;
 		$this->options = $this->options;
@@ -403,8 +395,6 @@ class PostmanSmtpModuleTransport extends PostmanAbstractZendModuleTransport impl
 
 	/**
 	 * 	 * Print the Section text
-	 *
-	 * @return void
 	 */
 	public function printSmtpSectionInfo(): void {
 		print __( 'Configure the communication with the mail server.', 'post-smtp' );
@@ -412,8 +402,6 @@ class PostmanSmtpModuleTransport extends PostmanAbstractZendModuleTransport impl
 
 	/**
 	 * 	 * Get the settings option array and print one of its values
-	 *
-	 * @return void
 	 */
 	public function hostname_callback(): void {
 		printf( '<input type="text" id="input_hostname" name="postman_options[hostname]" value="%s" size="40" class="required" placeholder="%s"/>', null !== $this->options->getHostname() ? esc_attr( $this->options->getHostname() ) : '', __( 'Required', 'post-smtp' ) );
@@ -421,8 +409,6 @@ class PostmanSmtpModuleTransport extends PostmanAbstractZendModuleTransport impl
 
 	/**
 	 * 	 * Get the settings option array and print one of its values
-	 *
-	 * @return void
 	 */
 	public function port_callback( $args ): void {
 		printf( '<input type="text" id="input_port" name="postman_options[port]" value="%s" %s placeholder="%s"/>', null !== $this->options->getPort() ? esc_attr( $this->options->getPort() ) : '', isset( $args ['style'] ) ? $args ['style'] : '', __( 'Required', 'post-smtp' ) );
@@ -430,8 +416,6 @@ class PostmanSmtpModuleTransport extends PostmanAbstractZendModuleTransport impl
 
 	/**
 	 * 	 * Get the settings option array and print one of its values
-	 *
-	 * @return void
 	 */
 	public function encryption_type_callback(): void {
 		$encType = $this->options->getEncryptionType();
@@ -444,8 +428,6 @@ class PostmanSmtpModuleTransport extends PostmanAbstractZendModuleTransport impl
 
 	/**
 	 * 	 * Get the settings option array and print one of its values
-	 *
-	 * @return void
 	 */
 	public function authentication_type_callback(): void {
 		$authType = $this->options->getAuthenticationType();
@@ -460,8 +442,6 @@ class PostmanSmtpModuleTransport extends PostmanAbstractZendModuleTransport impl
 
 	/**
 	 * 	 * Print the Section text
-	 *
-	 * @return void
 	 */
 	public function printBasicAuthSectionInfo(): void {
 		print __( 'Enter the account credentials.', 'post-smtp' );
@@ -469,8 +449,6 @@ class PostmanSmtpModuleTransport extends PostmanAbstractZendModuleTransport impl
 
 	/**
 	 * 	 * Get the settings option array and print one of its values
-	 *
-	 * @return void
 	 */
 	public function basic_auth_username_callback(): void {
 		$inputValue = (null !== $this->options->getUsername() ? esc_attr( $this->options->getUsername() ) : '');
@@ -481,8 +459,6 @@ class PostmanSmtpModuleTransport extends PostmanAbstractZendModuleTransport impl
 
 	/**
 	 * 	 * Get the settings option array and print one of its values
-	 *
-	 * @return void
 	 */
 	public function basic_auth_password_callback(): void {
 		print ('<input tabindex="99" id="fake_password" name="fake[password]" style="position:absolute; top:-500px;" type="password" value="Safari Autofill Me">') ;
@@ -492,8 +468,6 @@ class PostmanSmtpModuleTransport extends PostmanAbstractZendModuleTransport impl
 
 	/**
 	 * 	 * Get the settings option array and print one of its values
-	 *
-	 * @return void
 	 */
 	public function oauth_client_id_callback(): void {
 		printf( '<input type="text" onClick="this.setSelectionRange(0, this.value.length)" id="oauth_client_id" name="postman_options[oauth_client_id]" value="%s" size="60" class="required" placeholder="%s"/>', null !== $this->options->getClientId() ? esc_attr( $this->options->getClientId() ) : '', __( 'Required', 'post-smtp' ) );
@@ -501,8 +475,6 @@ class PostmanSmtpModuleTransport extends PostmanAbstractZendModuleTransport impl
 
 	/**
 	 * 	 * Get the settings option array and print one of its values
-	 *
-	 * @return void
 	 */
 	public function oauth_client_secret_callback(): void {
 		printf( '<input type="text" onClick="this.setSelectionRange(0, this.value.length)" autocomplete="off" id="oauth_client_secret" name="postman_options[oauth_client_secret]" value="%s" size="60" class="required" placeholder="%s"/>', null !== $this->options->getClientSecret() ? esc_attr( $this->options->getClientSecret() ) : '', __( 'Required', 'post-smtp' ) );
@@ -510,8 +482,6 @@ class PostmanSmtpModuleTransport extends PostmanAbstractZendModuleTransport impl
 
 	/**
 	 * 	 * Print the Section text
-	 *
-	 * @return void
 	 */
 	public function printOAuthSectionInfo(): void {
 		$this->options = $this->options;
@@ -522,8 +492,6 @@ class PostmanSmtpModuleTransport extends PostmanAbstractZendModuleTransport impl
 
 	/**
 	 * 	 * Get the settings option array and print one of its values
-	 *
-	 * @return void
 	 */
 	public function callback_domain_callback(): void {
 		printf( '<input type="text" onClick="this.setSelectionRange(0, this.value.length)" readonly="readonly" id="input_oauth_callback_domain" value="%s" size="60"/>', $this->getCallbackDomain() );
@@ -544,8 +512,6 @@ class PostmanSmtpModuleTransport extends PostmanAbstractZendModuleTransport impl
 
 	/**
 	 * 	 * Get the settings option array and print one of its values
-	 *
-	 * @return void
 	 */
 	public function redirect_url_callback(): void {
 		$this->options = $this->options;
@@ -556,8 +522,6 @@ class PostmanSmtpModuleTransport extends PostmanAbstractZendModuleTransport impl
 
 	/**
 	 * 	 * Get the settings option array and print one of its values
-	 *
-	 * @return void
 	 */
 	public function sender_email_callback(): void {
 		$inputValue = (null !== $this->options->getEnvelopeSender() ? esc_attr( $this->options->getEnvelopeSender() ) : '');

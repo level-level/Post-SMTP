@@ -42,8 +42,6 @@ class PostmanSendTestEmailController {
 	 * 	 *
 	 * 	 * "Typically used by plugins to initialize. The current user is already authenticated by this time."
 	 * 	 * ref: http://codex.wordpress.org/Plugin_API/Action_Reference#Actions_Run_During_a_Typical_Request
-	 *
-	 * @return void
 	 */
 	public function on_init(): void {
 		// register Ajax handlers
@@ -52,8 +50,6 @@ class PostmanSendTestEmailController {
 
 	/**
 	 * 	 * Fires on the admin_init method
-	 *
-	 * @return void
 	 */
 	public function on_admin_init(): void {
 				$this->registerStylesAndScripts();
@@ -70,8 +66,6 @@ class PostmanSendTestEmailController {
 
 	/**
 	 * 	 * Register and add settings
-	 *
-	 * @return void
 	 */
 	private function registerStylesAndScripts(): void {
 		if ( $this->logger->isTrace() ) {
@@ -97,8 +91,6 @@ class PostmanSendTestEmailController {
 
 	/**
 	 * 	 * Register the Email Test screen
-	 *
-	 * @return void
 	 */
 	public function addEmailTestSubmenu(): void {
 		$page = add_submenu_page( PostmanViewController::POSTMAN_MENU_SLUG, sprintf( __( '%s Setup', 'post-smtp' ), __( 'Postman SMTP', 'post-smtp' ) ), __( 'Email test', 'post-smtp' ), Postman::MANAGE_POSTMAN_CAPABILITY_NAME, PostmanSendTestEmailController::EMAIL_TEST_SLUG, function () : void {
@@ -110,9 +102,6 @@ class PostmanSendTestEmailController {
 		} );
 	}
 
-	/**
-	 * @return void
-	 */
 	function enqueueEmailTestResources(): void {
 		wp_enqueue_style( PostmanViewController::POSTMAN_STYLE );
 		wp_enqueue_style( 'postman_send_test_email' );
@@ -127,9 +116,6 @@ class PostmanSendTestEmailController {
 		) );
 	}
 
-	/**
-	 * @return void
-	 */
 	public function outputTestEmailContent(): void {
 		print '<div class="wrap">';
 
@@ -203,8 +189,6 @@ class PostmanSendTestEmailAjaxController extends PostmanAbstractAjaxHandler {
 
 	/**
 	 * 	 * This Ajax sends a test email
-	 *
-	 * @return void
 	 */
 	function sendTestEmailViaAjax(): void {
 		// get the email address of the recipient from the HTTP Request

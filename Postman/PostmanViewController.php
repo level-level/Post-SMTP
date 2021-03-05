@@ -19,10 +19,6 @@ if ( ! class_exists( 'PostmanViewController' ) ) {
 
 		/**
 		 * Constructor
-		 *
-		 * @param PostmanOptions          $options
-		 * @param PostmanOAuthToken       $authorizationToken
-		 * @param PostmanConfigTextHelper $oauthScribe
 		 */
 		function __construct( $rootPluginFilenameAndPath, PostmanOptions $options, PostmanOAuthToken $authorizationToken, PostmanConfigTextHelper $oauthScribe, PostmanAdminController $adminController ) {
 			$this->options = $options;
@@ -113,8 +109,6 @@ if ( ! class_exists( 'PostmanViewController' ) ) {
 
 		/**
 		 * 		 * Add options page
-		 *
-		 * @return void
 		 */
 		public function generateDefaultContent(): void {
 			// This page will be under "Settings"
@@ -137,8 +131,6 @@ if ( ! class_exists( 'PostmanViewController' ) ) {
 
 		/**
 		 * 		 * Register the Email Test screen
-		 *
-		 * @return void
 		 */
 		public function addPurgeDataSubmenu(): void {
 			$page = add_submenu_page( self::POSTMAN_MENU_SLUG, sprintf( __( '%s Setup', 'post-smtp' ), __( 'Post SMTP', 'post-smtp' ) ), __( 'Import/Export/Reset', 'post-smtp' ), Postman::MANAGE_POSTMAN_CAPABILITY_NAME, PostmanAdminController::MANAGE_OPTIONS_PAGE_SLUG, function () : void {
@@ -152,8 +144,6 @@ if ( ! class_exists( 'PostmanViewController' ) ) {
 
 		/**
 		 * 		 * Register and add settings
-		 *
-		 * @return void
 		 */
 		public function registerStylesAndScripts(): void {
 			if ( $this->logger->isTrace() ) {
@@ -203,8 +193,6 @@ if ( ! class_exists( 'PostmanViewController' ) ) {
 
 		/**
 		 * 		 * Options page callback
-		 *
-		 * @return void
 		 */
 		public function outputDefaultContent(): void {
 			// Set class property
@@ -255,9 +243,6 @@ if ( ! class_exists( 'PostmanViewController' ) ) {
             );
 		}
 
-		/**
-		 * @return void
-		 */
 		private function printDeliveryDetails(): void {
 			$currentTransport = PostmanTransportRegistry::getInstance()->getActiveTransport();
 			$deliveryDetails = $currentTransport->getDeliveryDetails( $this->options );
@@ -269,8 +254,6 @@ if ( ! class_exists( 'PostmanViewController' ) ) {
 		 *
 		 * @param mixed $title
 		 * @param string  $slug
-		 *
-		 * @return void
 		 */
 		public static function outputChildPageHeader( $title, $slug = '' ): void {
 			printf( '<h2>%s</h2>', sprintf( __( '%s Setup', 'post-smtp' ), __( 'Post SMTP', 'post-smtp' ) ) );
@@ -284,9 +267,6 @@ if ( ! class_exists( 'PostmanViewController' ) ) {
 			print '</div></div></div>';
 		}
 
-		/**
-		 * @return void
-		 */
 		public function outputPurgeDataContent(): void {
 			$importTitle = __( 'Import', 'post-smtp' );
 			$exportTile = __( 'Export', 'post-smtp' );
@@ -342,9 +322,6 @@ if ( ! class_exists( 'PostmanViewController' ) ) {
 			print '</div>';
 		}
 
-		/**
-		 * @return void
-		 */
 		private function displayTopNavigation(): void {
 			$version = PostmanState::getInstance()->getVersion();
 			$show = get_option('postman_release_version' );

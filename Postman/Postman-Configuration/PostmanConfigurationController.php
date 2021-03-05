@@ -47,8 +47,6 @@ class PostmanConfigurationController {
 	 * 	 *
 	 * 	 * "Typically used by plugins to initialize. The current user is already authenticated by this time."
 	 * 	 * ref: http://codex.wordpress.org/Plugin_API/Action_Reference#Actions_Run_During_a_Typical_Request
-	 *
-	 * @return void
 	 */
 	public function on_init(): void {
 		// register Ajax handlers
@@ -59,8 +57,6 @@ class PostmanConfigurationController {
 
 	/**
 	 * 	 * Fires on the admin_init method
-	 *
-	 * @return void
 	 */
 	public function on_admin_init(): void {
 				$this->registerStylesAndScripts();
@@ -69,8 +65,6 @@ class PostmanConfigurationController {
 
 	/**
 	 * 	 * Register and add settings
-	 *
-	 * @return void
 	 */
 	private function registerStylesAndScripts(): void {
 		if ( $this->logger->isTrace() ) {
@@ -92,9 +86,6 @@ class PostmanConfigurationController {
 		), $pluginData ['version'] );
 	}
 
-	/**
-	 * @return void
-	 */
 	private function addLocalizeScriptsToPage(): void {
 		$warning = __( 'Warning', 'post-smtp' );
 		// user input
@@ -123,8 +114,6 @@ class PostmanConfigurationController {
 
 	/**
 	 * 	 * Register the Configuration screen
-	 *
-	 * @return void
 	 */
 	public function addConfigurationSubmenu(): void {
 		$page = add_submenu_page( PostmanViewController::POSTMAN_MENU_SLUG, sprintf( __( '%s Setup', 'post-smtp' ), __( 'Postman SMTP', 'post-smtp' ) ), __( 'Configuration', 'post-smtp' ), Postman::MANAGE_POSTMAN_CAPABILITY_NAME, PostmanConfigurationController::CONFIGURATION_SLUG, function () : void {
@@ -137,9 +126,6 @@ class PostmanConfigurationController {
 		} );
 	}
 
-	/**
-	 * @return void
-	 */
 	function enqueueConfigurationResources(): void {
 		$this->addLocalizeScriptsToPage();
 		wp_enqueue_style( PostmanViewController::POSTMAN_STYLE );
@@ -148,8 +134,6 @@ class PostmanConfigurationController {
 
 	/**
 	 * 	 * Register the Setup Wizard screen
-	 *
-	 * @return void
 	 */
 	public function addSetupWizardSubmenu(): void {
 		$page = add_submenu_page( PostmanViewController::POSTMAN_MENU_SLUG, sprintf( __( '%s Setup', 'post-smtp' ), __( 'Postman SMTP', 'post-smtp' ) ), __( 'Setup wizard', 'post-smtp' ), Postman::MANAGE_POSTMAN_CAPABILITY_NAME, PostmanConfigurationController::CONFIGURATION_WIZARD_SLUG, function () : void {
@@ -161,9 +145,6 @@ class PostmanConfigurationController {
 		} );
 	}
 
-	/**
-	 * @return void
-	 */
 	function enqueueWizardResources(): void {
 		$this->addLocalizeScriptsToPage();
 		$this->importableConfiguration = new PostmanImportableConfiguration();
@@ -183,9 +164,6 @@ class PostmanConfigurationController {
 		}
 	}
 
-	/**
-	 * @return void
-	 */
 	public function outputManualConfigurationContent(): void {
 		print '<div class="wrap">';
 
@@ -393,9 +371,6 @@ class PostmanConfigurationController {
 		print '</div>';
 	}
 
-	/**
-	 * @return void
-	 */
 	public function outputWizardContent(): void {
 		// Set default values for input fields
 		$this->options->setMessageSenderEmailIfEmpty( wp_get_current_user()->user_email );
@@ -611,8 +586,6 @@ class PostmanGetHostnameByEmailAjaxController extends PostmanAbstractAjaxHandler
 	}
 	/**
 	 * 	 * This Ajax function retrieves the smtp hostname for a give e-mail address
-	 *
-	 * @return void
 	 */
 	function getAjaxHostnameByEmail(): void {
 		$goDaddyHostDetected = $this->getBooleanRequestParameter( 'go_daddy' );
@@ -648,8 +621,6 @@ class PostmanManageConfigurationAjaxHandler extends PostmanAbstractAjaxHandler {
 	 * 	 *
 	 *
 	 * @throws Exception
-	 *
-	 * @return void
 	 */
 	function getManualConfigurationViaAjax(): void {
 		$queryTransportType = $this->getTransportTypeFromRequest();
@@ -680,8 +651,6 @@ class PostmanManageConfigurationAjaxHandler extends PostmanAbstractAjaxHandler {
 	 * 	 * Once the Port Tests have run, the results are analyzed.
 	 * 	 * The Transport place bids on the sockets and highest bid becomes the recommended
 	 * 	 * The UI response is built so the user may choose a different socket with different options.
-	 *
-	 * @return void
 	 */
 	function getWizardConfigurationViaAjax(): void {
 		$this->logger->debug( 'in getWizardConfiguration' );
@@ -770,7 +739,6 @@ class PostmanManageConfigurationAjaxHandler extends PostmanAbstractAjaxHandler {
 
 	/**
 	 *
-	 * @param PostmanWizardSocket $socket
 	 * @param mixed       $userSocketOverride
 	 * @param mixed       $userAuthOverride
 	 * @param mixed       $originalSmtpServer
@@ -803,9 +771,7 @@ class PostmanManageConfigurationAjaxHandler extends PostmanAbstractAjaxHandler {
 	/**
 	 * @param PostmanWizardSocket[] $sockets
 	 *
-	 * @return array
 	 *
-	 * @psalm-return list<mixed>
 	 */
 	private function createOverrideMenus( array $sockets, $winningRecommendation, $userSocketOverride, $userAuthOverride ): array {
 		$overrideMenu = array();
@@ -828,7 +794,6 @@ class PostmanManageConfigurationAjaxHandler extends PostmanAbstractAjaxHandler {
 
 	/**
 	 *
-	 * @param PostmanWizardSocket $socket
 	 * @param mixed             $winningRecommendation
 	 * @param mixed             $userSocketOverride
 	 * @param mixed             $userAuthOverride
@@ -882,8 +847,6 @@ class PostmanImportConfigurationAjaxController extends PostmanAbstractAjaxHandle
 	private $options;
 	/**
 	 * Constructor
-	 *
-	 * @param PostmanOptions $options
 	 */
 	function __construct( PostmanOptions $options ) {
 		parent::__construct();
@@ -894,8 +857,6 @@ class PostmanImportConfigurationAjaxController extends PostmanAbstractAjaxHandle
 	/**
 	 * 	 * This function extracts configuration details form a competing SMTP plugin
 	 * 	 * and pushes them into the Postman configuration screen.
-	 *
-	 * @return void
 	 */
 	function getConfigurationFromExternalPluginViaAjax(): void {
 		$importableConfiguration = new PostmanImportableConfiguration();

@@ -16,7 +16,6 @@ if (! class_exists ( 'PostmanAbstractAjaxHandler' )) {
 		 * @param mixed $actionName        	
 		 * @param mixed $callbackName        	
 		 *
-		 * @return void
 		 */
 		protected function registerAjaxHandler($actionName, $class, $callbackName): void {
 			if (is_admin ()) {

@@ -130,8 +130,6 @@ if ( ! class_exists( 'PostmanInputSanitizer' ) ) {
 		 * @param mixed $key
 		 * @param mixed $input
 		 * @param mixed $new_input
-		 *
-		 * @return void
 		 */
 		private function sanitizePassword( $desc, $key, $input, &$new_input, $existingPassword ): void {
 			// WordPress calling Sanitize twice is a known issue

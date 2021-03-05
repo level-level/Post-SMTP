@@ -41,8 +41,6 @@ class PostmanConnectivityTestController {
 	 * 	 *
 	 * 	 * "Typically used by plugins to initialize. The current user is already authenticated by this time."
 	 * 	 * ref: http://codex.wordpress.org/Plugin_API/Action_Reference#Actions_Run_During_a_Typical_Request
-	 *
-	 * @return void
 	 */
 	public function on_init(): void {
 		// register Ajax handlers
@@ -51,8 +49,6 @@ class PostmanConnectivityTestController {
 
 	/**
 	 * 	 * Fires on the admin_init method
-	 *
-	 * @return void
 	 */
 	public function on_admin_init(): void {
 				$this->registerStylesAndScripts();
@@ -60,8 +56,6 @@ class PostmanConnectivityTestController {
 
 	/**
 	 * 	 * Register and add settings
-	 *
-	 * @return void
 	 */
 	private function registerStylesAndScripts(): void {
 		if ( $this->logger->isTrace() ) {
@@ -77,8 +71,6 @@ class PostmanConnectivityTestController {
 
 	/**
 	 * 	 * Register the Email Test screen
-	 *
-	 * @return void
 	 */
 	public function addPortTestSubmenu(): void {
 		$page = add_submenu_page( PostmanViewController::POSTMAN_MENU_SLUG, sprintf( __( '%s Setup', 'post-smtp' ), __( 'Postman SMTP', 'post-smtp' ) ), __( 'Connectivity test', 'post-smtp' ), Postman::MANAGE_POSTMAN_CAPABILITY_NAME, PostmanConnectivityTestController::PORT_TEST_SLUG, function () : void {
@@ -90,9 +82,6 @@ class PostmanConnectivityTestController {
 		} );
 	}
 
-	/**
-	 * @return void
-	 */
 	function enqueuePortTestResources(): void {
 		wp_enqueue_style( PostmanViewController::POSTMAN_STYLE );
 		wp_enqueue_script( 'postman_port_test_script' );
@@ -121,8 +110,6 @@ class PostmanConnectivityTestController {
 
 	/**
 	 * 	 * Get the settings option array and print one of its values
-	 *
-	 * @return void
 	 */
 	public function port_test_hostname_callback(): void {
 		$hostname = PostmanTransportRegistry::getInstance()->getSelectedTransport()->getHostname();
@@ -132,9 +119,6 @@ class PostmanConnectivityTestController {
 		printf( '<input type="text" id="input_hostname" name="postman_options[hostname]" value="%s" size="40" class="required"/>', $hostname );
 	}
 
-	/**
-	 * @return void
-	 */
 	public function outputPortTestContent(): void {
 		print '<div class="wrap">';
 
@@ -207,8 +191,6 @@ class PostmanPortTestAjaxController {
 	 * 	 *
 	 * 	 * Given a single outgoing smtp server hostname, return an array of host/port
 	 * 	 * combinations to run the connectivity test on
-	 *
-	 * @return void
 	 */
 	function getPortsToTestViaAjax(): void {
 		$queryHostname = PostmanUtils::getRequestParameter( 'hostname' );
@@ -226,8 +208,6 @@ class PostmanPortTestAjaxController {
 
 	/**
 	 * 	 * This Ajax function retrieves whether a TCP port is open or not
-	 *
-	 * @return void
 	 */
 	function runPortQuizTest(): void {
 		$hostname = 'portquiz.net';
@@ -241,8 +221,6 @@ class PostmanPortTestAjaxController {
 	/**
 	 * 	 * This Ajax function retrieves whether a TCP port is open or not.
 	 * 	 * This is called by both the Wizard and Port Test
-	 *
-	 * @return void
 	 */
 	function runSmtpTest(): void {
 		$hostname = trim( PostmanUtils::getRequestParameter( 'hostname' ) );
@@ -266,8 +244,6 @@ class PostmanPortTestAjaxController {
 	}
 	/**
 	 * 	 * This Ajax function retrieves whether a TCP port is open or not
-	 *
-	 * @return void
 	 */
 	function runSmtpsTest(): void {
 		$hostname = trim( PostmanUtils::getRequestParameter( 'hostname' ) );
@@ -286,8 +262,6 @@ class PostmanPortTestAjaxController {
 	 * @param mixed $hostname
 	 * @param mixed $port
 	 * @param mixed $success
-	 *
-	 * @return void
 	 */
 	private function buildResponse( $hostname, $port, PostmanPortTest $portTest, $success, string $transport = '' ): void {
 		$this->logger->debug( sprintf( 'testing port result for %s:%s success=%s', $hostname, $port, $success ) );

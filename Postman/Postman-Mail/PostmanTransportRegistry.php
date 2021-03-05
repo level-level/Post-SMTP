@@ -45,7 +45,6 @@ class PostmanTransportRegistry {
 	/**
 	 * A short-hand way of showing the complete delivery method
 	 *
-	 * @param PostmanModuleTransport $transport
 	 * @return string
 	 */
 	public function getPublicTransportUri( PostmanModuleTransport $transport ) {
@@ -57,8 +56,6 @@ class PostmanTransportRegistry {
 	 * 	 *
 	 *
 	 * @param mixed $slug
-	 *
-	 * @return bool
 	 */
 	public function isRegistered( $slug ): bool {
 		$transports = $this->getTransports();
@@ -119,7 +116,6 @@ class PostmanTransportRegistry {
 	 * 2. the transport is properly configured
 	 * 3. we have a valid Client ID and Client Secret without an Auth Token
 	 *
-	 * @param PostmanOptions $options
 	 * @return boolean
 	 */
 	public function isRequestOAuthPermissionAllowed( PostmanOptions $options, PostmanOAuthToken $authToken ) {
@@ -140,8 +136,6 @@ class PostmanTransportRegistry {
 	 *
 	 * @param mixed $hostname
 	 * @param mixed $smtpServerGuess
-	 *
-	 * @return array
 	 */
 	public function getSocketsForSetupWizardToProbe( $hostname = 'localhost', $smtpServerGuess = null ): array {
 		$hosts = array();
@@ -186,7 +180,6 @@ class PostmanTransportRegistry {
 
 	/**
 	 *
-	 * @param PostmanWizardSocket $hostData
 	 * @param mixed             $userAuthOverride
 	 * @return NULL
 	 */
