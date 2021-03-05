@@ -123,7 +123,7 @@ abstract class PostmanAbstractModuleTransport implements PostmanModuleTransport 
 	 *
 	 * @return (false|mixed|string)[]
 	 *
-	 * @psalm-return array{host: mixed, port: mixed, id: string, transport_id: mixed, transport_name: mixed, smtp: false}
+	 * @psalm-return array{host: mixed, port: mixed, id: string, transport_id: mixed, transport_name: mixed, smtp: bool}
 	 * @param string $hostname
 	 * @param int $port
 	 */

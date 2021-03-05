@@ -79,9 +79,7 @@ if (! class_exists ( 'PostmanAbstractPluginOptions' )) {
 		public function __construct() {
 			$this->logger = new PostmanLogger ( get_class ( $this ) );
 		}
-		/**
-		 * @return true
-		 */
+		
 		public function isValid(): bool {
 			$valid = true;
 			$host = $this->getHostname ();
@@ -109,7 +107,7 @@ if (! class_exists ( 'PostmanAbstractPluginOptions' )) {
 				$valid &= ! empty ( $password );
 			}
 			$this->logger->trace ( 'user/pass ok ' . $valid );
-			return $valid;
+			return (bool) $valid;
 		}
 		public function isImportable() {
 			return $this->isValid ();
