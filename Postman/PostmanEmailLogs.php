@@ -21,8 +21,6 @@ class PostmanEmailLogs {
         'session_transcript'
     );
 
-    private static $instance;
-
     /**
      * @return array[]
      *

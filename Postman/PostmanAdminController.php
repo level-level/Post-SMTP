@@ -53,7 +53,7 @@ if ( ! class_exists( 'PostmanAdminController' ) ) {
 		private $rootPluginFilenameAndPath;
 		private $options;
 		private $authorizationToken;
-		private $importableConfiguration;
+
 
 		// helpers
 		private $messageHandler;

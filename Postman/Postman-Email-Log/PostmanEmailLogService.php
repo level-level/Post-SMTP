@@ -39,7 +39,7 @@ if ( ! class_exists( 'PostmanEmailLogService' ) ) {
 
 		// member variables
 		private $logger;
-		private $inst;
+
 
 		/**
 		 * Constructor

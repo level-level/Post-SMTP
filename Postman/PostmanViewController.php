@@ -6,7 +6,7 @@ if ( ! class_exists( 'PostmanViewController' ) ) {
 		private $options;
 		private $authorizationToken;
 		private $oauthScribe;
-		private $importableConfiguration;
+
 		private $adminController;
 		const POSTMAN_MENU_SLUG = 'postman';
 

@@ -10,8 +10,6 @@
 class PostmanInstaller {
 	private $logger;
 
-	private $roles;
-
 	/**
 	 */
 	public function __construct() {
