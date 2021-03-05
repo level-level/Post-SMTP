@@ -101,7 +101,7 @@ class PostmanConnectivityTestController {
 		wp_enqueue_style( PostmanViewController::POSTMAN_STYLE );
 		wp_enqueue_script( 'postman_port_test_script' );
 		$warning = __( 'Warning', 'post-smtp' );
-		wp_localize_script( PostmanViewController::POSTMAN_SCRIPT, 'postman_hostname_element_name', '#input_' . PostmanOptions::HOSTNAME );
+		wp_localize_script( PostmanViewController::POSTMAN_SCRIPT, 'postman_data',array('host_element_name' => '#input_' . PostmanOptions::HOSTNAME ));
 		PostmanConnectivityTestController::addLocalizeScriptForPortTest();
 	}
 	static function addLocalizeScriptForPortTest(): void {
@@ -316,7 +316,7 @@ class PostmanPortTestAjaxController {
 				'transport' => $transport,
 		);
 		$this->logger->trace( 'Ajax response:' );
-		$this->logger->trace( $response );
+		$this->logger->trace( json_encode($response) );
 		if ( $success ) {
 			wp_send_json_success( $response );
 		} else {

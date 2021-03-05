@@ -234,7 +234,7 @@ class PostmanGetDiagnosticsViaAjax {
 		$this->addToDiagnostics( 'cURL Version', $curl['version'] );
 		$this->addToDiagnostics( 'OpenSSL Version', $curl['ssl_version'] );
 		$this->addToDiagnostics( 'OS', php_uname() );
-		$this->addToDiagnostics( 'PHP', PHP_OS . ' ' . PHP_VERSION . ' ' . setlocale( LC_CTYPE, 0 ) );
+		$this->addToDiagnostics( 'PHP', PHP_OS . ' ' . PHP_VERSION . ' ' . setlocale( LC_CTYPE, "0" ) );
 		$this->addToDiagnostics( 'PHP Dependencies', $this->getPhpDependencies() );
 		$this->addToDiagnostics( 'WordPress', (is_multisite() ? 'Multisite ' : '') . get_bloginfo( 'version' ) . ' ' . get_locale() . ' ' . get_bloginfo( 'charset', 'display' ) );
 		$this->addToDiagnostics( 'WordPress Theme', wp_get_theme() );

@@ -61,7 +61,7 @@ function checkEmail(goDaddyHostDetected, email) {
 					smtpDiscovery = response.data;
 					if (response.data.hostname != null
 							&& response.data.hostname) {
-						jQuery(postman_hostname_element_name).val(
+						jQuery(postman_data.host_element_name).val(
 								response.data.hostname);
 					}
 					enableSmtpHostnameInput(goDaddyHostDetected);
@@ -201,7 +201,7 @@ function handleStepChange(event, currentIndex, newIndex, form) {
 		portsToCheck = 0;
 		totalAvail = 0;
 
-		getHostsToCheck(jQuery(postman_hostname_element_name).val());
+		getHostsToCheck(jQuery(postman_data.host_element_name).val());
 
 	} else if (currentIndex === 3) {
 
@@ -218,7 +218,7 @@ function handleStepChange(event, currentIndex, newIndex, form) {
 			return false;
 		}
 		var chosenPort = jQuery(postman_port_element_name).val();
-		var hostname = jQuery(postman_hostname_element_name).val();
+		var hostname = jQuery(postman_data.host_element_name).val();
 		var authType = jQuery(postman_input_auth_type).val()
 
 	}
@@ -232,7 +232,7 @@ function postHandleStepChange(event, currentIndex, priorIndex, myself) {
 	// the user is old enough and wants
 	// to the previous step.
 	if (currentIndex === 2) {
-		jQuery(postman_hostname_element_name).focus();
+		jQuery(postman_data.host_element_name).focus();
 		// this is the second place i disable the next button but Steps
 		// re-enables it after the screen slides
 		if (priorIndex === 1) {
@@ -558,7 +558,7 @@ function getConfiguration() {
 										response.sender_email);
 								jQuery(postman_input_sender_name).val(
 										response.sender_name);
-								jQuery(postman_hostname_element_name).val(
+								jQuery(postman_data.host_element_name).val(
 										response.hostname);
 								jQuery(postman_port_element_name).val(
 										response.port);
@@ -580,7 +580,7 @@ function getConfiguration() {
 		jQuery(postman_input_sender_name).val('');
 		jQuery(postman_input_basic_username).val('');
 		jQuery(postman_input_basic_password).val('');
-		jQuery(postman_hostname_element_name).val('');
+		jQuery(postman_data.host_element_name).val('');
 		jQuery(postman_port_element_name).val('');
 		jQuery(postman_input_auth_type).val('none');
 		jQuery(postman_enc_for_password_el).val('none');

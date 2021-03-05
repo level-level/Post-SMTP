@@ -58,9 +58,9 @@ jQuery(document).ready(
 
 			// add an event on the hostname input field
 			// on keyup, start the countdown
-			jQuery(postman_hostname_element_name).keyup(function() {
+			jQuery(postman_data.host_element_name).keyup(function() {
 				clearTimeout(typingTimer);
-				if (jQuery(postman_hostname_element_name).val) {
+				if (jQuery(postman_data.host_element_name).val) {
 					typingTimer = setTimeout(doneTyping, doneTypingInterval);
 				}
 			});
@@ -74,7 +74,7 @@ jQuery(document).ready(
 		});
 
 function reloadOauthSection() {
-	var hostname = jQuery(postman_hostname_element_name).val();
+	var hostname = jQuery(postman_data.host_element_name).val();
 	var transport = jQuery('#input_transport_type').val();
 	var authtype = jQuery('select#input_auth_type').val();
 	var data = {

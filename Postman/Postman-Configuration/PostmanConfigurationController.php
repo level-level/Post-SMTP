@@ -109,7 +109,7 @@ class PostmanConfigurationController {
 		wp_localize_script( PostmanViewController::POSTMAN_SCRIPT, 'postman_input_sender_email', '#input_' . PostmanOptions::MESSAGE_SENDER_EMAIL );
 		wp_localize_script( PostmanViewController::POSTMAN_SCRIPT, 'postman_input_sender_name', '#input_' . PostmanOptions::MESSAGE_SENDER_NAME );
 		wp_localize_script( PostmanViewController::POSTMAN_SCRIPT, 'postman_port_element_name', '#input_' . PostmanOptions::PORT );
-		wp_localize_script( PostmanViewController::POSTMAN_SCRIPT, 'postman_hostname_element_name', '#input_' . PostmanOptions::HOSTNAME );
+		wp_localize_script( PostmanViewController::POSTMAN_SCRIPT, 'postman_data', array('host_element_name'=>'#input_' . PostmanOptions::HOSTNAME ));
 
 		// the enc input
 		wp_localize_script( PostmanViewController::POSTMAN_SCRIPT, 'postman_enc_for_password_el', '#input_enc_type_password' );
