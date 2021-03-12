@@ -31,7 +31,7 @@ class PostmanMailgunMailEngine implements PostmanMailEngine {
 		$this->logger = new PostmanLogger( get_class( $this ) );
 		$this->mailgunMessage = array(
 			'from'    => '',
-			'to'      => '',
+			'to'      => array(),
 			'subject' => '',
 		);
 	}
