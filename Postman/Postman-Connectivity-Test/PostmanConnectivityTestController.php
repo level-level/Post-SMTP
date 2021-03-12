@@ -249,7 +249,6 @@ class PostmanPortTestAjaxController {
 		$hostname = trim( PostmanUtils::getRequestParameter( 'hostname' ) );
 		$port = (int) PostmanUtils::getRequestParameter( 'port' );
 		$transport = trim( PostmanUtils::getRequestParameter( 'transport' ) );
-		trim( PostmanUtils::getRequestParameter( 'transport_name' ) );
 		$this->logger->debug( sprintf( 'testing SMTPS socket %s:%s (%s)', $hostname, $port, $transport ) );
 		$portTest = new PostmanPortTest( $hostname, $port );
 		$success = $portTest->testSmtpsPorts();
