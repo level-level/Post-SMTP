@@ -228,11 +228,6 @@ if ( ! class_exists( 'PostmanViewController' ) ) {
 				printf( '<p><span>%s</span></p>', sprintf( __( 'Let\'s get started! All users are strongly encouraged to <a href="%s">run the Setup Wizard</a>.', 'post-smtp' ), $this->getPageUrl( PostmanConfigurationController::CONFIGURATION_WIZARD_SLUG ) ) );
 				printf( '<p><span>%s</span></p>', sprintf( __( 'Alternately, <a href="%s">manually configure</a> your own settings and/or modify advanced options.', 'post-smtp' ), $this->getPageUrl( PostmanConfigurationController::CONFIGURATION_SLUG ) ) );
 			} else {
-				if ( PostmanState::getInstance()->isTimeToReviewPostman() && ! PostmanOptions::getInstance()->isNew() ) {
-					print '</br><hr width="70%"></br>';
-					/* translators: where %s is the URL to the WordPress.org review and ratings page */
-					printf( '%s</span></p>', sprintf( __( 'Please consider <a href="%s">leaving a review</a> to help spread the word! :D', 'post-smtp' ), 'https://wordpress.org/support/view/plugin-reviews/post-smtp?filter=5' ) );
-				}
 				printf( '<p><span>%s :-)</span></p>', sprintf( __( 'Postman needs translators! Please take a moment to <a href="%s">translate a few sentences on-line</a>', 'post-smtp' ), 'https://translate.wordpress.org/projects/wp-plugins/post-smtp/stable' ) );
 			}
 			printf(

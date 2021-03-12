@@ -51,19 +51,6 @@ if (! class_exists ( "PostmanState" )) {
 		private function load(): void {
 			$this->options = get_option ( self::SLUG );
 		}
-		/**
-		 * 		 * Shows the review feature of Postman up to thirty days after install
-		 * 		 *
-		 *
-		 * @return bool|null
-		 */
-		public function isTimeToReviewPostman() {
-			if (! empty ( $this->options [self::INSTALL_DATE] )) {
-				$successful = PostmanState::getInstance ()->getSuccessfulDeliveries () > 0;
-				$maxTime = $this->options [self::INSTALL_DATE] + self::TOO_LONG_SEC;
-				return $successful && time () <= $maxTime;
-			}
-		}
 		public function isFileLockingEnabled() {
 			if (isset ( $this->options [self::FILE_LOCKING_ENABLED] ))
 				return $this->options [self::FILE_LOCKING_ENABLED];
