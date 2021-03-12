@@ -272,8 +272,6 @@ if ( ! class_exists( 'PostmanAdminController' ) ) {
 		 * 		 *
 		 *
 		 * @param mixed $links
-		 *
-		 * @return array|null
 		 */
 		public function postmanModifyLinksOnPluginsListPage( $links ) {
 			// only administrators should be able to trigger this
@@ -285,6 +283,7 @@ if ( ! class_exists( 'PostmanAdminController' ) ) {
 				);
 				return array_merge( $mylinks, $links );
 			}
+			return $links;
 		}
 
 		/**
