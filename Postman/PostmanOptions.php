@@ -486,37 +486,50 @@ if ( ! class_exists( 'PostmanOptions' ) ) {
 		}
 
 		/**
-		 * @return false|null|string
+		 * @return null|string
 		 */
 		public function getPushoverUser() {
 			if ( isset( $this->options [ PostmanOptions::PUSHOVER_USER ] ) ) {
-				return base64_decode( $this->options [ PostmanOptions::PUSHOVER_USER ] );
+				$pushover_user = base64_decode( $this->options [ PostmanOptions::PUSHOVER_USER ] );
+				if(!empty($pushover_user)){
+					return $pushover_user;
+				}
 			}
+			return null;
 		}
 
 
 		/**
-		 * @return false|null|string
+		 * @return null|string
 		 */
 		public function getPushoverToken() {
 			if ( isset( $this->options [ PostmanOptions::PUSHOVER_TOKEN ] ) ) {
-				return base64_decode( $this->options [ PostmanOptions::PUSHOVER_TOKEN ] );
+				$pushover_token = base64_decode( $this->options [ PostmanOptions::PUSHOVER_TOKEN ] );
+				if(!empty($pushover_token)){
+					return $pushover_token;
+				}
 			}
+			return null;
 		}
 
 		/**
-		 * @return false|null|string
+		 * @return null|string
 		 */
 		public function getSlackToken() {
 			if ( isset( $this->options [ PostmanOptions::SLACK_TOKEN ] ) ) {
-				return base64_decode( $this->options [ PostmanOptions::SLACK_TOKEN ] );
+				$slack_token = base64_decode( $this->options [ PostmanOptions::SLACK_TOKEN ] );
+				if(!empty($slack_token)){
+					return $slack_token;
+				}
 			}
+			return null;
 		}
 
         public function useChromeExtension() {
             if ( isset( $this->options [ PostmanOptions::NOTIFICATION_USE_CHROME ] ) ) {
                 return $this->options [ PostmanOptions::NOTIFICATION_USE_CHROME ];
             }
+			return null;
         }
 
         /**
@@ -524,8 +537,12 @@ if ( ! class_exists( 'PostmanOptions' ) ) {
          */
         public function getNotificationChromeUid() {
             if ( isset( $this->options [ PostmanOptions::NOTIFICATION_CHROME_UID ] ) ) {
-                return base64_decode( $this->options [ PostmanOptions::NOTIFICATION_CHROME_UID ] );
+                $chrome_uid = base64_decode( $this->options [ PostmanOptions::NOTIFICATION_CHROME_UID ] );
+				if(!empty($chrome_uid)){
+					return $chrome_uid;
+				}
             }
+			return null;
         }
 
 		public function getReplyTo() {
@@ -667,8 +684,12 @@ if ( ! class_exists( 'PostmanOptions' ) ) {
 				foreach ( PostmanTransportRegistry::getInstance()->getTransports() as $transport ) {
 					$data = $transport->prepareOptionsForExport( $data );
 				}
-				return base64_encode( gzcompress( json_encode( $data ), 9 ) );
+				$export = base64_encode( gzcompress( json_encode( $data ), 9 ) );
+				if(!empty($export)){
+					return $export;
+				}
 			}
+			return null;
 		}
 
 		/**
@@ -680,8 +701,8 @@ if ( ! class_exists( 'PostmanOptions' ) ) {
 		 * @return bool|null
 		 */
 		public function import( $data ) {
+			$logger = new PostmanLogger( get_class( $this ) );
 			if ( PostmanPreRequisitesCheck::checkZlibEncode() ) {
-				$logger = new PostmanLogger( get_class( $this ) );
 				$logger->debug( 'Importing Settings' );
 				$base64 = $data;
 				$logger->trace( $base64 );
@@ -705,11 +726,10 @@ if ( ! class_exists( 'PostmanOptions' ) ) {
 					$logger->info( 'Imported data' );
 					$this->save();
 					return true;
-				} else {
-					$logger->error( 'Could not import data - data error' );
-					return false;
 				}
 			}
+			$logger->error( 'Could not import data - data error' );
+			return false;
 		}
 	}
 }
