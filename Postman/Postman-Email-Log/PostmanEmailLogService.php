@@ -117,7 +117,7 @@ class PostmanEmailLogService {
 		}
 
 		$this->logger->debug( sprintf( 'Saved message #%s to the database', $post_id ) );
-		$this->logger->trace( $log );
+		$this->logger->trace( json_encode($log) );
 
 		// Write the meta data related to the email
 		update_post_meta( $post_id, 'success', $log->success );
