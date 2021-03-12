@@ -2,408 +2,405 @@
 
 use PHPMailer\PHPMailer\Exception;
 
-if ( ! class_exists( 'PostmanWpMail' ) ) {
+/**
+ * Moved this code into a class so it could be used by both wp_mail() and PostmanSendTestEmailController
+ *
+ * @author jasonhendriks
+ */
+class PostmanWpMail {
+	private $exception;
+	private $transcript;
+	private $totalTime;
+	private $logger;
 
 	/**
-	 * Moved this code into a class so it could be used by both wp_mail() and PostmanSendTestEmailController
-	 *
-	 * @author jasonhendriks
+	 * 		 * Load the dependencies
 	 */
-	class PostmanWpMail {
-		private $exception;
-		private $transcript;
-		private $totalTime;
-		private $logger;
+	public function init(): void {
+		$this->logger = new PostmanLogger( get_class( $this ) );
+	}
+
+	/**
+	 * 		 * This methods follows the wp_mail function interface, but implements it Postman-style.
+	 * 		 * Exceptions are held for later inspection.
+	 * 		 * An instance of PostmanState updates the success/fail tally.
+	 * 		 *
+	 *
+	 * @param mixed $to
+	 * @param mixed $subject
+	 * @param mixed $headers
+	 * @param mixed $attachments
+	 * @param string $message
+	 *
+	 * @return boolean
+	 */
+	public function send( $to, $subject, $message, $headers = '', $attachments = array() ) {
+
+		// initialize for sending
+		$this->init();
+
+		// build the message
+		$postmanMessage = $this->processWpMailCall( $to, $subject, $message, $headers, $attachments );
+
+		// build the email log entry
+		$log = new PostmanEmailLog();
+		$log->originalTo = $to;
+		$log->originalSubject = $subject;
+		$log->originalMessage = $message;
+		$log->originalHeaders = $headers;
+
+		// send the message and return the result
+		return $this->sendMessage( $postmanMessage, $log );
+	}
+
+	/**
+	 * @param PostmanMessage $message
+	 */
+	private function apply_default_headers( $message ): void {
+		$headers[] = 'Message-ID: ' . $this->createMessageId();
+		$message->addHeaders($headers);
+	}
+
+	/**
+	 * Creates the Message-ID
+	 *
+	 * @return string
+	 */
+	public function createMessageId() {
+
+		$id = md5(uniqid((string)time()));
+
+		$hostName = isset($_SERVER["SERVER_NAME"]) ? $_SERVER["SERVER_NAME"] : php_uname('n');
+
+		return $id . '@' . $hostName;
+	}
+
+	/**
+	 * 		 * Builds a PostmanMessage based on the WordPress wp_mail parameters
+	 * 		 *
+	 *
+	 * @param mixed $to
+	 * @param mixed $subject
+	 * @param mixed $message
+	 * @param mixed $headers
+	 * @param mixed $attachments
+	 */
+	private function processWpMailCall( $to, $subject, $message, $headers, $attachments ): PostmanMessage {
+		$this->logger->trace( 'wp_mail parameters before applying WordPress wp_mail filter:' );
+		$this->traceParameters( $to, $subject, $message, $headers, $attachments );
 
 		/**
-		 * 		 * Load the dependencies
+		 * Filter the wp_mail() arguments.
+		 *
+		 * @since 1.5.4
+		 *
+		 * @param array $args
+		 *        	A compacted array of wp_mail() arguments, including the "to" email,
+		 *        	subject, message, headers, and attachments values.
 		 */
-		public function init(): void {
-			$this->logger = new PostmanLogger( get_class( $this ) );
+		$atts = apply_filters( 'wp_mail', ['to' => $to, 'subject' => $subject, 'message' => $message, 'headers' => $headers, 'attachments' => $attachments] );
+		if ( isset( $atts ['to'] ) ) {
+			$to = $atts ['to'];
 		}
 
-		/**
-		 * 		 * This methods follows the wp_mail function interface, but implements it Postman-style.
-		 * 		 * Exceptions are held for later inspection.
-		 * 		 * An instance of PostmanState updates the success/fail tally.
-		 * 		 *
-		 *
-		 * @param mixed $to
-		 * @param mixed $subject
-		 * @param mixed $headers
-		 * @param mixed $attachments
-		 * @param string $message
-		 *
-		 * @return boolean
-		 */
-		public function send( $to, $subject, $message, $headers = '', $attachments = array() ) {
-
-			// initialize for sending
-			$this->init();
-
-			// build the message
-			$postmanMessage = $this->processWpMailCall( $to, $subject, $message, $headers, $attachments );
-
-			// build the email log entry
-			$log = new PostmanEmailLog();
-			$log->originalTo = $to;
-			$log->originalSubject = $subject;
-			$log->originalMessage = $message;
-			$log->originalHeaders = $headers;
-
-			// send the message and return the result
-			return $this->sendMessage( $postmanMessage, $log );
+		if ( isset( $atts ['subject'] ) ) {
+			$subject = $atts ['subject'];
 		}
 
-        /**
-		 * @param PostmanMessage $message
-		 */
-		private function apply_default_headers( $message ): void {
-            $headers[] = 'Message-ID: ' . $this->createMessageId();
-            $message->addHeaders($headers);
-        }
-
-        /**
-         * Creates the Message-ID
-         *
-         * @return string
-         */
-        public function createMessageId() {
-
-            $id = md5(uniqid((string)time()));
-
-            $hostName = isset($_SERVER["SERVER_NAME"]) ? $_SERVER["SERVER_NAME"] : php_uname('n');
-
-            return $id . '@' . $hostName;
-        }
-
-		/**
-		 * 		 * Builds a PostmanMessage based on the WordPress wp_mail parameters
-		 * 		 *
-		 *
-		 * @param mixed $to
-		 * @param mixed $subject
-		 * @param mixed $message
-		 * @param mixed $headers
-		 * @param mixed $attachments
-		 */
-		private function processWpMailCall( $to, $subject, $message, $headers, $attachments ): PostmanMessage {
-			$this->logger->trace( 'wp_mail parameters before applying WordPress wp_mail filter:' );
-			$this->traceParameters( $to, $subject, $message, $headers, $attachments );
-
-			/**
-			 * Filter the wp_mail() arguments.
-			 *
-			 * @since 1.5.4
-			 *
-			 * @param array $args
-			 *        	A compacted array of wp_mail() arguments, including the "to" email,
-			 *        	subject, message, headers, and attachments values.
-			 */
-			$atts = apply_filters( 'wp_mail', ['to' => $to, 'subject' => $subject, 'message' => $message, 'headers' => $headers, 'attachments' => $attachments] );
-			if ( isset( $atts ['to'] ) ) {
-				$to = $atts ['to'];
-			}
-
-			if ( isset( $atts ['subject'] ) ) {
-				$subject = $atts ['subject'];
-			}
-
-			if ( isset( $atts ['message'] ) ) {
-				$message = $atts ['message'];
-			}
-
-			if ( isset( $atts ['headers'] ) ) {
-				$headers = $atts ['headers'];
-			}
-
-			if ( isset( $atts ['attachments'] ) ) {
-				$attachments = $atts ['attachments'];
-			}
-
-			if ( ! is_array( $attachments ) ) {
-				$attachments = explode( "\n", str_replace( "\r\n", "\n", $attachments ) );
-			}
-
-			$this->logger->trace( 'wp_mail parameters after applying WordPress wp_mail filter:' );
-			$this->traceParameters( $to, $subject, $message, $headers, $attachments );
-
-			// Postman API: register the response hook
-			add_filter( 'postman_wp_mail_result', function () : array {
-				return $this->postman_wp_mail_result();
-			} );
-
-			// create the message
-			$postmanMessage = $this->createNewMessage();
-			$this->populateMessageFromWpMailParams( $postmanMessage, $to, $subject, $message, $headers, $attachments );
-
-			// return the message
-			return $postmanMessage;
+		if ( isset( $atts ['message'] ) ) {
+			$message = $atts ['message'];
 		}
 
-		/**
-		 * Creates a new instance of PostmanMessage with a pre-set From and Reply-To
-		 *
-		 * @return PostmanMessage
-		 */
-		public function createNewMessage() {
-			$message = new PostmanMessage();
-			$options = PostmanOptions::getInstance();
-			// the From is set now so that it can be overridden
-			$transport = PostmanTransportRegistry::getInstance()->getActiveTransport();
-			$message->setFrom( $transport->getFromEmailAddress(), $transport->getFromName() );
-			// the Reply-To is set now so that it can be overridden
-			$message->setReplyTo( $options->getReplyTo() );
-			$message->setCharset( get_bloginfo( 'charset' ) );
-			return $message;
+		if ( isset( $atts ['headers'] ) ) {
+			$headers = $atts ['headers'];
 		}
 
-		/**
-		 * A convenient place for any code to inject a constructed PostmanMessage
-		 * (for example, from MyMail)
-		 *
-		 * The body parts may be set already at this time.
-		 *
-		 * @return boolean
-		 */
-		public function sendMessage( PostmanMessage $message, PostmanEmailLog $log ) {
+		if ( isset( $atts ['attachments'] ) ) {
+			$attachments = $atts ['attachments'];
+		}
 
-		    $this->apply_default_headers( $message );
+		if ( ! is_array( $attachments ) ) {
+			$attachments = explode( "\n", str_replace( "\r\n", "\n", $attachments ) );
+		}
 
-			// get the Options and AuthToken
-			$options = PostmanOptions::getInstance();
-			$authorizationToken = PostmanOAuthToken::getInstance();
+		$this->logger->trace( 'wp_mail parameters after applying WordPress wp_mail filter:' );
+		$this->traceParameters( $to, $subject, $message, $headers, $attachments );
 
-			// get the transport and create the transportConfig and engine
-			$transport = PostmanTransportRegistry::getInstance()->getActiveTransport();
+		// Postman API: register the response hook
+		add_filter( 'postman_wp_mail_result', function () : array {
+			return $this->postman_wp_mail_result();
+		} );
 
-			// create the Mail Engine
-			$engine = $transport->createMailEngine();
+		// create the message
+		$postmanMessage = $this->createNewMessage();
+		$this->populateMessageFromWpMailParams( $postmanMessage, $to, $subject, $message, $headers, $attachments );
 
-			// add plugin-specific attributes to PostmanMessage
-			$message->addHeaders( $options->getAdditionalHeaders() );
-			$message->addTo( $options->getForcedToRecipients() );
-			$message->addCc( $options->getForcedCcRecipients() );
-			$message->addBcc( $options->getForcedBccRecipients() );
+		// return the message
+		return $postmanMessage;
+	}
 
-			// apply the WordPress filters
-			// may impact the from address, from email, charset and content-type
-			$message->applyFilters();
-			//do_action_ref_array( 'phpmailer_init', array( &$message ) );
+	/**
+	 * Creates a new instance of PostmanMessage with a pre-set From and Reply-To
+	 *
+	 * @return PostmanMessage
+	 */
+	public function createNewMessage() {
+		$message = new PostmanMessage();
+		$options = PostmanOptions::getInstance();
+		// the From is set now so that it can be overridden
+		$transport = PostmanTransportRegistry::getInstance()->getActiveTransport();
+		$message->setFrom( $transport->getFromEmailAddress(), $transport->getFromName() );
+		// the Reply-To is set now so that it can be overridden
+		$message->setReplyTo( $options->getReplyTo() );
+		$message->setCharset( get_bloginfo( 'charset' ) );
+		return $message;
+	}
 
-			// create the body parts (if they are both missing)
-			if ( $message->isBodyPartsEmpty() ) {
-				$message->createBodyParts();
-			}
+	/**
+	 * A convenient place for any code to inject a constructed PostmanMessage
+	 * (for example, from MyMail)
+	 *
+	 * The body parts may be set already at this time.
+	 *
+	 * @return boolean
+	 */
+	public function sendMessage( PostmanMessage $message, PostmanEmailLog $log ) {
 
-			// is this a test run?
-			$testMode = apply_filters( 'postman_test_email', false );
-			if ( $this->logger->isDebug() ) {
-				$this->logger->debug( 'testMode=' . $testMode );
-			}
+		$this->apply_default_headers( $message );
 
-			// start the clock
-			$startTime = microtime( true ) * 1000;
+		// get the Options and AuthToken
+		$options = PostmanOptions::getInstance();
+		$authorizationToken = PostmanOAuthToken::getInstance();
 
-			try {
+		// get the transport and create the transportConfig and engine
+		$transport = PostmanTransportRegistry::getInstance()->getActiveTransport();
 
-				// prepare the message
-				$message->validate( $transport );
+		// create the Mail Engine
+		$engine = $transport->createMailEngine();
 
-				// send the message
-				if ( $options->getRunMode() == PostmanOptions::RUN_MODE_PRODUCTION ) {
-					if ( $transport->isLockingRequired() ) {
-						PostmanUtils::lock();
-						// may throw an exception attempting to contact the OAuth2 provider
-						$this->ensureAuthtokenIsUpdated( $transport, $options, $authorizationToken );
-					}
+		// add plugin-specific attributes to PostmanMessage
+		$message->addHeaders( $options->getAdditionalHeaders() );
+		$message->addTo( $options->getForcedToRecipients() );
+		$message->addCc( $options->getForcedCcRecipients() );
+		$message->addBcc( $options->getForcedBccRecipients() );
 
-					$this->logger->debug( 'Sending mail' );
-					// may throw an exception attempting to contact the SMTP server
-					$engine->send( $message );
+		// apply the WordPress filters
+		// may impact the from address, from email, charset and content-type
+		$message->applyFilters();
+		//do_action_ref_array( 'phpmailer_init', array( &$message ) );
 
-					// increment the success counter, unless we are just tesitng
-					if ( ! $testMode ) {
-						PostmanState::getInstance()->incrementSuccessfulDelivery();
-					}
+		// create the body parts (if they are both missing)
+		if ( $message->isBodyPartsEmpty() ) {
+			$message->createBodyParts();
+		}
+
+		// is this a test run?
+		$testMode = apply_filters( 'postman_test_email', false );
+		if ( $this->logger->isDebug() ) {
+			$this->logger->debug( 'testMode=' . $testMode );
+		}
+
+		// start the clock
+		$startTime = microtime( true ) * 1000;
+
+		try {
+
+			// prepare the message
+			$message->validate( $transport );
+
+			// send the message
+			if ( $options->getRunMode() == PostmanOptions::RUN_MODE_PRODUCTION ) {
+				if ( $transport->isLockingRequired() ) {
+					PostmanUtils::lock();
+					// may throw an exception attempting to contact the OAuth2 provider
+					$this->ensureAuthtokenIsUpdated( $transport, $options, $authorizationToken );
 				}
 
-				// clean up
-				$this->postSend( $engine, $startTime, $options, $transport );
+				$this->logger->debug( 'Sending mail' );
+				// may throw an exception attempting to contact the SMTP server
+				$engine->send( $message );
 
-				if ( $options->getRunMode() == PostmanOptions::RUN_MODE_PRODUCTION || $options->getRunMode() == PostmanOptions::RUN_MODE_LOG_ONLY ) {
-					// log the successful delivery
-					PostmanEmailLogService::getInstance()->writeSuccessLog( $log, $message, $engine->getTranscript(), $transport );
+				// increment the success counter, unless we are just tesitng
+				if ( ! $testMode ) {
+					PostmanState::getInstance()->incrementSuccessfulDelivery();
 				}
+			}
 
-				// return successful
+			// clean up
+			$this->postSend( $engine, $startTime, $options, $transport );
+
+			if ( $options->getRunMode() == PostmanOptions::RUN_MODE_PRODUCTION || $options->getRunMode() == PostmanOptions::RUN_MODE_LOG_ONLY ) {
+				// log the successful delivery
+				PostmanEmailLogService::getInstance()->writeSuccessLog( $log, $message, $engine->getTranscript(), $transport );
+			}
+
+			// return successful
+			return true;
+		} catch ( Exception $e ) {
+			// save the error for later
+			$this->exception = $e;
+
+			// write the error to the PHP log
+			$this->logger->error( get_class( $e ) . ' code=' . $e->getCode() . ' message=' . trim( $e->getMessage() ) );
+
+			// increment the failure counter, unless we are just tesitng
+			if ( ! $testMode && $options->getRunMode() == PostmanOptions::RUN_MODE_PRODUCTION ) {
+				PostmanState::getInstance()->incrementFailedDelivery();
+			}
+
+			// clean up
+			$this->postSend( $engine, $startTime, $options, $transport );
+
+			if ( $options->getRunMode() == PostmanOptions::RUN_MODE_PRODUCTION || $options->getRunMode() == PostmanOptions::RUN_MODE_LOG_ONLY ) {
+				// log the failed delivery
+				PostmanEmailLogService::getInstance()->writeFailureLog( $log, $message, $engine->getTranscript(), $transport, $e->getMessage() );
+			}
+
+			// Fallback
+			if ( $this->fallback( $log, $message, $options ) ) {
+
 				return true;
-			} catch ( Exception $e ) {
-				// save the error for later
-				$this->exception = $e;
-
-				// write the error to the PHP log
-				$this->logger->error( get_class( $e ) . ' code=' . $e->getCode() . ' message=' . trim( $e->getMessage() ) );
-
-				// increment the failure counter, unless we are just tesitng
-				if ( ! $testMode && $options->getRunMode() == PostmanOptions::RUN_MODE_PRODUCTION ) {
-					PostmanState::getInstance()->incrementFailedDelivery();
-				}
-
-				// clean up
-				$this->postSend( $engine, $startTime, $options, $transport );
-
-				if ( $options->getRunMode() == PostmanOptions::RUN_MODE_PRODUCTION || $options->getRunMode() == PostmanOptions::RUN_MODE_LOG_ONLY ) {
-					// log the failed delivery
-					PostmanEmailLogService::getInstance()->writeFailureLog( $log, $message, $engine->getTranscript(), $transport, $e->getMessage() );
-				}
-
-                // Fallback
-                if ( $this->fallback( $log, $message, $options ) ) {
-
-				    return true;
-
-                }
-
-				$mail_error_data = array(
-					'to' => $message->getToRecipients(),
-					'subject' => $message->getSubject(),
-					'message' => $message->getBody(),
-					'headers' => $message->getHeaders(),
-					'attachments' => $message->getAttachments()
-				);
-				$mail_error_data['phpmailer_exception_code'] = $e->getCode();
-
-				do_action( 'wp_mail_failed', new WP_Error( 'wp_mail_failed', $e->getMessage(), $mail_error_data ) );
-
-				// return failure
-                if ( PostmanOptions::getInstance()->getSmtpMailer() == 'phpmailer' ) {
-                    throw new Exception($e->getMessage(), $e->getCode());
-                }
-				return false;
 
 			}
-		}
 
-		/**
-		 * @return bool
-		 */
-		private function fallback( PostmanEmailLog $log, PostmanMessage $postMessage,PostmanOptions $options ) {
-
-            if ( ! $options->is_fallback && $options->getFallbackIsEnabled() && $options->getFallbackIsEnabled() == 'yes' ) {
-
-                $options->is_fallback = true;
-
-                $status = $this->sendMessage( $postMessage, $log );
-
-                $options->is_fallback = false;
-
-                return $status;
-
-            } else {
-                $options->is_fallback = false;
-            }
-
-			return false;
-        }
-
-		/**
-		 * 		 * Clean up after sending the mail
-		 * 		 *
-		 *
-		 * @param PostmanZendMailEngine $engine
-		 * @param mixed               $startTime
-		 */
-		private function postSend( PostmanMailEngine $engine, $startTime, PostmanOptions $options, PostmanModuleTransport $transport ): void {
-			// save the transcript
-			$this->transcript = $engine->getTranscript();
-
-			// log the transcript
-			if ( $this->logger->isTrace() ) {
-				$this->logger->trace( 'Transcript:' );
-				$this->logger->trace( $this->transcript );
-			}
-
-			// delete the semaphore
-			if ( $transport->isLockingRequired() ) {
-				PostmanUtils::unlock();
-			}
-
-			// stop the clock
-			$endTime = microtime( true ) * 1000;
-			$this->totalTime = $endTime - $startTime;
-		}
-
-		/**
-		 * 		 * Returns the result of the last call to send()
-		 * 		 *
-		 *
-		 * @return array NULL
-		 *
-		 * @psalm-return array{time: mixed, exception: mixed, transcript: mixed}
-		 */
-		function postman_wp_mail_result(): array {
-			return array(
-					'time' => $this->totalTime,
-					'exception' => $this->exception,
-					'transcript' => $this->transcript,
+			$mail_error_data = array(
+				'to' => $message->getToRecipients(),
+				'subject' => $message->getSubject(),
+				'message' => $message->getBody(),
+				'headers' => $message->getHeaders(),
+				'attachments' => $message->getAttachments()
 			);
-		}
+			$mail_error_data['phpmailer_exception_code'] = $e->getCode();
 
-		private function ensureAuthtokenIsUpdated( PostmanModuleTransport $transport, PostmanOptions $options, PostmanOAuthToken $authorizationToken ): void {
-			assert( ! empty( $transport ) );
-			assert( ! empty( $options ) );
-			assert( ! empty( $authorizationToken ) );
-			// ensure the token is up-to-date
-			$this->logger->debug( 'Ensuring Access Token is up-to-date' );
-			// interact with the Authentication Manager
-			$wpMailAuthManager = PostmanAuthenticationManagerFactory::getInstance()->createAuthenticationManager();
-			if ( $wpMailAuthManager->isAccessTokenExpired() ) {
-				$this->logger->debug( 'Access Token has expired, attempting refresh' );
-				$wpMailAuthManager->refreshToken();
-				$authorizationToken->save();
+			do_action( 'wp_mail_failed', new WP_Error( 'wp_mail_failed', $e->getMessage(), $mail_error_data ) );
+
+			// return failure
+			if ( PostmanOptions::getInstance()->getSmtpMailer() == 'phpmailer' ) {
+				throw new Exception($e->getMessage(), $e->getCode());
 			}
+			return false;
+
+		}
+	}
+
+	/**
+	 * @return bool
+	 */
+	private function fallback( PostmanEmailLog $log, PostmanMessage $postMessage,PostmanOptions $options ) {
+
+		if ( ! $options->is_fallback && $options->getFallbackIsEnabled() && $options->getFallbackIsEnabled() == 'yes' ) {
+
+			$options->is_fallback = true;
+
+			$status = $this->sendMessage( $postMessage, $log );
+
+			$options->is_fallback = false;
+
+			return $status;
+
+		} else {
+			$options->is_fallback = false;
 		}
 
-		/**
-		 * 		 * Aggregates all the content into a Message to be sent to the MailEngine
-		 * 		 *
-		 *
-		 * @param mixed $to
-		 * @param mixed $subject
-		 * @param mixed $body
-		 * @param mixed $headers
-		 * @param mixed $attachments
-		 */
-		private function populateMessageFromWpMailParams( PostmanMessage $message, $to, $subject, $body, $headers, $attachments ): PostmanMessage {
-			$message->addHeaders( $headers );
-			$message->setBody( $body );
-			$message->setSubject( $subject );
-			$message->addTo( $to );
-			$message->setAttachments( $attachments );
-			return $message;
+		return false;
+	}
+
+	/**
+	 * 		 * Clean up after sending the mail
+	 * 		 *
+	 *
+	 * @param PostmanZendMailEngine $engine
+	 * @param mixed               $startTime
+	 */
+	private function postSend( PostmanMailEngine $engine, $startTime, PostmanOptions $options, PostmanModuleTransport $transport ): void {
+		// save the transcript
+		$this->transcript = $engine->getTranscript();
+
+		// log the transcript
+		if ( $this->logger->isTrace() ) {
+			$this->logger->trace( 'Transcript:' );
+			$this->logger->trace( $this->transcript );
 		}
 
-		/**
-		 * 		 * Trace the parameters to aid in debugging
-		 * 		 *
-		 *
-		 * @param mixed $to
-		 * @param mixed $subject
-		 * @param mixed $headers
-		 * @param mixed $attachments
-		 */
-		private function traceParameters( $to, $subject, $message, $headers, $attachments ): void {
-			$this->logger->trace( 'to:' );
-			$this->logger->trace( $to );
-			$this->logger->trace( 'subject:' );
-			$this->logger->trace( $subject );
-			$this->logger->trace( 'headers:' );
-			$this->logger->trace( $headers );
-			$this->logger->trace( 'attachments:' );
-			$this->logger->trace( $attachments );
-			$this->logger->trace( 'message:' );
-			$this->logger->trace( $message );
+		// delete the semaphore
+		if ( $transport->isLockingRequired() ) {
+			PostmanUtils::unlock();
 		}
+
+		// stop the clock
+		$endTime = microtime( true ) * 1000;
+		$this->totalTime = $endTime - $startTime;
+	}
+
+	/**
+	 * 		 * Returns the result of the last call to send()
+	 * 		 *
+	 *
+	 * @return array NULL
+	 *
+	 * @psalm-return array{time: mixed, exception: mixed, transcript: mixed}
+	 */
+	function postman_wp_mail_result(): array {
+		return array(
+				'time' => $this->totalTime,
+				'exception' => $this->exception,
+				'transcript' => $this->transcript,
+		);
+	}
+
+	private function ensureAuthtokenIsUpdated( PostmanModuleTransport $transport, PostmanOptions $options, PostmanOAuthToken $authorizationToken ): void {
+		assert( ! empty( $transport ) );
+		assert( ! empty( $options ) );
+		assert( ! empty( $authorizationToken ) );
+		// ensure the token is up-to-date
+		$this->logger->debug( 'Ensuring Access Token is up-to-date' );
+		// interact with the Authentication Manager
+		$wpMailAuthManager = PostmanAuthenticationManagerFactory::getInstance()->createAuthenticationManager();
+		if ( $wpMailAuthManager->isAccessTokenExpired() ) {
+			$this->logger->debug( 'Access Token has expired, attempting refresh' );
+			$wpMailAuthManager->refreshToken();
+			$authorizationToken->save();
+		}
+	}
+
+	/**
+	 * 		 * Aggregates all the content into a Message to be sent to the MailEngine
+	 * 		 *
+	 *
+	 * @param mixed $to
+	 * @param mixed $subject
+	 * @param mixed $body
+	 * @param mixed $headers
+	 * @param mixed $attachments
+	 */
+	private function populateMessageFromWpMailParams( PostmanMessage $message, $to, $subject, $body, $headers, $attachments ): PostmanMessage {
+		$message->addHeaders( $headers );
+		$message->setBody( $body );
+		$message->setSubject( $subject );
+		$message->addTo( $to );
+		$message->setAttachments( $attachments );
+		return $message;
+	}
+
+	/**
+	 * 		 * Trace the parameters to aid in debugging
+	 * 		 *
+	 *
+	 * @param mixed $to
+	 * @param mixed $subject
+	 * @param mixed $headers
+	 * @param mixed $attachments
+	 */
+	private function traceParameters( $to, $subject, $message, $headers, $attachments ): void {
+		$this->logger->trace( 'to:' );
+		$this->logger->trace( $to );
+		$this->logger->trace( 'subject:' );
+		$this->logger->trace( $subject );
+		$this->logger->trace( 'headers:' );
+		$this->logger->trace( $headers );
+		$this->logger->trace( 'attachments:' );
+		$this->logger->trace( $attachments );
+		$this->logger->trace( 'message:' );
+		$this->logger->trace( $message );
 	}
 }
