@@ -410,22 +410,6 @@ class PostmanConfigurationController {
 		// display the setting text
 		settings_fields( PostmanAdminController::SETTINGS_GROUP_NAME );
 
-		// Wizard Step 0
-		printf( '<h5>%s</h5>', _x( 'Import Configuration', 'Wizard Step Title', 'post-smtp' ) );
-		print '<fieldset>';
-		printf( '<legend>%s</legend>', _x( 'Import configuration from another plugin?', 'Wizard Step Title', 'post-smtp' ) );
-		printf( '<p>%s</p>', __( 'If you had a working configuration with another Plugin, the Setup Wizard can begin with those settings.', 'post-smtp' ) );
-		print '<table class="input_auth_type">';
-		printf( '<tr><td><input type="radio" id="import_none" name="input_plugin" value="%s" checked="checked"></input></td><td><label> %s</label></td></tr>', 'none', __( 'None', 'post-smtp' ) );
-
-		if ( $this->importableConfiguration->isImportAvailable() ) {
-			foreach ( $this->importableConfiguration->getAvailableOptions() as $options ) {
-				printf( '<tr><td><input type="radio" name="input_plugin" value="%s"/></td><td><label> %s</label></td></tr>', $options->getPluginSlug(), $options->getPluginName() );
-			}
-		}
-		print '</table>';
-		print '</fieldset>';
-
 		// Wizard Step 1
 		printf( '<h5>%s</h5>', _x( 'Sender Details', 'Wizard Step Title', 'post-smtp' ) );
 		print '<fieldset>';
@@ -840,50 +824,5 @@ class PostmanManageConfigurationAjaxHandler extends PostmanAbstractAjaxHandler {
 	 */
 	private function getUserAuthOverride() {
 		return $this->getRequestParameter( 'user_auth_override' );
-	}
-}
-class PostmanImportConfigurationAjaxController extends PostmanAbstractAjaxHandler {
-	private $options;
-	/**
-	 * Constructor
-	 */
-	function __construct( PostmanOptions $options ) {
-		parent::__construct();
-		$this->options = $options;
-		PostmanUtils::registerAjaxHandler( 'import_configuration', $this, 'getConfigurationFromExternalPluginViaAjax' );
-	}
-
-	/**
-	 * 	 * This function extracts configuration details form a competing SMTP plugin
-	 * 	 * and pushes them into the Postman configuration screen.
-	 */
-	function getConfigurationFromExternalPluginViaAjax(): void {
-		$importableConfiguration = new PostmanImportableConfiguration();
-		$plugin = $this->getRequestParameter( 'plugin' );
-		$this->logger->debug( 'Looking for config=' . $plugin );
-		foreach ( $importableConfiguration->getAvailableOptions() as $options ) {
-			if ( $options->getPluginSlug() == $plugin ) {
-				$this->logger->debug( 'Sending configuration response' );
-				$response = array(
-						PostmanOptions::MESSAGE_SENDER_EMAIL => $this->options->getMessageSenderEmail(),
-						PostmanOptions::MESSAGE_SENDER_NAME => $this->options->getMessageSenderName(),
-						PostmanOptions::HOSTNAME => $this->options->getHostname(),
-						PostmanOptions::PORT => $this->options->getPort(),
-						PostmanOptions::AUTHENTICATION_TYPE => $this->options->getAuthenticationType(),
-						PostmanOptions::SECURITY_TYPE => $this->options->getEncryptionType(),
-						PostmanOptions::BASIC_AUTH_USERNAME => $this->options->getUsername(),
-						PostmanOptions::BASIC_AUTH_PASSWORD => $this->options->getPassword(),
-						'success' => true,
-				);
-				$this->options = $options;
-				break;
-			}
-		}
-		if ( ! isset( $response ) ) {
-			$response = array(
-					'success' => false,
-			);
-		}
-		wp_send_json( $response );
 	}
 }
