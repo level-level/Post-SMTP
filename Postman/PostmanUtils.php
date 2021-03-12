@@ -384,7 +384,7 @@ class PostmanUtils {
 	 *
 	 * @param mixed $actionName
 	 * @param mixed $callbackName
-	 * @param PostmanGetDiagnosticsViaAjax|PostmanGetHostnameByEmailAjaxController|PostmanImportConfigurationAjaxController|PostmanManageConfigurationAjaxHandler|PostmanPortTestAjaxController|PostmanSendTestEmailAjaxController $class
+	 * @param PostmanGetDiagnosticsViaAjax|PostmanGetHostnameByEmailAjaxController|PostmanManageConfigurationAjaxHandler|PostmanPortTestAjaxController|PostmanSendTestEmailAjaxController $class
 	 */
 	public static function registerAjaxHandler( $actionName, $class, $callbackName ): void {
 		if ( is_admin() ) {

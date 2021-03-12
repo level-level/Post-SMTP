@@ -52,7 +52,6 @@ class PostmanConfigurationController {
 		// register Ajax handlers
 		new PostmanGetHostnameByEmailAjaxController();
 		new PostmanManageConfigurationAjaxHandler();
-		new PostmanImportConfigurationAjaxController( $this->options );
 	}
 
 	/**
