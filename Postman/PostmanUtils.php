@@ -427,4 +427,10 @@ class PostmanUtils {
 
         return str_replace('www.', '', $host );
 	}
+
+	public static function getHost( $url ): string {
+		$host = parse_url( trim( $url ), PHP_URL_HOST );
+
+		return str_replace('www.', '', $host );
+	}
 }
