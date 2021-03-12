@@ -22,9 +22,11 @@ class PostmanSettingsRegistry {
 		// only administrators should be able to trigger this
 		if ( PostmanUtils::isAdmin() ) {
 			$sanitizer = new PostmanInputSanitizer();
-			register_setting( PostmanAdminController::SETTINGS_GROUP_NAME, PostmanOptions::POSTMAN_OPTIONS, function ($input) use ($sanitizer) {
-				return $sanitizer->sanitize($input);
-			} );
+			register_setting( PostmanAdminController::SETTINGS_GROUP_NAME, PostmanOptions::POSTMAN_OPTIONS, array(
+				'sanitize_callback' =>function ($input) use ($sanitizer) {
+					return $sanitizer->sanitize($input);
+				}
+			));
 
 			// Sanitize
 			add_settings_section( 'transport_section', __( 'Transport', 'post-smtp' ), function () : void {
