@@ -110,8 +110,6 @@ abstract class PostmanAbstractModuleTransport implements PostmanModuleTransport 
 	
 	/**
 	 * @return array
-	 *
-	 * @psalm-return array<empty, empty>
 	 */
 	protected function validateTransportConfiguration() {
 		$this->configuredAndReady = true;
@@ -249,8 +247,6 @@ abstract class PostmanAbstractModuleTransport implements PostmanModuleTransport 
 
 	/**
 	 * @return array
-	 *
-	 * @psalm-return array<empty, empty>
 	 */
 	public function populateConfiguration($hostname) {
 		return array ();
