@@ -67,7 +67,7 @@ class PostmanDefaultModuleTransport extends PostmanAbstractZendModuleTransport i
 		return false;
 	}
 	
-	protected function validateTransportConfiguration() {
+	protected function validateTransportConfiguration():array {
 		return array();
 	}
 	
