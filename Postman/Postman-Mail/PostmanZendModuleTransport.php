@@ -6,4 +6,5 @@ interface PostmanZendModuleTransport extends PostmanModuleTransport {
 	public function getCredentialsId();
 	public function getCredentialsSecret();
 	public function getEnvelopeFromEmailAddress();
+	public function isEnvelopeFromValidationSupported();
 }
