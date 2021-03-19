@@ -1,5 +1,4 @@
 <?php
-require_once 'PostmanModuleTransport.php';
 /**
  * Postman Mailgun module
  *
@@ -22,19 +21,27 @@ class PostmanMailgunTransport extends PostmanAbstractModuleTransport implements 
 		parent::__construct( $rootPluginFilenameAndPath );
 
 		// add a hook on the plugins_loaded event
-		add_action( 'admin_init', array(
-				$this,
-				'on_admin_init',
-		) );
+		add_action( 'admin_init', function () : void {
+			$this->on_admin_init();
+		} );
 	}
+	/**
+	 * @return string
+	 */
 	public function getProtocol() {
 		return 'https';
 	}
 
 	// this should be standard across all transports
+	/**
+	 * @return string
+	 */
 	public function getSlug() {
 		return self::SLUG;
 	}
+	/**
+	 * @return string
+	 */
 	public function getName() {
 		return __( 'Mailgun API', 'post-smtp' );
 	}
@@ -44,7 +51,7 @@ class PostmanMailgunTransport extends PostmanAbstractModuleTransport implements 
 	 * @return string
 	 */
 	public function getHostname() {
-		return ! is_null( $this->options->getMailgunRegion() ) ? self::EU_REGION : self::HOST;
+		return is_null( $this->options->getMailgunRegion() ) ? self::HOST : self::EU_REGION;
 	}
 	/**
 	 * v0.2.1
@@ -64,18 +71,21 @@ class PostmanMailgunTransport extends PostmanAbstractModuleTransport implements 
 	}
 
 	/**
-	 * (non-PHPdoc)
+	 * 	 * (non-PHPdoc)
+	 * 	 *
 	 *
 	 * @see PostmanModuleTransport::createMailEngine()
+	 *
+	 * @return PostmanMailgunMailEngine
 	 */
 	public function createMailEngine() {
 		$apiKey = $this->options->getMailgunApiKey();
 		$domainName = $this->options->getMailgunDomainName();
-
-		require_once 'PostmanMailgunMailEngine.php';
-		$engine = new PostmanMailgunMailEngine( $apiKey, $domainName );
-		return $engine;
+		return new PostmanMailgunMailEngine( $apiKey, $domainName );
 	}
+	/**
+	 * @return string
+	 */
 	public function getDeliveryDetails() {
 		/* translators: where (1) is the secure icon and (2) is the transport name */
 		return sprintf( __( 'Post SMTP will send mail via the <b>%1$s %2$s</b>.', 'post-smtp' ), '🔐', $this->getName() );
@@ -92,36 +102,41 @@ class PostmanMailgunTransport extends PostmanAbstractModuleTransport implements 
 	}
 
 	/**
-	 * (non-PHPdoc)
+	 * @return string[]
 	 *
-	 * @see PostmanTransport::getMisconfigurationMessage()
+	 * @psalm-return list<string>
 	 */
-	protected function validateTransportConfiguration() {
+	protected function validateTransportConfiguration(): array {
 		$messages = parent::validateTransportConfiguration();
 		$apiKey = $this->options->getMailgunApiKey();
 		$domainName = $this->options->getMailgunDomainName();
 
 		if ( empty( $apiKey ) ) {
-			array_push( $messages, __( 'API Key can not be empty', 'post-smtp' ) . '.' );
+			$messages[] = __( 'API Key can not be empty', 'post-smtp' ) . '.';
 			$this->setNotConfiguredAndReady();
 		}
 
 		if ( empty( $domainName ) ) {
-			array_push( $messages, __( 'Domain Name can not be empty', 'post-smtp' ) . '.' );
+			$messages[] = __( 'Domain Name can not be empty', 'post-smtp' ) . '.';
 			$this->setNotConfiguredAndReady();
 		}
 
 		if ( ! $this->isSenderConfigured() ) {
-			array_push( $messages, __( 'Message From Address can not be empty', 'post-smtp' ) . '.' );
+			$messages[] = __( 'Message From Address can not be empty', 'post-smtp' ) . '.';
 			$this->setNotConfiguredAndReady();
 		}
 		return $messages;
 	}
 
 	/**
-	 * (non-PHPdoc)
+	 * 	 * (non-PHPdoc)
+	 * 	 *
 	 *
 	 * @see PostmanModuleTransport::getConfigurationBid()
+	 *
+	 * @return (int|mixed|null|string)[]
+	 *
+	 * @psalm-return array{priority: 0|8000, transport: string, hostname: null, label: mixed, message?: string}
 	 */
 	public function getConfigurationBid( PostmanWizardSocket $hostData, $userAuthOverride, $originalSmtpServer ) {
 		$recommendation = array();
@@ -137,14 +152,8 @@ class PostmanMailgunTransport extends PostmanAbstractModuleTransport implements 
 		return $recommendation;
 	}
 
-	/**
-	 *
-	 * @param mixed $hostname
-	 * @param mixed $response
-	 */
 	public function populateConfiguration( $hostname ) {
-		$response = parent::populateConfiguration( $hostname );
-		return $response;
+		return parent::populateConfiguration( $hostname );
 	}
 
 	/**
@@ -163,12 +172,12 @@ class PostmanMailgunTransport extends PostmanAbstractModuleTransport implements 
 	}
 
 	/**
-	 * Functions to execute on the admin_init event
-	 *
-	 * "Runs at the beginning of every admin page before the page is rendered."
-	 * ref: http://codex.wordpress.org/Plugin_API/Action_Reference#Actions_Run_During_an_Admin_Page_Request
+	 * 	 * Functions to execute on the admin_init event
+	 * 	 *
+	 * 	 * "Runs at the beginning of every admin page before the page is rendered."
+	 * 	 * ref: http://codex.wordpress.org/Plugin_API/Action_Reference#Actions_Run_During_an_Admin_Page_Request
 	 */
-	public function on_admin_init() {
+	public function on_admin_init(): void {
 		// only administrators should be able to trigger this
 		if ( PostmanUtils::isAdmin() ) {
 			$this->addSettings();
@@ -176,88 +185,75 @@ class PostmanMailgunTransport extends PostmanAbstractModuleTransport implements 
 		}
 	}
 
-	/*
-	 * What follows in the code responsible for creating the Admin Settings page
-	 */
-
-	/**
-	 */
-	public function addSettings() {
+	public function addSettings(): void {
 		// the Mailgun Auth section
-		add_settings_section( PostmanMailgunTransport::MAILGUN_AUTH_SECTION, __( 'Authentication', 'post-smtp' ), array(
-				$this,
-				'printMailgunAuthSectionInfo',
-		), PostmanMailgunTransport::MAILGUN_AUTH_OPTIONS );
+		add_settings_section( PostmanMailgunTransport::MAILGUN_AUTH_SECTION, __( 'Authentication', 'post-smtp' ), function () : void {
+			$this->printMailgunAuthSectionInfo();
+		}, PostmanMailgunTransport::MAILGUN_AUTH_OPTIONS );
 
-		add_settings_field( PostmanOptions::MAILGUN_API_KEY, __( 'API Key', 'post-smtp' ), array(
-				$this,
-				'mailgun_api_key_callback',
-		), PostmanMailgunTransport::MAILGUN_AUTH_OPTIONS, PostmanMailgunTransport::MAILGUN_AUTH_SECTION );
+		add_settings_field( PostmanOptions::MAILGUN_API_KEY, __( 'API Key', 'post-smtp' ), function () : void {
+			$this->mailgun_api_key_callback();
+		}, PostmanMailgunTransport::MAILGUN_AUTH_OPTIONS, PostmanMailgunTransport::MAILGUN_AUTH_SECTION );
 
-		add_settings_field( PostmanOptions::MAILGUN_DOMAIN_NAME, __( 'Domain Name', 'post-smtp' ), array(
-			$this,
-			'mailgun_domain_name_callback',
-		), PostmanMailgunTransport::MAILGUN_AUTH_OPTIONS, PostmanMailgunTransport::MAILGUN_AUTH_SECTION );
+		add_settings_field( PostmanOptions::MAILGUN_DOMAIN_NAME, __( 'Domain Name', 'post-smtp' ), function () : void {
+			$this->mailgun_domain_name_callback();
+		}, PostmanMailgunTransport::MAILGUN_AUTH_OPTIONS, PostmanMailgunTransport::MAILGUN_AUTH_SECTION );
 
-		add_settings_field( PostmanOptions::MAILGUN_REGION, __( 'Mailgun Europe Region?', 'post-smtp' ), array(
-			$this,
-			'mailgun_region_callback',
-		), PostmanMailgunTransport::MAILGUN_AUTH_OPTIONS, PostmanMailgunTransport::MAILGUN_AUTH_SECTION );
+		add_settings_field( PostmanOptions::MAILGUN_REGION, __( 'Mailgun Europe Region?', 'post-smtp' ), function () : void {
+			$this->mailgun_region_callback();
+		}, PostmanMailgunTransport::MAILGUN_AUTH_OPTIONS, PostmanMailgunTransport::MAILGUN_AUTH_SECTION );
 	}
-	public function printMailgunAuthSectionInfo() {
+	public function printMailgunAuthSectionInfo(): void {
 		/* Translators: Where (1) is the service URL and (2) is the service name and (3) is a api key URL */
 		printf( '<p id="wizard_mailgun_auth_help">%s</p>', sprintf( __( 'Create an account at <a href="%1$s" target="_blank">%2$s</a> and enter <a href="%3$s" target="_blank">an API key</a> below.', 'post-smtp' ), 'https://mailgun.com', 'mailgun.com', 'https://app.mailgun.com/app/domains/' ) );
 	}
 
-	/**
-	 */
-	public function mailgun_api_key_callback() {
+	public function mailgun_api_key_callback(): void {
 		printf( '<input type="password" autocomplete="off" id="mailgun_api_key" name="postman_options[mailgun_api_key]" value="%s" size="60" class="required" placeholder="%s"/>', null !== $this->options->getMailgunApiKey() ? esc_attr( PostmanUtils::obfuscatePassword( $this->options->getMailgunApiKey() ) ) : '', __( 'Required', 'post-smtp' ) );
 		print '<input type="button" id="toggleMailgunApiKey" value="Show Password" class="button button-secondary" style="visibility:hidden" />';
 	}
 
-	function mailgun_domain_name_callback() {
+	function mailgun_domain_name_callback(): void {
 		printf( '<input type="text" autocomplete="off" id="mailgun_domain_name" name="postman_options[mailgun_domain_name]" value="%s" size="60" class="required" placeholder="%s"/>', null !== $this->options->getMailgunDomainName() ? esc_attr( $this->options->getMailgunDomainName() ) : '', __( 'Required', 'post-smtp' ) );
 	}
 
-	function mailgun_region_callback() {
+	function mailgun_region_callback(): void {
 		$value = $this->options->getMailgunRegion();
 		printf( '<input type="checkbox" id="mailgun_region" name="postman_options[mailgun_region]"%s />', null !== $value ? ' checked' : '' );
 	}
 
-	/**
-	 */
-	public function registerStylesAndScripts() {
+	public function registerStylesAndScripts(): void {
 		// register the stylesheet and javascript external resources
 		$pluginData = apply_filters( 'postman_get_plugin_metadata', null );
 		wp_register_script( 'postman_mailgun_script', plugins_url( 'Postman/Postman-Mail/postman_mailgun.js', $this->rootPluginFilenameAndPath ), array(
 				PostmanViewController::JQUERY_SCRIPT,
-				'jquery_validation',
 				PostmanViewController::POSTMAN_SCRIPT,
 		), $pluginData ['version'] );
 	}
 
 	/**
+	 * @return void
 	 */
 	public function enqueueScript() {
 		wp_enqueue_script( 'postman_mailgun_script' );
 	}
 
 	/**
+	 * @return void
 	 */
 	public function printWizardAuthenticationStep() {
 		print '<section class="wizard_mailgun">';
 		$this->printMailgunAuthSectionInfo();
 		printf( '<label for="api_key">%s</label>', __( 'API Key', 'post-smtp' ) );
 		print '<br />';
-		print $this->mailgun_api_key_callback();
+		$this->mailgun_api_key_callback();
 		printf( '<label for="domain_name">%s</label>', __( 'Domain Name', 'post-smtp' ) );
 		print '<br />';
-		print $this->mailgun_domain_name_callback();
+		$this->mailgun_domain_name_callback();
 		print '<br />';
 		printf( '<label for="mailgun_region">%s</label>', __( 'Mailgun Europe Region?', 'post-smtp' ) );
 		print '<br />';
-		print $this->mailgun_region_callback();
+		$this->mailgun_region_callback();
 		print '</section>';
 	}
 }

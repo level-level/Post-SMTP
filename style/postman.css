@@ -72,12 +72,8 @@ form#postman_wizard span.postman_input_description + label {
 	margin-top:2em;
 }
 
-fine_print {
+.fine_print {
 	font-size: 0.9em;
-}
-
-input.input_plugin_radio {
-	margin-left: 20px;
 }
 
 .wizard>.content {

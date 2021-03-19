@@ -2,6 +2,9 @@
 
 class PostmanMailNotify implements Postman_Notify {
 
+    /**
+     * @return void
+     */
     public function send_message($message)
     {
         $to_email = apply_filters( 'post_smtp_notify_email',get_bloginfo( 'admin_email' ) );

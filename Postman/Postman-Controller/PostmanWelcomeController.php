@@ -9,11 +9,15 @@ class PostmanWelcomeController {
 		$this->pluginUrl = plugins_url( 'style', $rootPluginFilenameAndPath );
 		$this->version = PostmanState::getInstance()->getVersion();
 
-		add_action( 'admin_menu', array( $this, 'add_menus' ) );
-		add_action( 'admin_head', array( $this, 'admin_head' ) );
+		add_action( 'admin_menu', function () : void {
+			$this->add_menus();
+		} );
+		add_action( 'admin_head', function () : void {
+			$this->admin_head();
+		} );
 	}
 
-	public function add_menus() {
+	public function add_menus(): void {
 
 		if ( current_user_can( 'manage_options' ) ) {
 
@@ -23,7 +27,9 @@ class PostmanWelcomeController {
 				__( 'Welcome',  'post-smtp' ),
 				'manage_options',
 				'post-about',
-				array( $this, 'about_screen' )
+				function () : void {
+					$this->about_screen();
+				}
 			);
 
 			// Credits
@@ -32,24 +38,22 @@ class PostmanWelcomeController {
 				__( 'Credits',  'post-smtp' ),
 				'manage_options',
 				'post-credits',
-				array( $this, 'credits_screen' )
+				function () : void {
+					$this->credits_screen();
+				}
 			);
 
 			// add_action( 'admin_print_styles-' . $page, array( $this, 'postman_about_enqueue_resources' ) );
 		}
 	}
 
-	public function admin_head() {
+	public function admin_head(): void {
 		remove_submenu_page( 'index.php', 'post-about' );
 		remove_submenu_page( 'index.php', 'post-credits' );
 	}
 
-	public function postman_about_enqueue_resources() {
-		// wp_enqueue_style( 'font-awsome', '' );
-	}
 
-
-	public function about_screen() {
+	public function about_screen(): void {
 		?>
 		<style type="text/css">
 			.post-badge {
@@ -151,7 +155,7 @@ class PostmanWelcomeController {
 		<?php
 	}
 
-	public function credits_screen() {
+	public function credits_screen(): void {
 		?>
 		<style type="text/css">
 			.post-badge {

@@ -14,12 +14,12 @@ jQuery(document).ready(
 								stepsOrientation : "vertical",
 								autoFocus : true,
 								labels : {
-									current : steps_current_step,
-									pagination : steps_pagination,
-									finish : steps_finish,
-									next : steps_next,
-									previous : steps_previous,
-									loading : steps_loading
+									current : postman_steps.steps_current_step,
+									pagination : postman_steps.steps_pagination,
+									finish : postman_steps.steps_finish,
+									next : postman_steps.steps_next,
+									previous : postman_steps.steps_previous,
+									loading : postman_steps.steps_loading
 								},
 								onStepChanging : function(event, currentIndex,
 										newIndex) {

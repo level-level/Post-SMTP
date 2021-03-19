@@ -1,11 +1,5 @@
 <?php
-require_once 'PostmanModuleTransport.php';
-require_once 'PostmanZendMailTransportConfigurationFactory.php';
 
-/**
- *
- * @author jasonhendriks
- */
 class PostmanTransportRegistry {
 	private $transports;
 	private $logger;
@@ -24,7 +18,7 @@ class PostmanTransportRegistry {
 		}
 		return $inst;
 	}
-	public function registerTransport( PostmanModuleTransport $instance ) {
+	public function registerTransport( PostmanModuleTransport $instance ): void {
 		$this->transports [ $instance->getSlug() ] = $instance;
 		$instance->init();
 	}
@@ -51,21 +45,10 @@ class PostmanTransportRegistry {
 	/**
 	 * A short-hand way of showing the complete delivery method
 	 *
-	 * @param PostmanModuleTransport $transport
 	 * @return string
 	 */
 	public function getPublicTransportUri( PostmanModuleTransport $transport ) {
 		return $transport->getPublicTransportUri();
-	}
-
-	/**
-	 * Determine if a specific transport is registered in the directory.
-	 *
-	 * @param mixed $slug
-	 */
-	public function isRegistered( $slug ) {
-		$transports = $this->getTransports();
-		return isset( $transports [ $slug ] );
 	}
 
 	/**
@@ -85,9 +68,6 @@ class PostmanTransportRegistry {
 	}
 
 	/**
-	 *
-	 * @param PostmanOptions    $options
-	 * @param PostmanOAuthToken $token
 	 * @return boolean
 	 */
 	public function getActiveTransport() {
@@ -118,36 +98,13 @@ class PostmanTransportRegistry {
 	}
 
 	/**
-	 * Determine whether to show the Request Permission link on the main menu
-	 *
-	 * This link is displayed if
-	 * 1. the current transport requires OAuth 2.0
-	 * 2. the transport is properly configured
-	 * 3. we have a valid Client ID and Client Secret without an Auth Token
-	 *
-	 * @param PostmanOptions $options
-	 * @return boolean
-	 */
-	public function isRequestOAuthPermissionAllowed( PostmanOptions $options, PostmanOAuthToken $authToken ) {
-		// does the current transport use OAuth 2.0
-		$oauthUsed = self::getSelectedTransport()->isOAuthUsed( $options->getAuthenticationType() );
-
-		// is the transport configured
-		if ( $oauthUsed ) {
-			$configured = self::getSelectedTransport()->isConfiguredAndReady();
-		}
-
-		return $oauthUsed && $configured;
-	}
-
-	/**
-	 * Polls all the installed transports to get a complete list of sockets to probe for connectivity
+	 * 	 * Polls all the installed transports to get a complete list of sockets to probe for connectivity
+	 * 	 *
 	 *
 	 * @param mixed $hostname
-	 * @param mixed $isGmail
-	 * @return multitype:
+	 * @param mixed $smtpServerGuess
 	 */
-	public function getSocketsForSetupWizardToProbe( $hostname = 'localhost', $smtpServerGuess = null ) {
+	public function getSocketsForSetupWizardToProbe( $hostname = 'localhost', $smtpServerGuess = null ): array {
 		$hosts = array();
 		if ( $this->logger->isDebug() ) {
 			$this->logger->debug( sprintf( 'Getting sockets for Port Test given hostname %s and smtpServerGuess %s', $hostname, $smtpServerGuess ) );
@@ -165,7 +122,7 @@ class PostmanTransportRegistry {
 			}
 			$hosts = array_merge( $hosts, $socketsToTest );
 			if ( $this->logger->isDebug() ) {
-				$this->logger->debug( sprintf( 'Transport %s returns %d sockets ', $transport->getName(), sizeof( $socketsToTest ) ) );
+				$this->logger->debug( sprintf( 'Transport %s returns %d sockets ', $transport->getName(), count( $socketsToTest ) ) );
 			}
 		}
 		return $hosts;
@@ -177,8 +134,6 @@ class PostmanTransportRegistry {
 	 * $hostData includes ['host'] and ['port']
 	 *
 	 * response should include ['success'], ['message'], ['priority']
-	 *
-	 * @param mixed $hostData
 	 */
 	public function getRecommendation( PostmanWizardSocket $hostData, $userAuthOverride, $originalSmtpServer ) {
 		$scrubbedUserAuthOverride = $this->scrubUserOverride( $hostData, $userAuthOverride );
@@ -192,7 +147,6 @@ class PostmanTransportRegistry {
 
 	/**
 	 *
-	 * @param PostmanWizardSocket $hostData
 	 * @param mixed             $userAuthOverride
 	 * @return NULL
 	 */
@@ -205,28 +159,25 @@ class PostmanTransportRegistry {
 		}
 
 		// validate the userAuthOverride
-		if ( ! $hostData->auth_xoauth ) {
-			if ( $userAuthOverride == 'oauth2' ) {
-				$userAuthOverride = null;
-			}
+		if ( ! $hostData->auth_xoauth && $userAuthOverride == 'oauth2' ) {
+			$userAuthOverride = null;
 		}
-		if ( ! $hostData->auth_crammd5 && ! $hostData->authPlain && ! $hostData->auth_login ) {
-			if ( $userAuthOverride == 'password' ) {
-				$userAuthOverride = null;
-			}
+		if ( ! $hostData->auth_crammd5 && ! $hostData->authPlain && ! $hostData->auth_login && $userAuthOverride == 'password' ) {
+			$userAuthOverride = null;
 		}
-		if ( ! $hostData->auth_none ) {
-			if ( $userAuthOverride == 'none' ) {
-				$userAuthOverride = null;
-			}
+		if ( ! $hostData->auth_none && $userAuthOverride == 'none' ) {
+			$userAuthOverride = null;
 		}
 		$this->logger->trace( 'after scrubbing userAuthOverride: ' . $userAuthOverride );
 		return $userAuthOverride;
 	}
 
 	/**
+	 * @return (bool|mixed)[]
+	 *
+	 * @psalm-return array{error: bool, message: mixed}
 	 */
-	public function getReadyMessage() {
+	public function getReadyMessage(): array {
 		if ( $this->getCurrentTransport()->isConfiguredAndReady() ) {
 			if ( PostmanOptions::getInstance()->getRunMode() != PostmanOptions::RUN_MODE_PRODUCTION ) {
 				return array(

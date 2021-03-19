@@ -1,6 +1,6 @@
 <?php
-require_once ("registered-domain-libs-master/PHP/effectiveTLDs.inc.php");
-require_once ("registered-domain-libs-master/PHP/regDomain.inc.php");
+require_once (__DIR__ . "/registered-domain-libs-master/PHP/effectiveTLDs.inc.php");
+require_once (__DIR__ . "/registered-domain-libs-master/PHP/regDomain.inc.php");
 
 /**
  *
@@ -36,8 +36,6 @@ class PostmanPortTest {
 	//
 	const SMTPS_PROTOCOL = 'SMTPS';
 	
-	/**
-	 */
 	public function __construct($hostname, $port) {
 		$this->logger = new PostmanLogger ( get_class ( $this ) );
 		$this->hostname = $hostname;
@@ -50,7 +48,8 @@ class PostmanPortTest {
 	/**
 	 * Wrap the regDomain/getRegisteredDomain function
 	 *
-	 * @param mixed $domain
+	 * @param string $hostname
+	 *
 	 * @return mixed
 	 */
 	private function getRegisteredDomain($hostname) {
@@ -60,15 +59,18 @@ class PostmanPortTest {
 		}
 		return $registeredDomain;
 	}
-	public function setConnectionTimeout($timeout) {
+	public function setConnectionTimeout(int $timeout): void {
 		$this->connectionTimeout = $timeout;
-		$this->logger->trace ( $this->connectionTimeout );
+		$this->logger->trace ( (string) $this->connectionTimeout );
 	}
-	public function setReadTimeout($timeout) {
+	public function setReadTimeout(int $timeout): void {
 		$this->readTimeout = $timeout;
-		$this->logger->trace ( $this->readTimeout );
+		$this->logger->trace ( (string) $this->readTimeout );
 	}
-	private function createStream($connectionString) {
+	/**
+	 * @return false|resource
+	 */
+	private function createStream(string $connectionString) {
 		$stream = @stream_socket_client ( $connectionString, $errno, $errstr, $this->connectionTimeout );
 		if ($stream) {
 			$this->trace ( sprintf ( 'connected to %s', $connectionString ) );
@@ -79,22 +81,20 @@ class PostmanPortTest {
 	}
 	
 	/**
-	 *
-	 * @param number $timeout        	
 	 * @return boolean
 	 */
 	public function genericConnectionTest() {
 		$this->logger->trace ( 'testCustomConnection()' );
 		// test if the port is open
 		$connectionString = sprintf ( '%s:%s', $this->hostname, $this->port );
-		$stream = $this->createStream ( $connectionString, $this->connectionTimeout );
+		$stream = $this->createStream ( $connectionString );
 		return null != $stream;
 	}
 	
 	/**
-	 * Given a hostname, test if it has open ports
+	 * Given a hostname, test if it has open ports	
 	 *
-	 * @param string $hostname        	
+	 * @return null|true
 	 */
 	public function testHttpPorts() {
 		$this->trace ( 'testHttpPorts()' );
@@ -102,7 +102,7 @@ class PostmanPortTest {
 		try {
 			$response = PostmanUtils::remotePost ( $connectionString );
 			$this->trace ( 'wp_remote_retrieve_headers:' );
-			$this->logger->trace ( wp_remote_retrieve_headers ( $response ) );
+			$this->logger->trace ( json_encode(wp_remote_retrieve_headers ( $response )) );
 			$this->trace ( wp_remote_retrieve_response_code ( $response ) );
 			$this->protocol = 'HTTPS';
 			$this->http = true;
@@ -114,14 +114,13 @@ class PostmanPortTest {
 		} catch ( Exception $e ) {
 			$this->debug ( 'return false' );
 		}
+		return null;
 	}
 	
 	/**
-	 * Given a hostname, test if it has open ports
-	 *
-	 * @param string $hostname        	
+	 * 	 * Given a hostname, test if it has open ports
 	 */
-	public function testSmtpPorts() {
+	public function testSmtpPorts(): bool {
 		$this->logger->trace ( 'testSmtpPorts()' );
 		if ($this->port == 8025) {
 			$this->debug ( 'Executing test code for port 8025' );
@@ -131,7 +130,7 @@ class PostmanPortTest {
 			return true;
 		}
 		$connectionString = sprintf ( "%s:%s", $this->hostname, $this->port );
-		$success = $this->talkToMailServer ( $connectionString, $this->connectionTimeout, $this->readTimeout );
+		$success = $this->talkToMailServer ( $connectionString );
 		if ($success) {
 			$this->protocol = 'SMTP';
 			if (! ($this->authCrammd5 || $this->authLogin || $this->authPlain || $this->authXoauth)) {
@@ -144,14 +143,14 @@ class PostmanPortTest {
 	}
 	
 	/**
-	 * Given a hostname, test if it has open ports
+	 * 	 * Given a hostname, test if it has open ports
 	 *
-	 * @param string $hostname        	
+	 * @return bool|false
 	 */
 	public function testSmtpsPorts() {
 		$this->logger->trace ( 'testSmtpsPorts()' );
 		$connectionString = sprintf ( "ssl://%s:%s", $this->hostname, $this->port );
-		$success = $this->talkToMailServer ( $connectionString, $this->connectionTimeout, $this->readTimeout );
+		$success = $this->talkToMailServer ( $connectionString );
 		if ($success) {
 			if (! ($this->authCrammd5 || $this->authLogin || $this->authPlain || $this->authXoauth)) {
 				$this->authNone = true;
@@ -166,11 +165,11 @@ class PostmanPortTest {
 	/**
 	 * Given a hostname, test if it has open ports
 	 *
-	 * @param string $hostname        	
+	 *
 	 */
-	private function talkToMailServer($connectionString) {
+	private function talkToMailServer(string $connectionString): bool {
 		$this->logger->trace ( 'talkToMailServer()' );
-		$stream = $this->createStream ( $connectionString, $this->connectionTimeout );
+		$stream = $this->createStream ( $connectionString );
 		if ($stream) {
 			$serverName = PostmanUtils::postmanGetServerName ();
 			@stream_set_timeout ( $stream, $this->readTimeout );
@@ -218,10 +217,18 @@ class PostmanPortTest {
 			return false;
 		}
 	}
-	private function sendSmtpCommand($stream, $message) {
+	/**
+	 * @param resource $stream
+	 */
+	private function sendSmtpCommand($stream, string $message): void {
 		$this->trace ( 'tx: ' . $message );
-		fputs ( $stream, $message . "\r\n" );
+		fwrite ( $stream, $message . "\r\n" );
 	}
+	/**
+	 * @return false|string
+	 *
+	 * @param resource $stream
+	 */
 	private function readSmtpResponse($stream) {
 		$result = '';
 		while ( ($line = fgets ( $stream )) !== false ) {
@@ -270,13 +277,22 @@ class PostmanPortTest {
 	public function getErrorMessage() {
 		return $this->errstr;
 	}
-	private function trace($message) {
+	/**
+	 * @param string $message
+	 */
+	private function trace($message): void {
 		$this->logger->trace ( sprintf ( '%s:%s => %s', $this->hostname, $this->port, $message ) );
 	}
-	private function debug($message) {
+	/**
+	 * @param string $message
+	 */
+	private function debug($message): void {
 		$this->logger->debug ( sprintf ( '%s:%s => %s', $this->hostname, $this->port, $message ) );
 	}
-	private function error($message) {
+	/**
+	 * @param string $message
+	 */
+	private function error($message): void {
 		$this->logger->error ( sprintf ( '%s:%s => %s', $this->hostname, $this->port, $message ) );
 	}
 }

@@ -1,6 +1,4 @@
 <?php
-require_once( 'PostmanOAuthToken.php' );
-require_once( 'PostmanOptions.php' );
 
 /**
  * If required, database upgrades are made during activation
@@ -12,8 +10,6 @@ require_once( 'PostmanOptions.php' );
 class PostmanInstaller {
 	private $logger;
 
-	private $roles;
-
 	/**
 	 */
 	public function __construct() {
@@ -21,9 +17,9 @@ class PostmanInstaller {
 	}
 
 	/**
-	 * Handle activation of the plugin
+	 * 	 * Handle activation of the plugin
 	 */
-	public function activatePostman() {
+	public function activatePostman(): void {
         delete_option( 'postman_release_version' );
         delete_option( 'postman_dismiss_donation' );
 
@@ -32,21 +28,18 @@ class PostmanInstaller {
 			'fallback_smtp_enabled' => 'no',
 		);
 
-		if ( empty( $options ) ) {
+		if (empty( $options )) {
 			add_option( 'postman_options', $args );
-
-		} else {
-			if ( empty( $options['fallback_smtp_enabled'] ) ) {
-				$result = array_merge($options, $args);
-				update_option( PostmanOptions::POSTMAN_OPTIONS, $result );
-			}
+		} elseif (empty( $options['fallback_smtp_enabled'] )) {
+			$result = array_merge($options, $args);
+			update_option( PostmanOptions::POSTMAN_OPTIONS, $result );
 		}
 
 		if ( function_exists( 'is_multisite' ) && is_multisite() ) {
 
             $options['post_smtp_allow_overwrite'] = '1';
             update_site_option( PostmanOptions::POSTMAN_NETWORK_OPTIONS, $options );
-			
+
 			// handle network activation
 			// from https://wordpress.org/support/topic/new-function-wp_get_sites?replies=11
 			// run the activation function for each blog id
@@ -69,20 +62,10 @@ class PostmanInstaller {
 		//$this->add_activation_redirect();
 	}
 
-	function add_activation_redirect() {
-
-		// Bail if activating from network, or bulk
-		if ( is_network_admin() || isset( $_GET['activate-multi'] ) ) {
-			return; }
-
-		// Add the transient to redirect
-	    //set_transient( '_post_activation_redirect', true, 30 );
-	}
-
 	/**
-	 * Handle deactivation of the plugin
+	 * 	 * Handle deactivation of the plugin
 	 */
-	public function deactivatePostman() {
+	public function deactivatePostman(): void {
 		if ( function_exists( 'is_multisite' ) && is_multisite() ) {
 			// handle network deactivation
 			// from https://wordpress.org/support/topic/new-function-wp_get_sites?replies=11
@@ -103,9 +86,9 @@ class PostmanInstaller {
 	}
 
 	/**
-	 * Add the capability to manage postman
+	 * 	 * Add the capability to manage postman
 	 */
-	public function addCapability() {
+	public function addCapability(): void {
 		if ( $this->logger->isDebug() ) {
 			$this->logger->debug( 'Adding admin capability' );
 		}
@@ -118,9 +101,9 @@ class PostmanInstaller {
 	}
 
 	/**
-	 * Remove the capability to manage postman
+	 * 	 * Remove the capability to manage postman
 	 */
-	public function removeCapability() {
+	public function removeCapability(): void {
 		if ( $this->logger->isDebug() ) {
 			$this->logger->debug( 'Removing admin capability' );
 		}
@@ -133,9 +116,9 @@ class PostmanInstaller {
 	}
 
 	/**
-	 * Handle activation of plugin
+	 * 	 * Handle activation of plugin
 	 */
-	private function handleOptionUpdates() {
+	private function handleOptionUpdates(): void {
 		$this->logger->debug( 'Activating plugin' );
 		// prior to version 0.2.5, $authOptions did not exist
 		$authOptions = get_option( 'postman_auth_token' );
@@ -152,22 +135,19 @@ class PostmanInstaller {
 			}
 			update_option( 'postman_auth_token', $authOptions );
 		}
-		if ( ! isset( $options ['authorization_type'] ) && ! isset( $options ['auth_type'] ) ) {
-			// prior to 1.0.0, access tokens were saved in authOptions without an auth type
-			// prior to 0.2.5, access tokens were save in options without an auth type
-			// either way, only oauth2 was supported
-			if ( isset( $authOptions ['access_token'] ) || isset( $options ['access_token'] ) ) {
-				$this->logger->debug( "Upgrading database: setting authorization_type to 'oauth2'" );
-				$options ['authorization_type'] = 'oauth2';
-				update_option( 'postman_options', $options );
-			}
+		// prior to 1.0.0, access tokens were saved in authOptions without an auth type
+		// prior to 0.2.5, access tokens were save in options without an auth type
+		// either way, only oauth2 was supported
+		if (! isset( $options ['authorization_type'] ) && ! isset( $options ['auth_type'] ) && (isset( $authOptions ['access_token'] ) || isset( $options ['access_token'] ))) {
+			$this->logger->debug( "Upgrading database: setting authorization_type to 'oauth2'" );
+			$options ['authorization_type'] = 'oauth2';
+			update_option( 'postman_options', $options );
 		}
-		if ( ! isset( $options ['enc_type'] ) ) {
-			// prior to 1.3, encryption type was combined with authentication type
-			if ( isset( $options ['authorization_type'] ) ) {
-				$this->logger->debug( 'Upgrading database: creating auth_type and enc_type from authorization_type' );
-				$authType = $options ['authorization_type'];
-				switch ( $authType ) {
+		// prior to 1.3, encryption type was combined with authentication type
+		if (! isset( $options ['enc_type'] ) && isset( $options ['authorization_type'] )) {
+			$this->logger->debug( 'Upgrading database: creating auth_type and enc_type from authorization_type' );
+			$authType = $options ['authorization_type'];
+			switch ( $authType ) {
 					case 'none' :
 						$options ['auth_type'] = 'none';
 						$options ['enc_type'] = 'none';
@@ -186,11 +166,10 @@ class PostmanInstaller {
 						break;
 					default :
 				}
-				update_option( 'postman_options', $options );
-			}
+			update_option( 'postman_options', $options );
 		}
 		// prior to 1.3.3, the version identifier was not stored and the passwords were plaintext
-		if ( isset( $options ['enc_type'] ) && ! (isset( $options ['version'] ) || isset( $postmanState ['version'] )) ) {
+		if ( isset( $options ['enc_type'] ) && (!isset( $options ['version'] ) && !isset( $postmanState ['version'] )) ) {
 			$this->logger->debug( 'Upgrading database: added plugin version and encoding password' );
 			$options ['version'] = '1.3.3';
 			if ( isset( $options ['basic_auth_password'] ) ) {
@@ -205,11 +184,15 @@ class PostmanInstaller {
 			update_option( 'postman_options', $options );
 			if ( isset( $authOptions ['access_token'] ) && isset( $options ['oauth_client_id'] ) ) {
 				// if there is a stored token..
-				if ( PostmanUtils::endsWith( $options ['oauth_client_id'], 'googleusercontent.com' ) ) {
-					$authOptions ['vendor_name'] = 'google'; } else if ( strlen( $options ['oauth_client_id'] < strlen( $options ['oauth_client_secret'] ) ) ) {
+				if (PostmanUtils::endsWith( $options ['oauth_client_id'], 'googleusercontent.com' )) {
+					$authOptions ['vendor_name'] = 'google';
+				} elseif (strlen( $options ['oauth_client_id']) < strlen( $options ['oauth_client_secret'] )) {
+					// TODO: ?
 					$authOptions ['vendor_name'] = 'microsoft';
-					} else { 					$authOptions ['vendor_name'] = 'yahoo'; }
-					update_option( 'postman_auth_token', $authOptions );
+				} else {
+					$authOptions ['vendor_name'] = 'yahoo'; 
+				}
+				update_option( 'postman_auth_token', $authOptions );
 			}
 		}
 

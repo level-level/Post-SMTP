@@ -44,7 +44,7 @@ define( 'POST_URL', plugins_url('', POST_BASE ) );
 define( 'POST_SMTP_VER', '2.0.1' );
 
 $postman_smtp_exist = in_array( 'postman-smtp/postman-smtp.php', (array) get_option( 'active_plugins', array() ) );
-$required_php_version = version_compare( PHP_VERSION, '5.6.0', '<' );
+$required_php_version = version_compare( PHP_VERSION, '7.2.0', '<' );
 
 if ( $postman_smtp_exist || $required_php_version ) {
 	add_action( 'admin_init', 'post_smtp_plugin_deactivate' );
@@ -127,6 +127,5 @@ function post_start( $startingMemory ) {
  * Instantiate the mail Postman class
  */
 function post_setupPostman() {
-	require_once 'Postman/Postman.php';
-	$kevinCostner = new Postman( __FILE__, POST_SMTP_VER );
+	new Postman( __FILE__, POST_SMTP_VER );
 }

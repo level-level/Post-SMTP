@@ -1,5 +1,4 @@
 <?php
-if (! class_exists ( 'PostmanStateIdMissingException' )) {
-	class PostmanStateIdMissingException extends Exception {
-	}
+
+class PostmanStateIdMissingException extends Exception {
 }

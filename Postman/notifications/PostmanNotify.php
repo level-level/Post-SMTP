@@ -1,8 +1,4 @@
 <?php
-require_once 'INotify.php';
-require_once 'PostmanMailNotify.php';
-require_once 'PostmanPushoverNotify.php';
-require_once 'PostmanSlackNotify.php';
 
 class PostmanNotify {
     private $notify;
@@ -11,10 +7,17 @@ class PostmanNotify {
         $this->notify = $notify;
     }
 
-    public function send( $message, $log ) {
+    /**
+     * @param string $message
+     * @param PostmanEmailLog $log
+     */
+    public function send( $message, $log ): void {
         $this->notify->send_message( $message );
     }
 
+    /**
+     * @return void
+     */
     public function push_to_chrome($message) {
         $push_chrome = PostmanOptions::getInstance()->useChromeExtension();
 
@@ -33,7 +36,7 @@ class PostmanNotify {
                 )
             );
 
-            $response = wp_remote_post( $url , $args );
+            wp_remote_post( $url , $args );
         }
     }
 }

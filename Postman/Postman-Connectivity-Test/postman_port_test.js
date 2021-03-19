@@ -2,7 +2,7 @@ postman_begin_test_button_id = 'input#begin-port-test';
 
 jQuery(document).ready(function() {
 	var elHostname = jQuery(postman_begin_test_button_id);
-	jQuery(postman_hostname_element_name).focus();
+	jQuery(postman_data.host_element_name).focus();
 	elHostname.click(function() {
 		valid = jQuery('#port_test_form_id').valid();
 		if (!valid) {
@@ -20,7 +20,7 @@ jQuery(document).ready(function() {
 		$elTestingTable.show();
 		show('.portquiz');
 
-		var hostname = jQuery(postman_hostname_element_name).val();
+		var hostname = jQuery(postman_data.host_element_name).val();
 		var data = {
 			'action' : 'postman_get_hosts_to_test',
 			'hostname' : hostname
@@ -258,7 +258,7 @@ function enableButtonCheck() {
 	if (totalPortsTested >= portsToBeTested) {
 		enable(postman_begin_test_button_id);
 		hideLoaderIcon();
-		jQuery(postman_hostname_element_name).focus();
+		jQuery(postman_data.host_element_name).focus();
 	}
 }
 function inspectResponse(id, response, port) {

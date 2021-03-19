@@ -1,12 +1,10 @@
 <?php
 
-require_once dirname(__DIR__) . '/PostmanEmailLogs.php';
-
 /**
  * See http://wpengineer.com/2426/wp_list_table-a-step-by-step-guide/
  */
 if ( ! class_exists( 'WP_List_Table' ) ) {
-	require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
+	// require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
 }
 class PostmanEmailLogView extends WP_List_Table {
 	private $logger;
@@ -50,7 +48,7 @@ class PostmanEmailLogView extends WP_List_Table {
 	 *
 	 * @param array $item
 	 *        	A singular item (one full row's worth of data)
-	 * @param array $column_name
+	 * @param string $column_name
 	 *        	The name/slug of the column to be processed
 	 * @return string Text or HTML to be placed inside the column <td>
 	 *         ************************************************************************
@@ -64,62 +62,6 @@ class PostmanEmailLogView extends WP_List_Table {
 			default :
 				return print_r( $item, true ); // Show the whole array for troubleshooting purposes
 		}
-	}
-
-	/**
-	 * ************************************************************************
-	 * Recommended.
-	 * This is a custom column method and is responsible for what
-	 * is rendered in any column with a name/slug of 'title'. Every time the class
-	 * needs to render a column, it first looks for a method named
-	 * column_{$column_title} - if it exists, that method is run. If it doesn't
-	 * exist, column_default() is called instead.
-	 *
-	 * This example also illustrates how to implement rollover actions. Actions
-	 * should be an associative array formatted as 'slug'=>'link html' - and you
-	 * will need to generate the URLs yourself. You could even ensure the links
-	 *
-	 * @see WP_List_Table::::single_row_columns()
-	 * @param array $item
-	 *        	A singular item (one full row's worth of data)
-	 * @return string Text to be placed inside the column <td> (movie title only)
-	 *         ************************************************************************
-	 */
-	function column_title( $item ) {
-
-		// Build row actions
-		$iframeUri = 'admin-post.php?page=postman_email_log&action=%s&email=%s&TB_iframe=true&width=700&height=550';
-		$deleteUrl = wp_nonce_url( admin_url( sprintf( 'admin-post.php?page=postman_email_log&action=%s&email=%s', 'delete', $item ['ID'] ) ), 'delete_email_log_item_' . $item ['ID'] );
-		$viewUrl = admin_url( sprintf( $iframeUri, 'view', $item ['ID'] ) );
-		$transcriptUrl = admin_url( sprintf( $iframeUri, 'transcript', $item ['ID'] ) );
-		$resendUrl = admin_url( sprintf( $iframeUri, 'resend', $item ['ID'] ) );
-
-		$meta_values = PostmanEmailLogs::get_data( $item ['ID'] );
-
-		$actions = array(
-				'delete' => sprintf( '<a href="%s">%s</a>', $deleteUrl, _x( 'Delete', 'Delete an item from the email log', 'post-smtp' ) ),
-				'view' => sprintf( '<a href="%s" class="thickbox">%s</a>', $viewUrl, _x( 'View', 'View an item from the email log', 'post-smtp' ) ),
-		);
-
-		if ( ! empty( $meta_values ['session_transcript'] [0] ) ) {
-			$actions ['transcript'] = sprintf( '<a href="%1$s" class="thickbox">%2$s</a>', $transcriptUrl, __( 'Session Transcript', 'post-smtp' ) );
-		} else {
-			$actions ['transcript'] = sprintf( '%2$s', $transcriptUrl, __( 'Session Transcript', 'post-smtp' ) );
-		}
-		if ( ! (empty( $meta_values ['original_to'] [0] ) && empty( $meta_values ['originalHeaders'] [0] )) ) {
-			// $actions ['resend'] = sprintf ( '<a href="%s">%s</a>', $resendUrl, __ ( 'Resend', 'post-smtp' ) );
-			$emails = maybe_unserialize( $meta_values ['original_to'] [0] );
-			$to = is_array( $emails ) ? implode( ',', $emails ) : $emails;
-			$actions ['resend'] = sprintf( '<span id="%3$s"><a class="postman-open-resend" href="#">%2$s</a></span><div style="display:none;"><input type="hidden" name="security" value="%6$s"><input type="text" name="mail_to" class="regular-text ltr" data-id="%1$s" value="%4$s"><button class="postman-resend button button-primary">%2$s</button><i style="color: black;">%5$s</i></div>', $item ['ID'], __( 'Resend', 'post-smtp' ), 'resend-' . $item ['ID'], esc_attr( $to ), __( 'comma-separated for multiple emails', 'post-smtp' ), wp_create_nonce( 'resend' ) );
-		} else {
-			$actions ['resend'] = sprintf( '%2$s', $resendUrl, __( 'Resend', 'post-smtp' ) );
-		}
-
-		// Return the title contents
-		return sprintf( '%1$s %3$s',
-			/*$1%s*/ $item ['title'],
-			/*$2%s*/ $item ['ID'],
-		/*$3%s*/ $this->row_actions( $actions ) );
 	}
 
 	/**
@@ -188,21 +130,6 @@ class PostmanEmailLogView extends WP_List_Table {
 	 */
 	function get_sortable_columns() {
 		return array();
-		$sortable_columns = array(
-				'title' => array(
-						'title',
-						false,
-				), // true means it's already sorted
-				'status' => array(
-						'status',
-						false,
-				),
-				'date' => array(
-						'date',
-						false,
-				),
-		);
-		return $sortable_columns;
 	}
 
 	/**
@@ -227,18 +154,6 @@ class PostmanEmailLogView extends WP_List_Table {
 				'bulk_delete' => _x( 'Delete', 'Delete an item from the email log', 'post-smtp' ),
 		);
 		return $actions;
-	}
-
-	/**
-	 * ************************************************************************
-	 * Optional.
-	 * You can handle your bulk actions anywhere or anyhow you prefer.
-	 * For this example package, we will handle it in the class to keep things
-	 * clean and organized.
-	 *
-	 * @see $this->prepare_items() ************************************************************************
-	 */
-	function process_bulk_action() {
 	}
 
 	/**
@@ -346,7 +261,7 @@ class PostmanEmailLogView extends WP_List_Table {
 		if ( isset( $_POST['postman_trash_all'] ) ) {
 			$args['posts_per_page'] = -1;
 		}
-		$posts = new WP_query( $args );
+		$posts = new WP_Query( $args );
 
 		if ( isset( $_POST['postman_trash_all'] ) ) {
 			foreach ( $posts->posts as $post ) {
@@ -381,21 +296,6 @@ class PostmanEmailLogView extends WP_List_Table {
 			array_push( $data, $flattenedPost );
 		}
 
-		/**
-		 * This checks for sorting input and sorts the data in our array accordingly.
-		 *
-		 * In a real-world situation involving a database, you would probably want
-		 * to handle sorting by passing the 'orderby' and 'order' values directly
-		 * to a custom query. The returned data will be pre-sorted, and this array
-		 * sorting technique would be unnecessary.
-		 */
-		function usort_reorder( $a, $b ) {
-			$orderby = ( ! empty( $_REQUEST ['orderby'] )) ? $_REQUEST ['orderby'] : 'title'; // If no sort, default to title
-			$order = ( ! empty( $_REQUEST ['order'] )) ? $_REQUEST ['order'] : 'asc'; // If no order, default to asc
-			$result = strcmp( $a [ $orderby ], $b [ $orderby ] ); // Determine sort order
-			return ($order === 'asc') ? $result : - $result; // Send final sort direction to usort
-		}
-		// usort($data, 'usort_reorder');
 		/**
 		 * *********************************************************************
 		 * ---------------------------------------------------------------------
@@ -452,6 +352,9 @@ class PostmanEmailLogView extends WP_List_Table {
 				'per_page' => $per_page, // WE have to determine how many items to show on a page
 				'total_pages' => ceil( $total_items / $per_page ),
 		) ); // WE have to calculate the total number of pages
+	}
+
+	public function process_bulk_action() {
 	}
 }
 

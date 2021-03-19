@@ -1,0 +1,11 @@
+includes:
+    - vendor/szepeviktor/phpstan-wordpress/extension.neon
+parameters:
+    level: 5
+    inferPrivatePropertyTypeFromConstructor: true
+    paths:
+        - postman-smtp.php
+        - Postman/
+    ignoreErrors:
+        - '#Constant WP_PLUGIN_DIR not found\.#'
+        - '#Constant POST_URL not found\.#'

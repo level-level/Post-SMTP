@@ -1,7 +1,4 @@
 <?php
-require_once dirname(__DIR__) . '/PostmanEmailLogs.php';
-require_once 'PostmanEmailLogService.php';
-require_once 'PostmanEmailLogView.php';
 
 /**
  *
@@ -59,8 +56,9 @@ class PostmanEmailLogController {
 	}
 
 	/**
+	 * @return void
 	 */
-	function on_admin_init() {
+	function on_admin_init(): void {
 		$this->handleBulkAction();
 		// register the stylesheet and javascript external resources
 		$pluginData = apply_filters( 'postman_get_plugin_metadata', null );
@@ -71,8 +69,9 @@ class PostmanEmailLogController {
 	}
 
 	/**
+	 * @return void
 	 */
-	public function resendMail() {
+	public function resendMail(): void {
 		check_ajax_referer( 'resend', 'security' );
 
 		// get the email address of the recipient from the HTTP Request
@@ -105,7 +104,7 @@ class PostmanEmailLogController {
 						'transcript' => $transcript,
 				);
 				$this->logger->trace( 'AJAX response' );
-				$this->logger->trace( $response );
+				$this->logger->trace( json_encode($response) );
 				// send the JSON response
 				wp_send_json_success( $response );
 			} else {
@@ -119,7 +118,7 @@ class PostmanEmailLogController {
 						'transcript' => $transcript,
 				);
 				$this->logger->trace( 'AJAX response' );
-				$this->logger->trace( $response );
+				$this->logger->trace( json_encode($response) );
 				// send the JSON response
 				wp_send_json_error( $response );
 			}
@@ -147,9 +146,11 @@ class PostmanEmailLogController {
 	}
 
 	/**
-	 * From https://www.skyverge.com/blog/add-custom-bulk-action/
+	 * 	 * From https://www.skyverge.com/blog/add-custom-bulk-action/
+	 *
+	 * @return void
 	 */
-	function handleBulkAction() {
+	function handleBulkAction(): void {
 		// only do this for administrators
 		if ( PostmanUtils::isAdmin() && isset( $_REQUEST ['email_log_entry'] ) ) {
 			$this->logger->trace( 'handling bulk action' );
@@ -175,8 +176,9 @@ class PostmanEmailLogController {
 	}
 
 	/**
+	 * @return void
 	 */
-	function delete_log_item() {
+	function delete_log_item(): void {
 		// only do this for administrators
 		if ( PostmanUtils::isAdmin() ) {
 			$this->logger->trace( 'handling delete item' );
@@ -195,8 +197,9 @@ class PostmanEmailLogController {
 	}
 
 	/**
+	 * @return void
 	 */
-	function view_log_item() {
+	function view_log_item(): void {
 		// only do this for administrators
 		if ( PostmanUtils::isAdmin() ) {
 			$this->logger->trace( 'handling view item' );
@@ -245,6 +248,11 @@ class PostmanEmailLogController {
 		}
 	}
 
+	/**
+	 * @param null|string $message
+	 *
+	 * @return string
+	 */
 	function sanitize_message( $message ) {
 		$allowed_tags = wp_kses_allowed_html( 'post' );
 		$allowed_tags['style'] = array();
@@ -253,13 +261,14 @@ class PostmanEmailLogController {
 	}
 
 	/**
+	 * @return void
 	 */
-	function view_transcript_log_item() {
+	function view_transcript_log_item(): void {
 		// only do this for administrators
 		if ( PostmanUtils::isAdmin() ) {
 			$this->logger->trace( 'handling view transcript item' );
 			$postid = $_REQUEST ['email'];
-			$post = get_post( $postid );
+			get_post( $postid );
 			$meta_values = PostmanEmailLogs::get_data( $postid );
 			// https://css-tricks.com/examples/hrs/
 			print '<html><head><style>body {font-family: monospace;} hr {
@@ -283,17 +292,21 @@ class PostmanEmailLogController {
 	}
 
 	/**
-	 * For whatever reason, PostmanUtils::get..url doesn't work here? :(
+	 * 	 * For whatever reason, PostmanUtils::get..url doesn't work here? :(
+	 *
+	 * @return void
 	 */
-	function redirectToLogPage() {
+	function redirectToLogPage(): void {
 		PostmanUtils::redirect( PostmanUtils::POSTMAN_EMAIL_LOG_PAGE_RELATIVE_URL );
 		die();
 	}
 
 	/**
-	 * Register the page
+	 * 	 * Register the page
+	 *
+	 * @return void
 	 */
-	function postmanAddMenuItem() {
+	function postmanAddMenuItem(): void {
 		// only do this for administrators
 		if ( PostmanUtils::isAdmin() ) {
 			$this->logger->trace( 'created PostmanEmailLog admin menu item' );
@@ -302,7 +315,14 @@ class PostmanEmailLogController {
 			$pageTitle = sprintf( __( '%s Email Log', 'post-smtp' ), __( 'Post SMTP', 'post-smtp' ) );
 			$pluginName = _x( 'Email Log', 'The log of Emails that have been delivered', 'post-smtp' );
 
-			$page = add_submenu_page( PostmanViewController::POSTMAN_MENU_SLUG, $pageTitle, $pluginName, Postman::MANAGE_POSTMAN_CAPABILITY_LOGS, 'postman_email_log', array( $this, 'postman_render_email_page' ) );
+			$page = add_submenu_page( 
+				PostmanViewController::POSTMAN_MENU_SLUG, 
+				$pageTitle, 
+				$pluginName, 
+				Postman::MANAGE_POSTMAN_CAPABILITY_LOGS, 
+				'postman_email_log', 
+				array( $this, 'postman_render_email_page' ) 
+			);
 
 			// When the plugin options page is loaded, also load the stylesheet
 			add_action( 'admin_print_styles-' . $page, array(
@@ -311,29 +331,30 @@ class PostmanEmailLogController {
 			) );
 		}
 	}
-	function postman_email_log_enqueue_resources() {
+	function postman_email_log_enqueue_resources(): void {
 		$pluginData = apply_filters( 'postman_get_plugin_metadata', null );
-		wp_register_style( 'postman_email_log', plugins_url( 'style/postman-email-log.css', $this->rootPluginFilenameAndPath ), null, $pluginData ['version'] );
+		wp_register_style( 'postman_email_log', plugins_url( 'style/postman-email-log.css', $this->rootPluginFilenameAndPath ), array(), $pluginData ['version'] );
 		wp_enqueue_style( 'postman_email_log' );
 		wp_enqueue_script( 'postman_resend_email_script' );
-		wp_enqueue_script( 'sprintf' );
-		wp_localize_script( 'postman_resend_email_script', 'postman_js_email_was_resent', __( 'Email was successfully resent (but without attachments)', 'post-smtp' ) );
 		/* Translators: Where %s is an error message */
-		wp_localize_script( 'postman_resend_email_script', 'postman_js_email_not_resent', __( 'Email could not be resent. Error: %s', 'post-smtp' ) );
-		wp_localize_script( 'postman_resend_email_script', 'postman_js_resend_label', __( 'Resend', 'post-smtp' ) );
+		wp_localize_script( 'postman_resend_email_script', 'postman_js_resend', array(
+			'postman_js_email_not_resent' => __( 'Email could not be resent. Error: %s', 'post-smtp' ),
+		));
 	}
 
 	/**
-	 * *************************** RENDER TEST PAGE ********************************
-	 * ******************************************************************************
-	 * This function renders the admin page and the example list table.
-	 * Although it's
-	 * possible to call prepare_items() and display() from the constructor, there
-	 * are often times where you may need to include logic here between those steps,
-	 * so we've instead called those methods explicitly. It keeps things flexible, and
-	 * it's the way the list tables are used in the WordPress core.
+	 * 	 * *************************** RENDER TEST PAGE ********************************
+	 * 	 * ******************************************************************************
+	 * 	 * This function renders the admin page and the example list table.
+	 * 	 * Although it's
+	 * 	 * possible to call prepare_items() and display() from the constructor, there
+	 * 	 * are often times where you may need to include logic here between those steps,
+	 * 	 * so we've instead called those methods explicitly. It keeps things flexible, and
+	 * 	 * it's the way the list tables are used in the WordPress core.
+	 *
+	 * @return void
 	 */
-	function postman_render_email_page() {
+	function postman_render_email_page(): void {
 
 		// Create an instance of our package class...
 		$testListTable = new PostmanEmailLogView();
@@ -350,8 +371,6 @@ class PostmanEmailLogController {
 	<h2><?php
 	/* Translators where (%s) is the name of the plugin */
 		echo sprintf( __( '%s Email Log', 'post-smtp' ), __( 'Post SMTP', 'post-smtp' ) )?></h2>
-
-    <?php include_once POST_PATH . '/Postman/extra/donation.php'; ?>
 
 	<div
 		style="background: #ECECEC; border: 1px solid #CCC; padding: 0 10px; margin-top: 5px; border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px;">

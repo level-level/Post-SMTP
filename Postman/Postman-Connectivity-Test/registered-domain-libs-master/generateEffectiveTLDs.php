@@ -17,7 +17,7 @@ $format = "php";
 if ($_SERVER['argc']>1) {
 	if ($_SERVER['argv'][1] == "perl") {
 		$format = "perl";
-	} else if ($_SERVER['argv'][1] == "c") {
+	} elseif ($_SERVER['argv'][1] == "c") {
 		$format = "c";
 	}
 }
@@ -25,19 +25,19 @@ if ($_SERVER['argc']>1) {
 /*
  * Does $search start with $startstring?
  */
-function startsWith($search, $startstring) {
+function startsWith($search, $startstring): bool {
 	return (substr($search, 0, strlen($startstring))==$startstring);
 }
 
 /*
  * Does $search end with $endstring?
  */
-function endsWith($search, $endstring) {
+function endsWith($search, $endstring): bool {
 	return (substr($search, -strlen($endstring))==$endstring);
 }
 
 
-function buildSubdomain(&$node, $tldParts) {
+function buildSubdomain(&$node, $tldParts): void {
 
 	$dom = trim(array_pop($tldParts));
 
@@ -48,11 +48,7 @@ function buildSubdomain(&$node, $tldParts) {
 	}
 
 	if (!array_key_exists($dom, $node)) {
-		if ($isNotDomain) {
-			$node[$dom] = array("!" => "");
-		} else {
-			$node[$dom] = array();
-		}
+		$node[$dom] = $isNotDomain ? array("!" => "") : array();
 	}
 
 	if (!$isNotDomain && count($tldParts)>0) {
@@ -60,6 +56,9 @@ function buildSubdomain(&$node, $tldParts) {
 	}
 }
 
+/**
+ * @return void
+ */
 function printNode($key, $valueTree, $isAssignment = false) {
 
 	global $format;
@@ -70,26 +69,23 @@ function printNode($key, $valueTree, $isAssignment = false) {
 		} else {
 			echo "$key = array(";
 		}
-	} else {
-		if (strcmp($key, "!")==0) {
-			if ($format == "perl") {
+	} elseif (strcmp($key, "!")==0) {
+		if ($format == "perl") {
 				echo "'!' => {}";
 			} else {
 				echo "'!' => ''";
 			}
-			return;
-		} else {
-			if ($format == "perl") {
-				echo "'$key' => {";
-			} else {
+		return;
+	} elseif ($format == "perl") {
+		echo "'$key' => {";
+	} else {
 				echo "'$key' => array(";
 			}
-		}
-	}
 
 	$keys = array_keys($valueTree);
+	$keysCount = count($keys);
 
-	for ($i=0; $i<count($keys); $i++) {
+	for ($i=0; $i<$keysCount; $i++) {
 
 		$key = $keys[$i];
 
@@ -98,7 +94,7 @@ function printNode($key, $valueTree, $isAssignment = false) {
 		if ($i+1 != count($valueTree)) {
 			echo ",\n";
 		} else {
-			"\n";
+			echo "\n";
 		}
 	}
 
@@ -111,7 +107,7 @@ function printNode($key, $valueTree, $isAssignment = false) {
 
 // sample: root(3:ac(5:com,edu,gov,net,ad(3:nom,co!,*)),de,com)
 
-function printNode_C($key, $valueTree) {
+function printNode_C($key, $valueTree): void {
 
 	echo "$key";
 
@@ -119,20 +115,17 @@ function printNode_C($key, $valueTree) {
 
 	if (count($keys)>0) {
 
-		if (strcmp($keys['!'], "!")==0) {
+		if (strcmp($keys['!'], "!")==0) { // @phpstan-ignore-line
 			echo "!";
 		} else {
 
 			echo "(".count($keys).":";
 
-			for ($i=0; $i<count($keys); $i++) {
-
-				$key = $keys[$i];
-
+			foreach ($keys as $i => $key) {
+				$key = $key;
 				// if (count($valueTree[$key])>0) {
-					printNode_C($key, $valueTree[$key]);
+				printNode_C($key, $valueTree[$key]);
 				// }
-
 				if ($i+1 != count($valueTree)) {
 					echo ",";
 				}
@@ -176,7 +169,7 @@ foreach ($lines as $line) {
 	}
 
 	// this must be a TLD
-	$tldParts = preg_split('\.', $line);
+	$tldParts = preg_split('/\./', $line);
 	buildSubdomain($tldTree, $tldParts);
 }
 

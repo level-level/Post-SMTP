@@ -1,12 +1,16 @@
 <?php
-require_once ABSPATH . WPINC . '/class-phpmailer.php';
-require_once ABSPATH . WPINC . '/class-smtp.php';
 
-add_action('plugins_loaded', function() {
-    global $phpmailer;
+use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\PHPMailer;
 
-    $phpmailer = new PostsmtpMailer(true);
-});
+// require_once ABSPATH . WPINC . '/PHPMailer/PHPMailer.php';
+// require_once ABSPATH . WPINC . '/PHPMailer/SMTP.php';
+
+// add_action('plugins_loaded', function() {
+//     global $phpmailer;
+
+//     $phpmailer = new PostsmtpMailer(true);
+// });
 
 class PostsmtpMailer extends PHPMailer {
 
@@ -19,13 +23,13 @@ class PostsmtpMailer extends PHPMailer {
         parent::__construct($exceptions);
 
         $this->options = PostmanOptions::getInstance();
-        add_filter( 'postman_wp_mail_result', [ $this, 'postman_wp_mail_result' ] );
+        add_filter( 'postman_wp_mail_result', function () {
+            return $this->postman_wp_mail_result();
+        } );
     }
 
     public function send()
     {
-        require_once dirname(__DIR__) . '/PostmanWpMail.php';
-
         // create a PostmanWpMail instance
         $postmanWpMail = new PostmanWpMail();
         $postmanWpMail->init();
@@ -59,7 +63,7 @@ class PostsmtpMailer extends PHPMailer {
 
         try {
             return $postmanWpMail->sendMessage( $message, $log );
-        } catch (phpmailerException $exc) {
+        } catch (Exception $exc) {
 
             $this->error = $exc;
 
@@ -84,7 +88,12 @@ class PostsmtpMailer extends PHPMailer {
         return $data;
     }
 
-    private function getHeaders() {
+    /**
+     * @return string[]
+     *
+     * @psalm-return list<string>
+     */
+    private function getHeaders(): array {
         $headers = array();
         foreach ( $this->getCustomHeaders() as $header ) {
             $headers[] = "{$header[0]}: {$header[1]}";
@@ -93,15 +102,24 @@ class PostsmtpMailer extends PHPMailer {
         return $headers;
     }
 
-    public function postman_wp_mail_result() {
-        $result = [
+    /**
+     * @return (mixed|string)[]
+     *
+     * @psalm-return array{time: string, exception: mixed, transcript: string}
+     */
+    public function postman_wp_mail_result(): array {
+        return [
             'time' => '',
             'exception' => $this->error,
             'transcript' => '',
         ];
-        return $result;
     }
 
+    /**
+     * @param array $arr
+     *
+     * @return string
+     */
     private function flatArray($arr) {
         $result = [];
         foreach ( $arr as $key => $value ) {

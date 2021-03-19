@@ -76,7 +76,6 @@ SendGrid has a free SMTP plan that you can use to send up to 100 emails per day.
 * [Contact Form Builder](https://wordpress.org/plugins/contact-form-builder/)
 * [PlanSo Forms](https://wordpress.org/plugins/planso-forms/)
 * [Quform](https://www.quform.com/)
-* [MyMail Newsletter](http://revaxarts-themes.com/?t=mymail) by revaxarts
 * [SendPress Newsletters](https://wordpress.org/plugins/sendpress/)
 * [WP HTML Mail](https://wordpress.org/plugins/wp-html-mail/)
 * [Email Templates](https://wordpress.org/plugins/email-templates/)
@@ -304,7 +303,6 @@ To avoid being flagged as spam, you need to prove your email isn't forged. On a 
 * New: Fallback Feature - Configure a backup SMTP when emails are failing.
 * New: WordPress Multisite compability - with global settings.
 * New: Email Log capability - give other user cheking the logs.
-* Fixed: compatibility with mailster plugin
 * Fixed: Mandrill exception bug - Thanks to Niels de Blaauw from Level-Level
 
 = 1.9.6 - 2019-01-29
@@ -413,7 +411,6 @@ Syntx stupid mistake
 * [[Ticket](https://wordpress.org/support/topic/having-troble-in-17-while-set-content-type-to-texthtml?replies=8)] - v1.7 ignores the content-type header set in the Additional Headers. Fixed.
 * [[Ticket](https://wordpress.org/support/topic/do-not-network-activate-17-on-multisite?replies=15)] - Fixed an issue where v1.7 admin screens crash for non-admin users when Post is not configured. Fixed a multiste issue where v1.7 site admins lose access to their Post settings screen. Special thank-you to Domi2015 for giving me access for testing! :)
 * Localized jQuery Validation messages
-* Localized MyMail messages
 * Put the local translation files back, as WordPress on-line translations do not work as advertised
 
 = 1.7.1 - 2015-11-05 =

@@ -7,12 +7,8 @@ portTestInProgress = false;
  * Functions to run on document load
  */
 jQuery(document).ready(function() {
-	jQuery(postman_input_sender_email).focus();
+	jQuery(postman_data.input_sender_email).focus();
 	initializeJQuerySteps();
-	// add an event on the plugin selection
-	jQuery('input[name="input_plugin"]').click(function() {
-		getConfiguration();
-	});
 
 	// add an event on the transport input field
 	// when the user changes the transport, determine whether
@@ -61,7 +57,7 @@ function checkEmail(goDaddyHostDetected, email) {
 					smtpDiscovery = response.data;
 					if (response.data.hostname != null
 							&& response.data.hostname) {
-						jQuery(postman_hostname_element_name).val(
+						jQuery(postman_data.host_element_name).val(
 								response.data.hostname);
 					}
 					enableSmtpHostnameInput(goDaddyHostDetected);
@@ -106,12 +102,12 @@ function initializeJQuerySteps() {
 				autoFocus : true,
 				startIndex : parseInt(postman_setup_wizard.start_page),
 				labels : {
-					current : steps_current_step,
-					pagination : steps_pagination,
-					finish : steps_finish,
-					next : steps_next,
-					previous : steps_previous,
-					loading : steps_loading
+					current : postman_steps.steps_current_step,
+					pagination : postman_steps.steps_pagination,
+					finish : postman_steps.steps_finish,
+					next : postman_steps.steps_next,
+					previous : postman_steps.steps_previous,
+					loading : postman_steps.steps_loading
 				},
 				onStepChanging : function(event, currentIndex, newIndex) {
 					return handleStepChange(event, currentIndex, newIndex,
@@ -119,7 +115,7 @@ function initializeJQuerySteps() {
 
 				},
 				onInit : function() {
-					jQuery(postman_input_sender_email).focus();
+					jQuery(postman_data.input_sender_email).focus();
 				},
 				onStepChanged : function(event, currentIndex, priorIndex) {
 					return postHandleStepChange(event, currentIndex,
@@ -189,7 +185,7 @@ function handleStepChange(event, currentIndex, newIndex, form) {
 	if (currentIndex === 1) {
 		// page 1 : look-up the email
 		// address for the smtp server
-		checkGoDaddyAndCheckEmail(jQuery(postman_input_sender_email).val());
+		checkGoDaddyAndCheckEmail(jQuery(postman_data.input_sender_email).val());
 
 	} else if (currentIndex === 2) {
 
@@ -201,7 +197,7 @@ function handleStepChange(event, currentIndex, newIndex, form) {
 		portsToCheck = 0;
 		totalAvail = 0;
 
-		getHostsToCheck(jQuery(postman_hostname_element_name).val());
+		getHostsToCheck(jQuery(postman_data.host_element_name).val());
 
 	} else if (currentIndex === 3) {
 
@@ -217,9 +213,9 @@ function handleStepChange(event, currentIndex, newIndex, form) {
 		if (!valid) {
 			return false;
 		}
-		var chosenPort = jQuery(postman_port_element_name).val();
-		var hostname = jQuery(postman_hostname_element_name).val();
-		var authType = jQuery(postman_input_auth_type).val()
+		var chosenPort = jQuery(postman_data.port_element_name).val();
+		var hostname = jQuery(postman_data.host_element_name).val();
+		var authType = jQuery(postman_data.input_auth_type).val()
 
 	}
 
@@ -232,7 +228,7 @@ function postHandleStepChange(event, currentIndex, priorIndex, myself) {
 	// the user is old enough and wants
 	// to the previous step.
 	if (currentIndex === 2) {
-		jQuery(postman_hostname_element_name).focus();
+		jQuery(postman_data.host_element_name).focus();
 		// this is the second place i disable the next button but Steps
 		// re-enables it after the screen slides
 		if (priorIndex === 1) {
@@ -251,7 +247,7 @@ function postHandleStepChange(event, currentIndex, priorIndex, myself) {
 	}
 	if (currentIndex === 4) {
 		if (redirectUrlWarning) {
-			alert(postman_wizard_bad_redirect_url);
+			alert(postman_data.wizard_bad_redirect_url);
 		}
 		if (chosenPort == 'none') {
 			if (priorIndex === 5) {
@@ -533,57 +529,4 @@ function buildRadioButtonGroup(tableElement, radioGroupName, isSelected, value,
 			+ '" type="radio" name="' + radioGroupName + '"'
 			+ radioInputChecked + radioInputValue + '/></td><td>' + secureIcon
 			+ label + '</td></tr>');
-}
-
-/**
- * Handles population of the configuration based on the options set in a
- * 3rd-party SMTP plugin
- */
-function getConfiguration() {
-	var plugin = jQuery('input[name="input_plugin"]' + ':checked').val();
-	if (plugin != '') {
-		var data = {
-			'action' : 'import_configuration',
-			'plugin' : plugin
-		};
-		jQuery
-				.post(
-						ajaxurl,
-						data,
-						function(response) {
-							if (response.success) {
-								jQuery('select#input_transport_type').val(
-										'smtp');
-								jQuery(postman_input_sender_email).val(
-										response.sender_email);
-								jQuery(postman_input_sender_name).val(
-										response.sender_name);
-								jQuery(postman_hostname_element_name).val(
-										response.hostname);
-								jQuery(postman_port_element_name).val(
-										response.port);
-								jQuery(postman_input_auth_type).val(
-										response.auth_type);
-								jQuery('#input_enc_type')
-										.val(response.enc_type);
-								jQuery(postman_input_basic_username).val(
-										response.basic_auth_username);
-								jQuery(postman_input_basic_password).val(
-										response.basic_auth_password);
-								switchBetweenPasswordAndOAuth();
-							}
-						}).fail(function(response) {
-					ajaxFailed(response);
-				});
-	} else {
-		jQuery(postman_input_sender_email).val('');
-		jQuery(postman_input_sender_name).val('');
-		jQuery(postman_input_basic_username).val('');
-		jQuery(postman_input_basic_password).val('');
-		jQuery(postman_hostname_element_name).val('');
-		jQuery(postman_port_element_name).val('');
-		jQuery(postman_input_auth_type).val('none');
-		jQuery(postman_enc_for_password_el).val('none');
-		switchBetweenPasswordAndOAuth();
-	}
 }
