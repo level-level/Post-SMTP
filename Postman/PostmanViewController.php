@@ -374,9 +374,6 @@ class PostmanViewController {
 			printf( '<li><img class="align-middle" src="' . plugins_url( 'style/images/new.gif', dirname( __DIR__ ) . '/postman-smtp.php' ) . '"><a target="blank" class="align-middle" href="https://postmansmtp.com/category/guides/" class="welcome-icon postman_guides">%s</a></li>', __( 'Guides', 'post-smtp' ) );
 			print '</ul></div></div></div></div>';
 			?>
-			<div class="twitter-iframe-wrap" style="min-width: 300px;">
-				<a class="twitter-timeline" data-height="304" href="https://twitter.com/PostSMTP?ref_src=twsrc%5Etfw">Tweets by PostSMTP</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-			</div>
 		</div>
 		<?php
 	}
