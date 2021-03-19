@@ -126,18 +126,18 @@ class PostmanUtils {
 				'headers' => $headers,
 				'body' => $parameters,
 		);
-		if ( PostmanUtils::$logger->isTrace() ) {
-			PostmanUtils::$logger->trace( sprintf( 'Posting to %s', $url ) );
-			PostmanUtils::$logger->trace( 'Post header:' );
-			PostmanUtils::$logger->trace( $headers );
-			PostmanUtils::$logger->trace( 'Posting args:' );
-			PostmanUtils::$logger->trace( $parameters );
+		if ( static::get_logger()->isTrace() ) {
+			static::get_logger()->trace( sprintf( 'Posting to %s', $url ) );
+			static::get_logger()->trace( 'Post header:' );
+			static::get_logger()->trace( $headers );
+			static::get_logger()->trace( 'Posting args:' );
+			static::get_logger()->trace( $parameters );
 		}
 		$response = wp_remote_post( $url, $args );
 
 		// pre-process the response
 		if ( is_wp_error( $response ) ) {
-			PostmanUtils::$logger->error( $response->get_error_message() );
+			static::get_logger()->error( $response->get_error_message() );
 			throw new Exception( 'Error executing wp_remote_post: ' . $response->get_error_message() );
 		} else {
 			return $response;
@@ -152,8 +152,8 @@ class PostmanUtils {
 	 */
 	static function redirect( $url ): void {
 		// redirections back to THIS SITE should always be relative because of IIS bug
-		if ( PostmanUtils::$logger->isTrace() ) {
-			PostmanUtils::$logger->trace( sprintf( "Redirecting to '%s'", $url ) );
+		if ( static::get_logger()->isTrace() ) {
+			static::get_logger()->trace( sprintf( "Redirecting to '%s'", $url ) );
 		}
 		wp_redirect( $url );
 		exit();
@@ -165,7 +165,7 @@ class PostmanUtils {
 		return filter_var( $var, FILTER_VALIDATE_BOOLEAN );
 	}
 	static function logMemoryUse( $startingMemory, $description ): void {
-		PostmanUtils::$logger->trace( sprintf( $description . ' memory used: %s', PostmanUtils::roundBytes( memory_get_usage() - $startingMemory ) ) );
+		static::get_logger()->trace( sprintf( $description . ' memory used: %s', PostmanUtils::roundBytes( memory_get_usage() - $startingMemory ) ) );
 	}
 
 	/**
@@ -231,11 +231,19 @@ class PostmanUtils {
 		return file_exists($path);
 	}
 
+	static function get_logger(){
+		return new PostmanLogger( 'PostmanUtils' );
+	}
+
 	static function deleteLockFile( $tempDirectory = null ): bool {
 		$path = PostmanUtils::calculateTemporaryLockPath( $tempDirectory );
-		$success = @unlink( $path );
-		if ( PostmanUtils::$logger->isTrace() ) {
-			PostmanUtils::$logger->trace( sprintf( 'Deleting file %s : %s', $path, $success ) );
+		if(file_exists($path)){
+			$success = unlink( $path );	
+		}else{
+			$success = true;
+		}
+		if ( static::get_logger()->isTrace() ) {
+			static::get_logger()->trace( sprintf( 'Deleting file %s : %s', $path, $success ) );
 		}
 		return $success;
 	}
@@ -248,8 +256,8 @@ class PostmanUtils {
 		}
 		$path = PostmanUtils::calculateTemporaryLockPath( $tempDirectory );
 		$success = @fopen( $path, 'xb' );
-		if ( PostmanUtils::$logger->isTrace() ) {
-			PostmanUtils::$logger->trace( sprintf( 'Creating file %s : %s', $path, $success ) );
+		if ( static::get_logger()->isTrace() ) {
+			static::get_logger()->trace( sprintf( 'Creating file %s : %s', $path, $success ) );
 		}
 		return $success;
 	}
