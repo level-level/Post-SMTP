@@ -165,26 +165,7 @@ class PostmanUtils {
 		return filter_var( $var, FILTER_VALIDATE_BOOLEAN );
 	}
 	static function logMemoryUse( $startingMemory, $description ): void {
-		static::get_logger()->trace( sprintf( $description . ' memory used: %s', PostmanUtils::roundBytes( memory_get_usage() - $startingMemory ) ) );
-	}
-
-	/**
-	 * Rounds the bytes returned from memory_get_usage to smaller amounts used IEC binary prefixes
-	 * See http://en.wikipedia.org/wiki/Binary_prefix
-	 *
-	 * @param mixed $size
-	 * @return string
-	 */
-	static function roundBytes( $size ) {
-		$unit = array(
-				'B',
-				'KiB',
-				'MiB',
-				'GiB',
-				'TiB',
-				'PiB',
-		);
-		return @round( $size / pow( 1024, ($i = floor( log( $size, 1024 ) )) ), 2 ) . ' ' . $unit [ $i ];
+		static::get_logger()->trace( sprintf( $description . ' memory used: %s', size_format( memory_get_usage() - $startingMemory, 2 ) ) );
 	}
 
 	/**
