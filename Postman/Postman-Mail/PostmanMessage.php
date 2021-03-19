@@ -339,13 +339,11 @@ class PostmanMessage {
 	}
 
 	/**
-	 * 		 * 		 * For the string version, each header line (beginning with From:, Cc:, etc.) is delimited with a newline ("\r\n")
-	 * 		 *
-	 *
-	 *
-	 * @param (mixed|string)[] $headers
+	 * 	For the string version, each header line (beginning with From:, Cc:, etc.) is delimited with a newline ("\r\n")
+	 * 
+	 * @param string|[] $headers
 	 */
-	public function addHeaders( array $headers ): void {
+	public function addHeaders( $headers ): void {
 		if ( ! is_array( $headers ) ) {
 			// WordPress may send a string where "each header line (beginning with From:, Cc:, etc.) is delimited with a newline ("\r\n") (advanced)"
 			// this converts that string to an array
