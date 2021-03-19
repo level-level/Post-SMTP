@@ -341,7 +341,7 @@ class PostmanMessage {
 	/**
 	 * 	For the string version, each header line (beginning with From:, Cc:, etc.) is delimited with a newline ("\r\n")
 	 * 
-	 * @param string|[] $headers
+	 * @param string|array $headers
 	 */
 	public function addHeaders( $headers ): void {
 		if ( ! is_array( $headers ) ) {
