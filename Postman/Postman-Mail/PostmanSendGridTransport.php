@@ -2,6 +2,8 @@
 
 use Laminas\Mail\Transport\Smtp;
 use Laminas\Mail\Transport\TransportInterface;
+use SlmMail\Mail\Transport\HttpTransport;
+use SlmMail\Service\SendGridService;
 
 /**
  * Postman SendGrid module
@@ -79,18 +81,10 @@ class PostmanSendGridTransport extends PostmanAbstractModuleTransport implements
 		return 'SendGrid_api';
 	}
 	
-	/**
-	 * 	 * (non-PHPdoc)
-	 * 	 *
-	 *
-	 * @see PostmanModuleTransport::createMailEngine()
-	 *
-	 * @return PostmanSendGridMailEngine
-	 */
-	public function createMailEngine() {
-		$apiKey = $this->options->getSendGridApiKey ();
-		return new PostmanSendGridMailEngine ( $apiKey );
+	public function createMailEngine():TransportInterface {
+		return new HttpTransport( new SendGridService('', $this->options->getSendGridApiKey ()) ); // TODO username
 	}
+
 	/**
 	 * @return string
 	 */

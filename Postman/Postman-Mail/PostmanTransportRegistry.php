@@ -67,9 +67,6 @@ class PostmanTransportRegistry {
 		}
 	}
 
-	/**
-	 * @return boolean
-	 */
 	public function getActiveTransport() {
 		$selectedTransport = PostmanOptions::getInstance()->getTransportType();
 		$transports = $this->getTransports();

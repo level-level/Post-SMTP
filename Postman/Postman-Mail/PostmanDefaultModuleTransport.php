@@ -76,16 +76,8 @@ class PostmanDefaultModuleTransport extends PostmanAbstractZendModuleTransport i
 		return array();
 	}
 	
-	/**
-	 * 		 * (non-PHPdoc)
-	 * 		 *
-	 *
-	 * @see PostmanModuleTransport::createMailEngine()
-	 *
-	 * @return PostmanZendMailEngine
-	 */
-	public function createMailEngine() {
-		return new PostmanZendMailEngine ( $this );
+	public function createMailEngine() :TransportInterface{
+		return new Smtp();
 	}
 	
 	public function createMailTransport(): TransportInterface {

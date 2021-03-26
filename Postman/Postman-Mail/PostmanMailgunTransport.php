@@ -2,6 +2,9 @@
 
 use Laminas\Mail\Transport\Smtp;
 use Laminas\Mail\Transport\TransportInterface;
+use Mailgun\Mailgun;
+use SlmMail\Mail\Transport\HttpTransport;
+use SlmMail\Service\MailgunService;
 
 /**
  * Postman Mailgun module
@@ -79,18 +82,10 @@ class PostmanMailgunTransport extends PostmanAbstractModuleTransport implements 
 		return 'Mailgun_api';
 	}
 
-	/**
-	 * 	 * (non-PHPdoc)
-	 * 	 *
-	 *
-	 * @see PostmanModuleTransport::createMailEngine()
-	 *
-	 * @return PostmanMailgunMailEngine
-	 */
-	public function createMailEngine() {
+	public function createMailEngine():TransportInterface {
 		$apiKey = $this->options->getMailgunApiKey();
 		$domainName = $this->options->getMailgunDomainName();
-		return new PostmanMailgunMailEngine( $apiKey, $domainName );
+		return new HttpTransport( new MailgunService($domainName, $apiKey, 'https://api.mailgun.net/v3') );
 	}
 	/**
 	 * @return string

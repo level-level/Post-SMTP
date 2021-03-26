@@ -1,5 +1,7 @@
 <?php
 
+use Laminas\Mail\Transport\TransportInterface;
+
 interface PostmanModuleTransport extends PostmanTransport {
 	const RAW_MESSAGE_FOLLOWS = '
 
@@ -10,7 +12,7 @@ interface PostmanModuleTransport extends PostmanTransport {
 	public function getSocketsForSetupWizardToProbe($hostname, $smtpServerGuess);
 	public function getConfigurationBid(PostmanWizardSocket $hostData, $userAuthOverride, $originalSmtpServer);
 	public function isLockingRequired();
-	public function createMailEngine();
+	public function createMailEngine():TransportInterface;
 	public function isWizardSupported();
 	public function isConfiguredAndReady();
 	public function isReadyToSendMail();

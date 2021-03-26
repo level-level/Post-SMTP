@@ -1,5 +1,7 @@
 <?php
 
+use Laminas\Validator\EmailAddress;
+
 /**
  *
  * @author jasonhendriks
@@ -316,7 +318,7 @@ class PostmanUtils {
 			return true;
 		}
 		if ( ! isset( PostmanUtils::$emailValidator ) ) {
-			PostmanUtils::$emailValidator = new Zend_Validate_EmailAddress();
+			PostmanUtils::$emailValidator = new EmailAddress();
 		}
 		return PostmanUtils::$emailValidator->isValid( $email );
 	}

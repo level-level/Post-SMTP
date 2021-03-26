@@ -1,5 +1,11 @@
 <?php
 
+use Laminas\Mail\Header\HeaderInterface;
+use Laminas\Mail\Message;
+use Laminas\Mail\Transport\TransportInterface;
+use Laminas\Mime\Message as MimeMessage;
+use Laminas\Mime\Mime;
+use Laminas\Mime\Part;
 use PHPMailer\PHPMailer\Exception;
 
 /**
@@ -29,7 +35,7 @@ class PostmanWpMail {
 	 * @param mixed $to
 	 * @param mixed $subject
 	 * @param mixed $headers
-	 * @param mixed $attachments
+	 * @param string[] $attachments
 	 * @param string $message
 	 *
 	 * @return boolean
@@ -53,12 +59,8 @@ class PostmanWpMail {
 		return $this->sendMessage( $postmanMessage, $log );
 	}
 
-	/**
-	 * @param PostmanMessage $message
-	 */
-	private function apply_default_headers( $message ): void {
-		$headers[] = 'Message-ID: ' . $this->createMessageId();
-		$message->addHeaders($headers);
+	private function apply_default_headers( Message $message ): void {
+		$message->getHeaders()->addHeaderLine('Message-ID', $this->createMessageId());
 	}
 
 	/**
@@ -83,9 +85,9 @@ class PostmanWpMail {
 	 * @param mixed $subject
 	 * @param mixed $message
 	 * @param mixed $headers
-	 * @param mixed $attachments
+	 * @param string[] $attachments Paths to files to attach
 	 */
-	private function processWpMailCall( $to, $subject, $message, $headers, $attachments ): PostmanMessage {
+	private function processWpMailCall( $to, $subject, $message, $headers, $attachments ): Message {
 		$this->logger->trace( 'wp_mail parameters before applying WordPress wp_mail filter:' );
 		$this->traceParameters( $to, $subject, $message, $headers, $attachments );
 
@@ -141,18 +143,16 @@ class PostmanWpMail {
 
 	/**
 	 * Creates a new instance of PostmanMessage with a pre-set From and Reply-To
-	 *
-	 * @return PostmanMessage
 	 */
-	public function createNewMessage() {
-		$message = new PostmanMessage();
+	public function createNewMessage() : Message {
+		$message = new Message();
 		$options = PostmanOptions::getInstance();
 		// the From is set now so that it can be overridden
 		$transport = PostmanTransportRegistry::getInstance()->getActiveTransport();
 		$message->setFrom( $transport->getFromEmailAddress(), $transport->getFromName() );
 		// the Reply-To is set now so that it can be overridden
 		$message->setReplyTo( $options->getReplyTo() );
-		$message->setCharset( get_bloginfo( 'charset' ) );
+		$message->setEncoding( get_bloginfo( 'charset' ) );
 		return $message;
 	}
 
@@ -164,7 +164,7 @@ class PostmanWpMail {
 	 *
 	 * @return boolean
 	 */
-	public function sendMessage( PostmanMessage $message, PostmanEmailLog $log ) {
+	public function sendMessage( Message $message, PostmanEmailLog $log ) {
 
 		$this->apply_default_headers( $message );
 
@@ -179,20 +179,32 @@ class PostmanWpMail {
 		$engine = $transport->createMailEngine();
 
 		// add plugin-specific attributes to PostmanMessage
-		$message->addHeaders( $options->getAdditionalHeaders() );
-		$message->addTo( $options->getForcedToRecipients() );
-		$message->addCc( $options->getForcedCcRecipients() );
-		$message->addBcc( $options->getForcedBccRecipients() );
+		$headers = $options->getAdditionalHeaders();
+		if(!is_array($headers) && !empty($headers)){
+			$headers = array($headers);
+		}
+		if(!empty($headers)){
+			$message->getHeaders()->addHeaders( $headers );
+		}
+		if(!empty($options->getForcedToRecipients())){
+			$message->addTo( $options->getForcedToRecipients() );
+		}
+		if(!empty($options->getForcedCcRecipients())){
+			$message->addCc( $options->getForcedCcRecipients() );
+		}
+		if(!empty($options->getForcedBccRecipients())){
+			$message->addBcc( $options->getForcedBccRecipients() );
+		}
 
 		// apply the WordPress filters
 		// may impact the from address, from email, charset and content-type
-		$message->applyFilters();
+		$message = $this->applyFilters($message);
 		//do_action_ref_array( 'phpmailer_init', array( &$message ) );
 
-		// create the body parts (if they are both missing)
-		if ( $message->isBodyPartsEmpty() ) {
-			$message->createBodyParts();
-		}
+		// create the body parts (if they are both missing) // TODO!
+		// if ( $message->isBodyPartsEmpty() ) {
+		// 	$message->createBodyParts();
+		// }
 
 		// is this a test run?
 		$testMode = apply_filters( 'postman_test_email', false );
@@ -206,7 +218,7 @@ class PostmanWpMail {
 		try {
 
 			// prepare the message
-			$message->validate( $transport );
+			// $message->validate( $transport ); // @TODO
 
 			// send the message
 			if ( $options->getRunMode() == PostmanOptions::RUN_MODE_PRODUCTION ) {
@@ -240,7 +252,7 @@ class PostmanWpMail {
 			// save the error for later
 			$this->exception = $e;
 
-			// write the error to the PHP log
+				// write the error to the PHP log
 			$this->logger->error( get_class( $e ) . ' code=' . $e->getCode() . ' message=' . trim( $e->getMessage() ) );
 
 			// increment the failure counter, unless we are just tesitng
@@ -264,11 +276,11 @@ class PostmanWpMail {
 			}
 
 			$mail_error_data = array(
-				'to' => $message->getToRecipients(),
+				'to' => $message->getTo()->current()->toString(),
 				'subject' => $message->getSubject(),
 				'message' => $message->getBody(),
 				'headers' => $message->getHeaders(),
-				'attachments' => $message->getAttachments()
+				'attachments' => $message->toString()
 			);
 			$mail_error_data['phpmailer_exception_code'] = $e->getCode();
 
@@ -284,9 +296,97 @@ class PostmanWpMail {
 	}
 
 	/**
+	 * 		 * Apply the WordPress filters to the email
+	 */
+	public function applyFilters(Message $message): Message {
+		if ( $this->logger->isDebug() ) {
+			$this->logger->debug( 'Applying WordPress filters' );
+		}
+
+		$original_from = $message->getFrom()->current();
+		/**
+		 * Filter the email address to send from.
+		 *
+		 * @since 2.2.0
+		 *
+		 * @param string $from_email
+		 *        	Email address to send from.
+		 */
+		$filteredEmail = apply_filters( 'wp_mail_from', $original_from->getEmail() );
+		if ( $this->logger->isTrace() ) {
+			$this->logger->trace( 'wp_mail_from: ' . $filteredEmail );
+		}
+		if ( $original_from->getEmail() !== $filteredEmail ) {
+			$this->logger->debug( sprintf( 'Filtering From email address: before=%s after=%s', $original_from->getEmail(), $filteredEmail ) );
+			$message->setFrom($filteredEmail, $original_from->getName());
+		}
+
+		$original_from = $message->getFrom()->current();
+		/**
+		 * Filter the name to associate with the "from" email address.
+		 *
+		 * @since 2.3.0
+		 *
+		 * @param string $from_name
+		 *        	Name associated with the "from" email address.
+		 */
+		$filteredName = apply_filters( 'wp_mail_from_name', $original_from->getName() );
+		if ( $this->logger->isTrace() ) {
+			$this->logger->trace( 'wp_mail_from_name: ' . $filteredName );
+		}
+		if ( $original_from->getName() !== $filteredName ) {
+			$this->logger->debug( sprintf( 'Filtering From email name: before=%s after=%s', $original_from->getName(), $filteredName ) );
+			$message->setFrom($original_from->getEmail(), $filteredName);
+		}
+
+		/**
+		 * Filter the default wp_mail() charset.
+		 *
+		 * @since 2.3.0
+		 *
+		 * @param string $charset
+		 *        	Default email charset.
+		 */
+		$filteredCharset = apply_filters( 'wp_mail_charset', $message->getEncoding() );
+		if ( $this->logger->isTrace() ) {
+			$this->logger->trace( 'wp_mail_charset: ' . $filteredCharset );
+		}
+		if ( $message->getEncoding() !== $filteredCharset ) {
+			$this->logger->debug( sprintf( 'Filtering Charset: before=%s after=%s', $message->getEncoding(), $filteredCharset ) );
+			$message->setEncoding( $filteredCharset );
+		}
+
+		// Postman has it's own 'user override' filter
+		$options = PostmanOptions::getInstance();
+		$forcedEmailAddress = $options->getMessageSenderEmail();
+		$original_from = $message->getFrom()->current();
+		if ( $options->isSenderEmailOverridePrevented() && $original_from->getEmail() !== $forcedEmailAddress ) {
+			$this->logger->debug( sprintf( 'Forced From email address: before=%s after=%s', $original_from->getEmail(), $forcedEmailAddress ) );
+			$message->setFrom($forcedEmailAddress, $original_from->getName() );
+		}
+
+		$original_from = $message->getFrom()->current();
+		if ( $options->is_fallback ) {
+			$fallback_email = $options->getFallbackFromEmail();
+			$this->logger->debug( sprintf( 'Fallback: Forced From email address: before=%s after=%s', $original_from->getEmail(), $fallback_email ) );
+			$message->setFrom($fallback_email, $original_from->getName() );
+
+		}
+
+		$original_from = $message->getFrom()->current();
+		$forcedEmailName = $options->getMessageSenderName();
+		if ( $options->isSenderNameOverridePrevented() && $original_from->getName() !== $forcedEmailName ) {
+			$this->logger->debug( sprintf( 'Forced From email name: before=%s after=%s', $original_from->getName(), $forcedEmailName ) );
+			$message->setFrom($original_from->getEmail(), $forcedEmailName);
+		}
+
+		return $message;
+	}
+
+	/**
 	 * @return bool
 	 */
-	private function fallback( PostmanEmailLog $log, PostmanMessage $postMessage,PostmanOptions $options ) {
+	private function fallback( PostmanEmailLog $log, Message $postMessage,PostmanOptions $options ) {
 
 		if ( ! $options->is_fallback && $options->getFallbackIsEnabled() && $options->getFallbackIsEnabled() == 'yes' ) {
 
@@ -309,19 +409,10 @@ class PostmanWpMail {
 	 * 		 * Clean up after sending the mail
 	 * 		 *
 	 *
-	 * @param PostmanZendMailEngine $engine
+	 * @param TransportInterface $engine
 	 * @param mixed               $startTime
 	 */
-	private function postSend( PostmanMailEngine $engine, $startTime, PostmanOptions $options, PostmanModuleTransport $transport ): void {
-		// save the transcript
-		$this->transcript = $engine->getTranscript();
-
-		// log the transcript
-		if ( $this->logger->isTrace() ) {
-			$this->logger->trace( 'Transcript:' );
-			$this->logger->trace( $this->transcript );
-		}
-
+	private function postSend( TransportInterface $engine, $startTime, PostmanOptions $options, PostmanModuleTransport $transport ): void {
 		// delete the semaphore
 		if ( $transport->isLockingRequired() ) {
 			PostmanUtils::unlock();
@@ -373,12 +464,45 @@ class PostmanWpMail {
 	 * @param mixed $headers
 	 * @param mixed $attachments
 	 */
-	private function populateMessageFromWpMailParams( PostmanMessage $message, $to, $subject, $body, $headers, $attachments ): PostmanMessage {
-		$message->addHeaders( $headers );
-		$message->setBody( $body );
+	private function populateMessageFromWpMailParams( Message $message, $to, $subject, $body, $headers, $attachments ): Message {
+		$bodyMime = new MimeMessage();
+		$bodyHtml = new Part($body);
+		$bodyHtml->setEncoding(Mime::ENCODING_QUOTEDPRINTABLE);
+		$bodyHtml->setType(Mime::TYPE_HTML);
+		$bodyHtml->setCharset("UTF-8");   
+		$bodyMime->addPart($bodyHtml);
+
+		$message = $this->addAttachments($message, $bodyMime, $attachments );
+
+		if(!is_array($headers)){
+			$headers = array($headers);
+		}
+		$message->getHeaders()->addHeaders( $headers );
 		$message->setSubject( $subject );
 		$message->addTo( $to );
-		$message->setAttachments( $attachments );
+		return $message;
+	}
+
+	private function addAttachments(Message $message, MimeMessage $body, array $attachments){
+		$contentPart = new Part($body->generateMessage());
+		$attachmentParts = array();
+		foreach($attachments as $attachment){
+			$attachmentPart = new Part(fopen($attachment, 'r'));
+			$attachmentPart->type        = wp_check_filetype($attachment)['type'];
+			$attachmentPart->filename    = basename($attachment);
+			$attachmentPart->disposition = Mime::DISPOSITION_ATTACHMENT;
+			$attachmentPart->encoding    = Mime::ENCODING_BASE64;
+			$attachmentParts[] = $attachmentPart;
+		}
+		$content = new MimeMessage();
+		$content->setParts(array_merge(array($contentPart), $attachmentParts));
+		$message->setBody($content);
+		if(!empty($attachmentParts)){
+			$contentTypeHeader = $message->getHeaders()->get('Content-Type');
+			if($contentTypeHeader instanceof HeaderInterface){
+				// $contentTypeHeader->set('multipart/related'); // @TODO
+			}
+		}
 		return $message;
 	}
 

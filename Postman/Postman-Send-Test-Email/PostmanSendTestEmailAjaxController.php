@@ -170,6 +170,6 @@ class PostmanSendTestEmailAjaxController extends PostmanAbstractAjaxHandler {
 				'</body>',
 				'</html>',
 		);
-		return implode( PostmanMessage::EOL, $messageArray );
+		return implode( PHP_EOL, $messageArray );
 	}
 }
