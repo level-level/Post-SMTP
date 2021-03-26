@@ -59,9 +59,48 @@ class PostmanEmailLogView extends WP_List_Table {
 			case 'date' :
 			case 'status' :
 				return $item [ $column_name ];
+			case 'title':
+				return get_edit_post_link($item['ID']);
 			default :
 				return print_r( $item, true ); // Show the whole array for troubleshooting purposes
 		}
+	}
+
+	function column_title( $item ) {
+
+		// Build row actions
+		$iframeUri = 'admin-post.php?page=postman_email_log&action=%s&email=%s&TB_iframe=true&width=700&height=550';
+		$deleteUrl = wp_nonce_url( admin_url( sprintf( 'admin-post.php?page=postman_email_log&action=%s&email=%s', 'delete', $item ['ID'] ) ), 'delete_email_log_item_' . $item ['ID'] );
+		$viewUrl = admin_url( sprintf( $iframeUri, 'view', $item ['ID'] ) );
+		$transcriptUrl = admin_url( sprintf( $iframeUri, 'transcript', $item ['ID'] ) );
+		$resendUrl = admin_url( sprintf( $iframeUri, 'resend', $item ['ID'] ) );
+
+		$meta_values = get_post_meta( $item ['ID'] );
+
+		$actions = array(
+				'delete' => sprintf( '<a href="%s">%s</a>', $deleteUrl, _x( 'Delete', 'Delete an item from the email log', Postman::TEXT_DOMAIN ) ),
+				'view' => sprintf( '<a href="%s" class="thickbox">%s</a>', $viewUrl, _x( 'View', 'View an item from the email log', Postman::TEXT_DOMAIN ) ),
+		);
+
+		if ( ! empty( $meta_values ['session_transcript'] [0] ) ) {
+			$actions ['transcript'] = sprintf( '<a href="%1$s" class="thickbox">%2$s</a>', $transcriptUrl, __( 'Session Transcript', Postman::TEXT_DOMAIN ) );
+		} else {
+			$actions ['transcript'] = sprintf( '%2$s', $transcriptUrl, __( 'Session Transcript', Postman::TEXT_DOMAIN ) );
+		}
+		if ( ! (empty( $meta_values ['original_to'] [0] ) && empty( $meta_values ['originalHeaders'] [0] )) ) {
+			// $actions ['resend'] = sprintf ( '<a href="%s">%s</a>', $resendUrl, __ ( 'Resend', Postman::TEXT_DOMAIN ) );
+			$emails = maybe_unserialize( $meta_values ['original_to'] [0] );
+			$to = is_array( $emails ) ? implode( ',', $emails ) : $emails;
+			$actions ['resend'] = sprintf( '<span id="%3$s"><a class="postman-open-resend" href="#">%2$s</a></span><div style="display:none;"><input type="hidden" name="security" value="%6$s"><input type="text" name="mail_to" class="regular-text ltr" data-id="%1$s" value="%4$s"><button class="postman-resend button button-primary">%2$s</button><i style="color: black;">%5$s</i></div>', $item ['ID'], __( 'Resend', Postman::TEXT_DOMAIN ), 'resend-' . $item ['ID'], esc_attr( $to ), __( 'comma-separated for multiple emails', Postman::TEXT_DOMAIN ), wp_create_nonce( 'resend' ) );
+		} else {
+			$actions ['resend'] = sprintf( '%2$s', $resendUrl, __( 'Resend', Postman::TEXT_DOMAIN ) );
+		}
+
+		// Return the title contents
+		return sprintf( '%1$s %3$s',
+			/*$1%s*/ $item ['title'],
+			/*$2%s*/ $item ['ID'],
+		/*$3%s*/ $this->row_actions( $actions ) );
 	}
 
 	/**
