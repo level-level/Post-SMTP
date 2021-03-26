@@ -19,11 +19,6 @@ class PostmanSendGridTransport extends PostmanAbstractModuleTransport implements
 	const SENDGRID_AUTH_OPTIONS = 'postman_sendgrid_auth_options';
 	const SENDGRID_AUTH_SECTION = 'postman_sendgrid_auth_section';
 	
-	// @TODO: Implement
-	public function createMailTransport(): TransportInterface {
-		return new Smtp();
-	}
-
 	/**
 	 *
 	 * @param mixed $rootPluginFilenameAndPath        	

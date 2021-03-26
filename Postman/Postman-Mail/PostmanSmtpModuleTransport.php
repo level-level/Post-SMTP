@@ -19,14 +19,9 @@ class PostmanSmtpModuleTransport extends PostmanAbstractZendModuleTransport impl
 	}
 
 	public function createMailEngine(): TransportInterface {
-		return new Smtp();
-	}
-
-	public function createMailTransport(): TransportInterface {
 		$config = PostmanBasicAuthConfigurationFactory::createConfig( $this );
-		return new Smtp( $config );
+		return new Smtp($config);
 	}
-
 	/**
 	 * 	 * Determines whether Mail Engine locking is needed
 	 * 	 *

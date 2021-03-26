@@ -27,11 +27,6 @@ class PostmanMandrillTransport extends PostmanAbstractModuleTransport implements
 		} );
 	}
 	
-	// @TODO: Implement
-	public function createMailTransport(): TransportInterface {
-		return new Smtp();
-	}
-
 	/**
 	 *
 	 * @param mixed $data        	

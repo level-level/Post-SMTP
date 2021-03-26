@@ -77,11 +77,7 @@ class PostmanDefaultModuleTransport extends PostmanAbstractZendModuleTransport i
 	}
 	
 	public function createMailEngine() :TransportInterface{
-		return new Smtp();
-	}
-	
-	public function createMailTransport(): TransportInterface {
-		return new Smtp();
+		return new Smtp(new SmtpOptions(array('host'=>ini_get('smtp_server')?:'127.0.0.1', 'port'=>ini_get('smtp_port')?:25)));
 	}
 	
 	/**

@@ -243,7 +243,7 @@ class PostmanWpMail {
 
 			if ( $options->getRunMode() == PostmanOptions::RUN_MODE_PRODUCTION || $options->getRunMode() == PostmanOptions::RUN_MODE_LOG_ONLY ) {
 				// log the successful delivery
-				PostmanEmailLogService::getInstance()->writeSuccessLog( $log, $message, $engine->getTranscript(), $transport );
+				PostmanEmailLogService::getInstance()->writeSuccessLog( $log, $message, '', $transport );
 			}
 
 			// return successful

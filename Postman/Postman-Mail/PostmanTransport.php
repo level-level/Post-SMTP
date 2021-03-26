@@ -18,7 +18,6 @@ interface PostmanTransport {
 	public function getName();
 	// @deprecated
 	public function createPostmanMailAuthenticator(PostmanOptions $options, PostmanOAuthToken $authToken);
-	public function createMailTransport(): TransportInterface;
 	public function isConfigured(PostmanOptionsInterface $options, PostmanOAuthToken $token);
 	public function isReady(PostmanOptionsInterface $options, PostmanOAuthToken $token);
 	// @deprecated

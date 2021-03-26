@@ -311,13 +311,6 @@ abstract class PostmanAbstractModuleTransport implements PostmanModuleTransport 
 		return strpos ( $hostname, 'yahoo' );
 	}
 	
-	/*
-	 * ********************************
-	 * Unused, deprecated methods follow
-	 * *********************************
-	 */
-
-	abstract public function createMailTransport():TransportInterface;
 	
 	/**
 	 * 	 *

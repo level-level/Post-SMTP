@@ -18,6 +18,7 @@ class PostmanBasicAuthConfigurationFactory implements PostmanZendMailTransportCo
         
         $config = array(
             'name' => $hostname,
+            'host' => $hostname,
             'port' => $port,
         );
 
@@ -32,8 +33,8 @@ class PostmanBasicAuthConfigurationFactory implements PostmanZendMailTransportCo
         }
         if ($authType != PostmanOptions::AUTHENTICATION_TYPE_NONE) {
             $config['connection_class'] = $authType;
-            $$connection_config ['username'] = $username;
-            $$connection_config ['password'] = $password;
+            $connection_config ['username'] = $username;
+            $connection_config ['password'] = $password;
             $logger->debug ( sprintf ( 'Using auth %s with username %s and password %s', $authType, $username, PostmanUtils::obfuscatePassword ( $password ) ) );
         } else {
             $logger->debug ( 'Using no authentication' );
