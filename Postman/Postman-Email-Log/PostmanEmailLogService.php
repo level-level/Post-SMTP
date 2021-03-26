@@ -209,7 +209,7 @@ class PostmanEmailLogService {
 			$log->subject = $message->getSubject();
 			$log->body = $message->getBody();
 			if ( null !== $message->getReplyTo() ) {
-				$log->replyTo = $message->getReplyTo();
+				$log->replyTo = $this->flattenEmails( $message->getReplyTo() );
 			}
 		}
 		$log->success = $success;
