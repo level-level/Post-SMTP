@@ -1,5 +1,7 @@
 <?php
 
+use Laminas\Mail\Message;
+
 /**
  * This class knows how to interface with Wordpress
  * including loading/saving to the database.
@@ -9,26 +11,26 @@
  *
  * @author jasonhendriks
  */
-class PostmanMessage {
+class PostmanMessage extends Message{
 	const EOL = "\r\n";
 
 	// logger for all concrete classes - populate with setLogger($logger)
 	protected $logger;
 
 	// set by the caller
-	private $from;
-	private $replyTo;
-	private $toRecipients;
-	private $ccRecipients;
-	private $bccRecipients;
-	private $subject;
-	private $body;
-	private $bodyTextPart;
-	private $bodyHtmlPart;
-	private $headers;
-	private $attachments;
-	private $date;
-	private $messageId;
+	protected $from;
+	protected $replyTo;
+	protected $toRecipients;
+	protected $ccRecipients;
+	protected $bccRecipients;
+	protected $subject;
+	protected $body;
+	protected $bodyTextPart;
+	protected $bodyHtmlPart;
+	protected $headers;
+	protected $attachments;
+	protected $date;
+	protected $messageId;
 
 	// determined by the send() method
 	private $isTextHtml;

@@ -1,5 +1,7 @@
 <?php
 
+use Laminas\Mail\Message;
+
 /**
  * This class knows how to interface with Wordpress
  * including loading/saving to the database.
@@ -45,7 +47,7 @@ class PostmanZendMailEngine implements PostmanMailEngine {
 		// create the Message
 		$charset = $message->getCharset();
 		$this->logger->debug( 'Building Zend_Mail with charset=' . $charset );
-		$mail = new Zend_Mail( $charset );
+		$mail = new Message( $charset );
 
 		// add the Postman signature - append it to whatever the user may have set
 		if ( ! PostmanOptions::getInstance()->isStealthModeEnabled() ) {
