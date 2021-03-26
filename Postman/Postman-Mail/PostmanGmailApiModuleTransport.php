@@ -1,5 +1,7 @@
 <?php
 
+use Laminas\Mail\Transport\TransportInterface;
+
 /**
  * This class integrates Postman with the Gmail API
  * http://ctrlq.org/code/19860-gmail-api-send-emails
@@ -51,15 +53,7 @@ class PostmanGmailApiModuleTransport extends PostmanAbstractZendModuleTransport 
 		return new PostmanZendMailEngine ( $this );
 	}
 	
-	/**
-	 * 	 * (non-PHPdoc)
-	 * 	 *
-	 *
-	 * @see PostmanZendModuleTransport::createZendMailTransport()
-	 *
-	 * @return PostmanGmailApiModuleZendMailTransport
-	 */
-	public function createZendMailTransport($fakeHostname, $fakeConfig) {
+	public function createMailTransport():TransportInterface {
 		if (PostmanOptions::AUTHENTICATION_TYPE_OAUTH2 == $this->getAuthenticationType ()) {
 			$config = PostmanOAuth2ConfigurationFactory::createConfig ( $this );
 		} else {

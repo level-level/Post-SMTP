@@ -139,8 +139,8 @@ class PostmanZendMailEngine implements PostmanMailEngine {
 		$message->addAttachmentsToMail( $mail );
 
 		// create the SMTP transport
-		$this->logger->debug( 'Create the Zend_Mail transport' );
-		$zendTransport = $this->transport->createZendMailTransport( $this->transport->getHostname(), array() );
+		$this->logger->debug( 'Create the Mail transport' );
+		$zendTransport = $this->transport->createMailTransport();
 
 		$transport = $this->transport instanceof PostmanDefaultModuleTransport ? null : $zendTransport;
 

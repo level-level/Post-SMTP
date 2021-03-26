@@ -1,4 +1,8 @@
 <?php
+
+use Laminas\Mail\Transport\Smtp;
+use Laminas\Mail\Transport\TransportInterface;
+
 /**
  * Postman Mandrill module
  *
@@ -21,6 +25,11 @@ class PostmanMandrillTransport extends PostmanAbstractModuleTransport implements
 		} );
 	}
 	
+	// @TODO: Implement
+	public function createMailTransport(): TransportInterface {
+		return new Smtp();
+	}
+
 	/**
 	 *
 	 * @param mixed $data        	

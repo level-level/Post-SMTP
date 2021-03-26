@@ -1,5 +1,7 @@
 <?php
 
+use Laminas\Mail\Transport\TransportInterface;
+
 /**
  *
  * @author jasonhendriks
@@ -27,15 +29,7 @@ class PostmanSmtpModuleTransport extends PostmanAbstractZendModuleTransport impl
 		return new PostmanZendMailEngine( $this );
 	}
 
-	/**
-	 * 	 * (non-PHPdoc)
-	 * 	 *
-	 *
-	 * @see PostmanZendModuleTransport::createZendMailTransport()
-	 *
-	 * @return Zend_Mail_Transport_Smtp
-	 */
-	public function createZendMailTransport( $fakeHostname, $fakeConfig ) {
+	public function createMailTransport(): TransportInterface {
 		if ( PostmanOptions::AUTHENTICATION_TYPE_OAUTH2 == $this->getAuthenticationType() ) {
 			$config = PostmanOAuth2ConfigurationFactory::createConfig( $this );
 		} else {

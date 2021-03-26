@@ -1,4 +1,8 @@
 <?php
+
+use Laminas\Mail\Transport\Smtp;
+use Laminas\Mail\Transport\TransportInterface;
+
 /**
  * Postman Mailgun module
  *
@@ -12,6 +16,11 @@ class PostmanMailgunTransport extends PostmanAbstractModuleTransport implements 
 	const PRIORITY = 8000;
 	const MAILGUN_AUTH_OPTIONS = 'postman_mailgun_auth_options';
 	const MAILGUN_AUTH_SECTION = 'postman_mailgun_auth_section';
+
+	// @TODO: Implement
+	public function createMailTransport(): TransportInterface {
+		return new Smtp();
+	}
 
 	/**
 	 *

@@ -20,6 +20,12 @@
  * @version    $Id$
  */
 
+use Laminas\Mail\Message;
+use Laminas\Mail\Protocol\Smtp;
+use Laminas\Mail\Transport\Exception\DomainException;
+use Laminas\Mail\Transport\TransportInterface;
+use Laminas\Mime\Mime;
+
 /**
  * SMTP connection object
  *
@@ -31,7 +37,7 @@
  * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license http://framework.zend.com/license/new-bsd New BSD License
  */
-class PostmanGmailApiModuleZendMailTransport extends Zend_Mail_Transport_Abstract {
+class PostmanGmailApiModuleZendMailTransport implements TransportInterface {
 	const SERVICE_OPTION = 'service';
 	const MESSAGE_SENDER_EMAIL_OPTION = 'sender_email';
 	private $logger;
@@ -82,9 +88,7 @@ class PostmanGmailApiModuleZendMailTransport extends Zend_Mail_Transport_Abstrac
 	protected $_config;
 	
 	/**
-	 * Instance of Zend_Mail_Protocol_Smtp
-	 *
-	 * @var Zend_Mail_Protocol_Abstract
+	 * @var Smtp
 	 */
 	protected $_connection;
 	
@@ -120,10 +124,10 @@ class PostmanGmailApiModuleZendMailTransport extends Zend_Mail_Transport_Abstrac
 	 * @return void
 	 */
 	public function __destruct() {
-		if ($this->_connection instanceof Zend_Mail_Protocol_Smtp) {
+		if ($this->_connection instanceof Smtp) {
 			try {
 				$this->_connection->quit ();
-			} catch ( Zend_Mail_Protocol_Exception $e ) {
+			} catch ( Exception $e ) {
 				// ignore
 			}
 			$this->_connection->disconnect ();
@@ -135,7 +139,7 @@ class PostmanGmailApiModuleZendMailTransport extends Zend_Mail_Transport_Abstrac
 	/**
 	 * Gets the connection protocol instance
 	 *
-	 * @return Zend_Mail_Protocol_Abstract|null
+	 * @return Smtp|null
 	 */
 	public function getConnection() {
 		return $this->_connection;
@@ -148,90 +152,14 @@ class PostmanGmailApiModuleZendMailTransport extends Zend_Mail_Transport_Abstrac
 	 *
 	 *
 	 * @return void
-	 * @todo Rename this to sendMail, it's a public method...
+	 * @todo IMPLEMENT correctly
 	 */
-	public function _sendMail() {
-
-		// Prepare the message in message/rfc822
-		$message = $this->header . Zend_Mime::LINEEND . $this->body;
-		$this->message = $message;
-
-		// The message needs to be encoded in Base64URL
-		$googleApiMessage = new Google_Service_Gmail_Message ();
-		$googleService = $this->_config [self::SERVICE_OPTION];
-		$googleClient = $googleService->getClient();
-
-		$file_size = strlen($message);
-
-		try {
-			$googleClient->setDefer(true);
-			$result = $googleService->users_messages->send ( 'me', $googleApiMessage, array('uploadType' => 'resumable') );
-
-			$chunkSizeBytes = 1 * 1024 * 1024;
-
-			// create mediafile upload
-			$media = new Google_Http_MediaFileUpload( 
-				$googleClient,
-				$result,
-				'message/rfc822',
-				$message,
-				true,
-				// chunkSizeBytes has an invalid doctype.
-				// @see https://github.com/googleapis/google-api-php-client/issues/1881
-				// @phpstan-ignore-next-line
-				$chunkSizeBytes 
-			);
-			$media->setFileSize($file_size);
-
-			$status = false;
-			while (! $status) {
-				$status = $media->nextChunk();
-			}
-			$result = false;
-
-			// Reset to the client to execute requests immediately in the future.
-			$googleClient->setDefer(false);
-
-			$status->getId();
-
-			if ($this->logger->isInfo ()) {
-				$this->logger->info ( sprintf ( 'Message %d accepted for delivery', PostmanState::getInstance ()->getSuccessfulDeliveries () + 1 ) );
-			}
-			$this->transcript = print_r ( $result, true );
-			$this->transcript .= PostmanModuleTransport::RAW_MESSAGE_FOLLOWS;
-			$this->transcript .= $message;
-		} catch ( Exception $e ) {
-			$this->transcript = $e->getMessage ();
-			$this->transcript .= PostmanModuleTransport::RAW_MESSAGE_FOLLOWS;
-			$this->transcript .= $message;
-			throw $e;
-		}
+	public function send(Message $message)
+	{
+		throw new BadMethodCallException('Transport not yet implemented.');
 	}
 
 	public function getMessage() {
 		return $this->message;
-	}
-
-	
-	/**
-	 * Format and fix headers
-	 *
-	 * Some SMTP servers do not strip BCC headers. Most clients do it themselves as do we.
-	 *
-	 * @access protected
-	 * @param array $headers        	
-	 * @return void
-	 * @throws Zend_Mail_Transport_Exception
-	 */
-	protected function _prepareHeaders($headers) {
-		if (! $this->_mail) {
-			throw new Zend_Mail_Transport_Exception ( '_prepareHeaders requires a registered Zend_Mail object' );
-		}
-		
-		// google will unset the Bcc header for us.
-		// unset ( $headers ['Bcc'] );
-		
-		// Prepare headers
-		parent::_prepareHeaders ( $headers );
 	}
 }

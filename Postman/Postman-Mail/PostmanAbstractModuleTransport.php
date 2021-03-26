@@ -1,5 +1,7 @@
 <?php
 
+use Laminas\Mail\Transport\TransportInterface;
+
 /**
  *
  * @author jasonhendriks
@@ -314,18 +316,8 @@ abstract class PostmanAbstractModuleTransport implements PostmanModuleTransport 
 	 * Unused, deprecated methods follow
 	 * *********************************
 	 */
-	
-	/**
-	 * 	 *
-	 *
-	 * @deprecated (non-PHPdoc)
-	 *
-	 * @see PostmanTransport::createZendMailTransport()
-	 *
-	 * @return void
-	 */
-	public function createZendMailTransport($hostname, $config) {
-	}
+
+	abstract public function createMailTransport():TransportInterface;
 	
 	/**
 	 * 	 *
