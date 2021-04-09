@@ -18,7 +18,7 @@ class PostmanLogger {
 		$this->logLevel = class_exists ( 'PostmanOptions' ) ? PostmanOptions::getInstance ()->getLogLevel () : self::OFF_INT;
 	}
 	/**
-	 * @param false|string $text
+	 * @param false|string|array $text
 	 */
 	function trace($text): void {
 		$this->printLog ( $text, self::TRACE_INT, 'TRACE' );
@@ -57,7 +57,7 @@ class PostmanLogger {
 	 *
 	 * @param mixed $intLogLevel        	
 	 * @param mixed $logLevelName
-	 * @param false|string $text
+	 * @param false|string|array $text
 	 */
 	private function printLog($text, $intLogLevel, $logLevelName): void {
 		if ($this->wpDebug && $intLogLevel >= $this->logLevel) {

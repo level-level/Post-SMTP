@@ -222,13 +222,6 @@ class PostmanInstaller {
 			}
 		}
 
-		// can we create a tmp file? - this code is duplicated in InputSanitizer
-		PostmanUtils::deleteLockFile();
-		$lockSuccess = PostmanUtils::createLockFile();
-		// &= does not work as expected in my PHP
-		$lockSuccess = $lockSuccess && PostmanUtils::deleteLockFile();
-		$postmanState ['locking_enabled'] = $lockSuccess;
-
 		// always update the version number
 		if ( ! isset( $postmanState ['install_date'] ) ) {
 			$this->logger->debug( 'Upgrading database: adding install_date' );

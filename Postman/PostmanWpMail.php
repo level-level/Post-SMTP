@@ -223,7 +223,6 @@ class PostmanWpMail {
 			// send the message
 			if ( $options->getRunMode() == PostmanOptions::RUN_MODE_PRODUCTION ) {
 				if ( $transport->isLockingRequired() ) {
-					PostmanUtils::lock();
 					// may throw an exception attempting to contact the OAuth2 provider
 					$this->ensureAuthtokenIsUpdated( $transport, $options, $authorizationToken );
 				}
@@ -413,11 +412,6 @@ class PostmanWpMail {
 	 * @param mixed               $startTime
 	 */
 	private function postSend( TransportInterface $engine, $startTime, PostmanOptions $options, PostmanModuleTransport $transport ): void {
-		// delete the semaphore
-		if ( $transport->isLockingRequired() ) {
-			PostmanUtils::unlock();
-		}
-
 		// stop the clock
 		$endTime = microtime( true ) * 1000;
 		$this->totalTime = $endTime - $startTime;
