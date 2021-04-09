@@ -1,8 +1,6 @@
 <?php
 
-use Laminas\Mail\Transport\Smtp;
 use Laminas\Mail\Transport\TransportInterface;
-use Mailgun\Mailgun;
 use SlmMail\Mail\Transport\HttpTransport;
 use SlmMail\Service\MailgunService;
 

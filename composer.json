@@ -20,7 +20,7 @@
     "require": {
         "google/apiclient": "^2",
         "laminas/laminas-mail": "^2",
-        "laminas/laminas-servicemanager": "^3.6",
+        "laminas/laminas-servicemanager": "^3",
         "mailgun/mailgun-php": "^3",
         "mandrill/mandrill": "^1.0",
         "sendgrid/sendgrid": "^7.9",
