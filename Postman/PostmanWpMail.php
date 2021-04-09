@@ -473,13 +473,6 @@ class PostmanWpMail {
 		$bodyMime->addPart($bodyHtml);
 		$bodyMime = $this->addAttachments($bodyMime, $attachments );
 		$message->setBody($bodyMime);
-		if(empty($headers)){
-			$headers = array();
-		}
-		if(!is_array($headers)){
-			$headers = array($headers);
-		}
-		$message->getHeaders()->addHeaders( $headers );
 		$message->setSubject( $subject );
 		$message->addTo( $to );
 		return $message;
