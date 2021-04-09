@@ -23,6 +23,13 @@ class PostmanUtils {
 
 		const NO_ECHO = false;
 
+	public static function get_logger():PostmanLogger{
+		if(empty(self::$logger)){
+			self::$logger = new PostmanLogger('PostmanUtils');
+		}
+		return self::$logger;
+	}
+
 	/**
 	 *
 	 * @param mixed $slug
@@ -214,11 +221,8 @@ class PostmanUtils {
 		return file_exists($path);
 	}
 
-	static function get_logger(){
-		return new PostmanLogger( 'PostmanUtils' );
-	}
-
 	static function deleteLockFile( $tempDirectory = null ): bool {
+		return true;
 		$path = PostmanUtils::calculateTemporaryLockPath( $tempDirectory );
 		if(file_exists($path)){
 			$success = unlink( $path );	
@@ -234,6 +238,7 @@ class PostmanUtils {
 	 * @return false|resource
 	 */
 	static function createLockFile( $tempDirectory = null ) {
+		return true;
 		if ( self::lockFileExists() ) {
 			self::deleteLockFile();
 		}
@@ -300,7 +305,7 @@ class PostmanUtils {
 		 *
 		 * Good to know.
 		 */
-		$logger = PostmanUtils::$logger = new PostmanLogger( 'PostmanUtils' );
+		$logger = PostmanUtils::get_logger();
 		if ( $logger->isTrace() ) {
 			$logger->trace( 'calling current_user_can' );
 		}
@@ -358,7 +363,7 @@ class PostmanUtils {
 	 *
 	 */
 	public static function registerAdminMenu( $viewController, $callbackName, int $priority = 10 ): void {
-		$logger = PostmanUtils::$logger;
+		$logger = PostmanUtils::get_logger();
 		if ( $logger->isTrace() ) {
 			$logger->trace( 'Registering admin menu ' . $callbackName );
 		}
@@ -394,7 +399,7 @@ class PostmanUtils {
 	 * @return mixed
 	 */
 	public static function getRequestParameter( $parameterName ) {
-		$logger = PostmanUtils::$logger;
+		$logger = PostmanUtils::get_logger();
 		if ( isset( $_POST [ $parameterName ] ) ) {
 			$value = filter_var( $_POST [ $parameterName ], FILTER_SANITIZE_STRING );
 			if ( $logger->isTrace() ) {
