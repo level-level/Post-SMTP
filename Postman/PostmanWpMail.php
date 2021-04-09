@@ -469,11 +469,13 @@ class PostmanWpMail {
 		$bodyHtml = new Part($body);
 		$bodyHtml->setEncoding(Mime::ENCODING_QUOTEDPRINTABLE);
 		$bodyHtml->setType(Mime::TYPE_HTML);
-		$bodyHtml->setCharset("UTF-8");   
+		$bodyHtml->setCharset("UTF-8");
 		$bodyMime->addPart($bodyHtml);
-
-		$message = $this->addAttachments($message, $bodyMime, $attachments );
-
+		$bodyMime = $this->addAttachments($bodyMime, $attachments );
+		$message->setBody($bodyMime);
+		if(empty($headers)){
+			$headers = array();
+		}
 		if(!is_array($headers)){
 			$headers = array($headers);
 		}
@@ -483,27 +485,16 @@ class PostmanWpMail {
 		return $message;
 	}
 
-	private function addAttachments(Message $message, MimeMessage $body, array $attachments){
-		$contentPart = new Part($body->generateMessage());
-		$attachmentParts = array();
+	private function addAttachments(MimeMessage $body, array $attachments){
 		foreach($attachments as $attachment){
 			$attachmentPart = new Part(fopen($attachment, 'r'));
 			$attachmentPart->type        = wp_check_filetype($attachment)['type'];
-			$attachmentPart->filename    = basename($attachment);
-			$attachmentPart->disposition = Mime::DISPOSITION_ATTACHMENT;
-			$attachmentPart->encoding    = Mime::ENCODING_BASE64;
-			$attachmentParts[] = $attachmentPart;
+			$attachmentPart->setFileName(basename($attachment));
+			$attachmentPart->setDisposition(Mime::DISPOSITION_ATTACHMENT);
+			$attachmentPart->setEncoding(Mime::ENCODING_BASE64);
+			$body->addPart($attachmentPart);
 		}
-		$content = new MimeMessage();
-		$content->setParts(array_merge(array($contentPart), $attachmentParts));
-		$message->setBody($content);
-		if(!empty($attachmentParts)){
-			$contentTypeHeader = $message->getHeaders()->get('Content-Type');
-			if($contentTypeHeader instanceof HeaderInterface){
-				// $contentTypeHeader->set('multipart/related'); // @TODO
-			}
-		}
-		return $message;
+		return $body;
 	}
 
 	/**
