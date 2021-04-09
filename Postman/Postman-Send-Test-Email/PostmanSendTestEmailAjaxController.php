@@ -41,14 +41,11 @@ class PostmanSendTestEmailAjaxController extends PostmanAbstractAjaxHandler {
 			return $this->test_mode();
 		} );
 
-		// this header specifies that there are many parts (one text part, one html part)
-		$header = 'Content-Type: multipart/alternative;';
-
 		// createt the message content
 		$message = $this->createMessageContent();
 
 		// send the message
-		$success = wp_mail( $email, $subject, $message, $header );
+		$success = wp_mail( $email, $subject, $message );
 
 		// Postman API: remove the testing indicator
 		remove_filter( 'postman_test_email', function () {
@@ -170,6 +167,6 @@ class PostmanSendTestEmailAjaxController extends PostmanAbstractAjaxHandler {
 				'</body>',
 				'</html>',
 		);
-		return implode( PostmanMessage::EOL, $messageArray );
+		return implode( PHP_EOL, $messageArray );
 	}
 }

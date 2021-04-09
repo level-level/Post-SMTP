@@ -1,4 +1,7 @@
 <?php
+
+use Laminas\Mail\Transport\TransportInterface;
+
 /**
  * Keep the interface_exists check here for Postman Gmail API Extension users!
  * 
@@ -15,7 +18,6 @@ interface PostmanTransport {
 	public function getName();
 	// @deprecated
 	public function createPostmanMailAuthenticator(PostmanOptions $options, PostmanOAuthToken $authToken);
-	public function createZendMailTransport($fakeHostname, $fakeConfig);
 	public function isConfigured(PostmanOptionsInterface $options, PostmanOAuthToken $token);
 	public function isReady(PostmanOptionsInterface $options, PostmanOAuthToken $token);
 	// @deprecated

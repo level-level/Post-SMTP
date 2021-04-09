@@ -1,4 +1,10 @@
 <?php
+
+use Laminas\Mail\Transport\Smtp;
+use Laminas\Mail\Transport\TransportInterface;
+use SlmMail\Mail\Transport\HttpTransport;
+use SlmMail\Service\MandrillService;
+
 /**
  * Postman Mandrill module
  *
@@ -110,17 +116,8 @@ class PostmanMandrillTransport extends PostmanAbstractModuleTransport implements
 		return false;
 	}
 	
-	/**
-	 * 	 * (non-PHPdoc)
-	 * 	 *
-	 *
-	 * @see PostmanModuleTransport::createMailEngine()
-	 *
-	 * @return PostmanMandrillMailEngine
-	 */
-	public function createMailEngine() {
-		$apiKey = $this->options->getMandrillApiKey ();
-		return new PostmanMandrillMailEngine ( $apiKey );
+	public function createMailEngine():TransportInterface {
+		return new HttpTransport( new MandrillService($this->options->getMandrillApiKey ()) );
 	}
 	
 	/**

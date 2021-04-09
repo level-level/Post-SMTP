@@ -1,4 +1,9 @@
 <?php
+
+use Laminas\Mail\Transport\Smtp;
+use Laminas\Mail\Transport\SmtpOptions;
+use Laminas\Mail\Transport\TransportInterface;
+
 class PostmanDefaultModuleTransport extends PostmanAbstractZendModuleTransport implements PostmanZendModuleTransport {
 	const SLUG = 'default';
 	private $fromName;
@@ -71,31 +76,8 @@ class PostmanDefaultModuleTransport extends PostmanAbstractZendModuleTransport i
 		return array();
 	}
 	
-	/**
-	 * 		 * (non-PHPdoc)
-	 * 		 *
-	 *
-	 * @see PostmanModuleTransport::createMailEngine()
-	 *
-	 * @return PostmanZendMailEngine
-	 */
-	public function createMailEngine() {
-		return new PostmanZendMailEngine ( $this );
-	}
-	
-	/**
-	 * 		 * (non-PHPdoc)
-	 * 		 *
-	 *
-	 * @see PostmanZendModuleTransport::createZendMailTransport()
-	 *
-	 * @return Zend_Mail_Transport_Smtp
-	 */
-	public function createZendMailTransport($fakeHostname, $fakeConfig) {
-		$config = array (
-				'port' => $this->getPort () 
-		);
-		return new Zend_Mail_Transport_Smtp ( $this->getHostname (), $config );
+	public function createMailEngine() :TransportInterface{
+		return new Smtp(new SmtpOptions(array('host'=>ini_get('smtp_server')?:'127.0.0.1', 'port'=>ini_get('smtp_port')?:25)));
 	}
 	
 	/**

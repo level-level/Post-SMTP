@@ -1,5 +1,8 @@
 <?php
 
+use Laminas\Mail\Transport\Smtp;
+use Laminas\Mail\Transport\TransportInterface;
+
 /**
  *
  * @author jasonhendriks
@@ -15,35 +18,10 @@ class PostmanSmtpModuleTransport extends PostmanAbstractZendModuleTransport impl
 		} );
 	}
 
-	/**
-	 * 	 * (non-PHPdoc)
-	 * 	 *
-	 *
-	 * @see PostmanModuleTransport::createMailEngine()
-	 *
-	 * @return PostmanZendMailEngine
-	 */
-	public function createMailEngine() {
-		return new PostmanZendMailEngine( $this );
+	public function createMailEngine(): TransportInterface {
+		$config = PostmanBasicAuthConfigurationFactory::createConfig( $this );
+		return new Smtp($config);
 	}
-
-	/**
-	 * 	 * (non-PHPdoc)
-	 * 	 *
-	 *
-	 * @see PostmanZendModuleTransport::createZendMailTransport()
-	 *
-	 * @return Zend_Mail_Transport_Smtp
-	 */
-	public function createZendMailTransport( $fakeHostname, $fakeConfig ) {
-		if ( PostmanOptions::AUTHENTICATION_TYPE_OAUTH2 == $this->getAuthenticationType() ) {
-			$config = PostmanOAuth2ConfigurationFactory::createConfig( $this );
-		} else {
-			$config = PostmanBasicAuthConfigurationFactory::createConfig( $this );
-		}
-		return new Zend_Mail_Transport_Smtp( $this->getHostname(), $config );
-	}
-
 	/**
 	 * 	 * Determines whether Mail Engine locking is needed
 	 * 	 *

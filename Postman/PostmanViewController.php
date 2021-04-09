@@ -33,9 +33,7 @@ class PostmanViewController {
 		add_action( 'admin_init', function () : void {
 			$this->registerStylesAndScripts();
 		}, 0 );
-		add_action( 'wp_ajax_delete_lock_file', function () : void {
-			$this->delete_lock_file();
-		} );
+
 		add_action( 'wp_ajax_dismiss_version_notify', function () : void {
 			$this->dismiss_version_notify();
 		} );
@@ -58,18 +56,6 @@ class PostmanViewController {
 		check_ajax_referer( 'postsmtp', 'security' );
 
 		update_option('postman_dismiss_donation', true );
-	}
-
-	function delete_lock_file(): void {
-		check_ajax_referer( 'postman', 'security' );
-
-		if ( ! PostmanUtils::lockFileExists() ) {
-			echo __('No lock file found.', 'post-smtp' );
-			die();
-		}
-
-		echo PostmanUtils::deleteLockFile() == true ? __('Success, try to send test email.', 'post-smtp' ) : __('Failed, try again.', 'post-smtp' );
-		die();
 	}
 
 	/**
@@ -369,7 +355,6 @@ class PostmanViewController {
 			print '<ul>';
 			printf( '<li><a href="%s" class="welcome-icon run-port-test">%s</a></li>', $this->getPageUrl( PostmanConnectivityTestController::PORT_TEST_SLUG ), __( 'Connectivity Test', 'post-smtp' ) );
 			printf( '<li><a href="%s" class="welcome-icon run-port-test">%s</a></li>', $this->getPageUrl( PostmanDiagnosticTestController::DIAGNOSTICS_SLUG ), __( 'Diagnostic Test', 'post-smtp' ) );
-			printf( '<li><a href="%s" data-security="%s" class="welcome-icon release-lock-file">%s</a></li>', '#', wp_create_nonce( "postman" ), __( 'Release Lock File Error', 'post-smtp' ) );
 			printf( '<li><a href="https://postmansmtp.com/forums/" class="welcome-icon postman_support">%s</a></li>', __( 'Online Support', 'post-smtp' ) );
 			printf( '<li><img class="align-middle" src="' . plugins_url( 'style/images/new.gif', dirname( __DIR__ ) . '/postman-smtp.php' ) . '"><a target="blank" class="align-middle" href="https://postmansmtp.com/category/guides/" class="welcome-icon postman_guides">%s</a></li>', __( 'Guides', 'post-smtp' ) );
 			print '</ul></div></div></div></div>';

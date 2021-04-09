@@ -410,7 +410,6 @@ class Postman {
 
         $postman_transport_registry->registerTransport( new PostmanDefaultModuleTransport( $rootPluginFilenameAndPath ) );
         $postman_transport_registry->registerTransport( new PostmanSmtpModuleTransport( $rootPluginFilenameAndPath ) );
-        $postman_transport_registry->registerTransport( new PostmanGmailApiModuleTransport( $rootPluginFilenameAndPath ) );
         $postman_transport_registry->registerTransport( new PostmanMandrillTransport( $rootPluginFilenameAndPath ) );
         $postman_transport_registry->registerTransport( new PostmanSendGridTransport( $rootPluginFilenameAndPath ) );
         $postman_transport_registry->registerTransport( new PostmanMailgunTransport( $rootPluginFilenameAndPath ) );

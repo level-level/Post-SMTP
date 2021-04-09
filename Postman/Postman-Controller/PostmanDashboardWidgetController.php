@@ -129,7 +129,7 @@ class PostmanDashboardWidgetController {
 				
 				$num_posts = wp_count_posts ( $type );
 				
-				if ($num_posts > 0) {
+				if ( (int) $num_posts->private > 0) {
 					
 					$privated = (int) $num_posts->private;
 					$post_type = get_post_type_object ( $type );

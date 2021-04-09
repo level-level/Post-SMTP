@@ -1,4 +1,9 @@
 <?php
+
+use Laminas\Mail\Transport\TransportInterface;
+use SlmMail\Mail\Transport\HttpTransport;
+use SlmMail\Service\MailgunService;
+
 /**
  * Postman Mailgun module
  *
@@ -12,7 +17,7 @@ class PostmanMailgunTransport extends PostmanAbstractModuleTransport implements 
 	const PRIORITY = 8000;
 	const MAILGUN_AUTH_OPTIONS = 'postman_mailgun_auth_options';
 	const MAILGUN_AUTH_SECTION = 'postman_mailgun_auth_section';
-
+	
 	/**
 	 *
 	 * @param mixed $rootPluginFilenameAndPath
@@ -70,18 +75,10 @@ class PostmanMailgunTransport extends PostmanAbstractModuleTransport implements 
 		return 'Mailgun_api';
 	}
 
-	/**
-	 * 	 * (non-PHPdoc)
-	 * 	 *
-	 *
-	 * @see PostmanModuleTransport::createMailEngine()
-	 *
-	 * @return PostmanMailgunMailEngine
-	 */
-	public function createMailEngine() {
+	public function createMailEngine():TransportInterface {
 		$apiKey = $this->options->getMailgunApiKey();
 		$domainName = $this->options->getMailgunDomainName();
-		return new PostmanMailgunMailEngine( $apiKey, $domainName );
+		return new HttpTransport( new MailgunService($domainName, $apiKey, 'https://api.mailgun.net/v3') );
 	}
 	/**
 	 * @return string

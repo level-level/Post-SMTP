@@ -19,11 +19,12 @@
     },
     "require": {
         "google/apiclient": "^2",
+        "laminas/laminas-mail": "^2",
+        "laminas/laminas-servicemanager": "^3",
         "mailgun/mailgun-php": "^3",
         "mandrill/mandrill": "^1.0",
         "sendgrid/sendgrid": "^7.9",
-        "zf1/zend-mail": "^1.12",
-        "zf1/zend-registry": "^1.12"
+        "slm/mail": "^3.3"
     },
     "require-dev": {
         "php-stubs/wordpress-stubs": "^5.6",

@@ -96,14 +96,6 @@ class PostmanInputSanitizer {
 			delete_option( PostmanOAuthToken::OPTIONS_NAME );
 		}
 
-		// can we create a tmp file? - this code is duplicated in ActivationHandler
-		PostmanUtils::deleteLockFile( $new_input [ PostmanOptions::TEMPORARY_DIRECTORY ] );
-		$lockSuccess = PostmanUtils::createLockFile( $new_input [ PostmanOptions::TEMPORARY_DIRECTORY ] );
-		// &= does not work as expected in my PHP
-		$lockSuccess = $lockSuccess && PostmanUtils::deleteLockFile( $new_input [ PostmanOptions::TEMPORARY_DIRECTORY ] );
-		$this->logger->debug( 'FileLocking=' . $lockSuccess );
-		PostmanState::getInstance()->setFileLockingEnabled( $lockSuccess );
-
 		if ( $success ) {
 			PostmanSession::getInstance()->setAction( self::VALIDATION_SUCCESS );
 		} else {

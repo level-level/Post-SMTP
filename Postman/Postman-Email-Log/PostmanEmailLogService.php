@@ -1,5 +1,8 @@
 <?php
 
+use Laminas\Mail\AddressList;
+use Laminas\Mail\Message;
+
 /**
  * This class creates the Custom Post Type for Email Logs and handles writing these posts.
  *
@@ -45,7 +48,7 @@ class PostmanEmailLogService {
 	 * @param mixed                $transcript
 	 *
 	 */
-	public function writeSuccessLog( PostmanEmailLog $log, PostmanMessage $message, $transcript, PostmanModuleTransport $transport ): void {
+	public function writeSuccessLog( PostmanEmailLog $log, Message $message, $transcript, PostmanModuleTransport $transport ): void {
 		if ( PostmanOptions::getInstance()->isMailLoggingEnabled() ) {
 			$statusMessage = '';
 			$status = true;
@@ -67,7 +70,7 @@ class PostmanEmailLogService {
 	 * @param mixed                $statusMessage
 	 *
 	 */
-	public function writeFailureLog( PostmanEmailLog $log, PostmanMessage $message = null, $transcript, PostmanModuleTransport $transport, $statusMessage ): void {
+	public function writeFailureLog( PostmanEmailLog $log, Message $message = null, $transcript, PostmanModuleTransport $transport, $statusMessage ): void {
 		if ( PostmanOptions::getInstance()->isMailLoggingEnabled() ) {
 			$this->createLog( $log, $message, $transcript, $statusMessage, false, $transport );
 			$this->writeToEmailLog( $log,$message );
@@ -79,7 +82,7 @@ class PostmanEmailLogService {
 	 * 		 *
 	 * 		 * From http://wordpress.stackexchange.com/questions/8569/wp-insert-post-php-function-and-custom-fields
 	 */
-	private function writeToEmailLog( PostmanEmailLog $log, PostmanMessage $message = null ): void {
+	private function writeToEmailLog( PostmanEmailLog $log, Message $message = null ): void {
 
 		$options = PostmanOptions::getInstance();
 
@@ -149,7 +152,7 @@ class PostmanEmailLogService {
 		$purger->truncateLogItems( PostmanOptions::getInstance()->getMailLoggingMaxEntries() );
 	}
 
-	private function checkForLogErrors( PostmanEmailLog $log, ?PostmanMessage $postMessage ): void {
+	private function checkForLogErrors( PostmanEmailLog $log, ?Message $postMessage ): void {
 		$message = __( 'You getting this message because an error detected while delivered your email.', 'post-smtp' );
 		$message .= "\r\n" . sprintf( __( 'For the domain: %1$s','post-smtp' ), get_bloginfo('url') );
 		$message .= "\r\n" . __( 'The log to paste when you open a support issue:', 'post-smtp' ) . "\r\n";
@@ -197,16 +200,16 @@ class PostmanEmailLogService {
 	 * @param mixed                $success
 	 * @return PostmanEmailLog
 	 */
-	private function createLog( PostmanEmailLog $log, PostmanMessage $message = null, $transcript, $statusMessage, $success, PostmanModuleTransport $transport ) {
+	private function createLog( PostmanEmailLog $log, Message $message = null, $transcript, $statusMessage, $success, PostmanModuleTransport $transport ) {
 		if ( $message !== null ) {
-			$log->sender = $message->getFromAddress()->format();
-			$log->toRecipients = $this->flattenEmails( $message->getToRecipients() );
-			$log->ccRecipients = $this->flattenEmails( $message->getCcRecipients() );
-			$log->bccRecipients = $this->flattenEmails( $message->getBccRecipients() );
+			$log->sender = $this->flattenEmails( $message->getFrom() );
+			$log->toRecipients = $this->flattenEmails( $message->getTo() );
+			$log->ccRecipients = $this->flattenEmails( $message->getCc() );
+			$log->bccRecipients = $this->flattenEmails( $message->getBcc() );
 			$log->subject = $message->getSubject();
 			$log->body = $message->getBody();
 			if ( null !== $message->getReplyTo() ) {
-				$log->replyTo = $message->getReplyTo()->format();
+				$log->replyTo = $this->flattenEmails( $message->getReplyTo() );
 			}
 		}
 		$log->success = $success;
@@ -221,7 +224,7 @@ class PostmanEmailLogService {
 	 *
 	 * @return string
 	 */
-	private static function flattenEmails( array $addresses ) {
+	private static function flattenEmails( AddressList $addresses ) {
 		$flat = '';
 		$count = 0;
 		foreach ( $addresses as $address ) {
@@ -232,7 +235,7 @@ class PostmanEmailLogService {
 			if ( $count > 0 ) {
 				$flat .= ', ';
 			}
-			$flat .= $address->format();
+			$flat .= $address->toString();
 			$count ++;
 		}
 		return $flat;

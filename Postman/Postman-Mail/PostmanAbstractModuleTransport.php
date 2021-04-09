@@ -1,5 +1,7 @@
 <?php
 
+use Laminas\Mail\Transport\TransportInterface;
+
 /**
  *
  * @author jasonhendriks
@@ -309,23 +311,6 @@ abstract class PostmanAbstractModuleTransport implements PostmanModuleTransport 
 		return strpos ( $hostname, 'yahoo' );
 	}
 	
-	/*
-	 * ********************************
-	 * Unused, deprecated methods follow
-	 * *********************************
-	 */
-	
-	/**
-	 * 	 *
-	 *
-	 * @deprecated (non-PHPdoc)
-	 *
-	 * @see PostmanTransport::createZendMailTransport()
-	 *
-	 * @return void
-	 */
-	public function createZendMailTransport($hostname, $config) {
-	}
 	
 	/**
 	 * 	 *

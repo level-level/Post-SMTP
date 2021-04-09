@@ -337,9 +337,6 @@ class PostmanAdminController {
 		$logger->debug( 'Authorization in progress' );
 		$transactionId = PostmanSession::getInstance()->getOauthInProgress();
 
-		// begin transaction
-		PostmanUtils::lock();
-
 		$authenticationManager = PostmanAuthenticationManagerFactory::getInstance()->createAuthenticationManager();
 		try {
 			if ( $authenticationManager->processAuthorizationGrantCode( $transactionId ) ) {
@@ -359,7 +356,6 @@ class PostmanAdminController {
 		}
 
 		// clean-up
-		PostmanUtils::unlock();
 		PostmanSession::getInstance()->unsetOauthInProgress();
 
 		// redirect home

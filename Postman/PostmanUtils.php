@@ -1,5 +1,7 @@
 <?php
 
+use Laminas\Validator\EmailAddress;
+
 /**
  *
  * @author jasonhendriks
@@ -20,6 +22,13 @@ class PostmanUtils {
 	const ADMIN_POST_OAUTH2_GRANT_URL_PART = 'admin-post.php?action=postman/requestOauthGrant';
 
 		const NO_ECHO = false;
+
+	public static function get_logger():PostmanLogger{
+		if(empty(self::$logger)){
+			self::$logger = new PostmanLogger('PostmanUtils');
+		}
+		return self::$logger;
+	}
 
 	/**
 	 *
@@ -169,109 +178,6 @@ class PostmanUtils {
 	}
 
 	/**
-	 * 	 * Unblock threads waiting on lock()
-	 */
-	static function unlock(): void {
-		if ( PostmanState::getInstance()->isFileLockingEnabled() ) {
-			PostmanUtils::deleteLockFile();
-		}
-	}
-
-	/**
-	 * 	 * Processes will block on this method until unlock() is called
-	 * 	 * Inspired by http://cubicspot.blogspot.ca/2010/10/forget-flock-and-system-v-semaphores.html
-	 * 	 *
-	 *
-	 * @throws Exception
-	 *
-	 * @return void
-	 */
-	static function lock() {
-		if ( PostmanState::getInstance()->isFileLockingEnabled() ) {
-			$attempts = 0;
-			while ( true ) {
-				// create the semaphore
-				$lock = PostmanUtils::createLockFile();
-				if ( $lock ) {
-					// if we got the lock, return
-					return;
-				} else {
-					$attempts ++;
-					if ( $attempts >= 10 ) {
-						throw new Exception( sprintf( 'Could not create lockfile %s', '/tmp/.postman.lock' ) );
-					}
-					sleep( 1 );
-				}
-			}
-		}
-	}
-
-	static function lockFileExists(): bool {
-		$path = PostmanUtils::calculateTemporaryLockPath( null );
-
-		return file_exists($path);
-	}
-
-	static function get_logger(){
-		return new PostmanLogger( 'PostmanUtils' );
-	}
-
-	static function deleteLockFile( $tempDirectory = null ): bool {
-		$path = PostmanUtils::calculateTemporaryLockPath( $tempDirectory );
-		if(file_exists($path)){
-			$success = unlink( $path );	
-		}else{
-			$success = true;
-		}
-		if ( static::get_logger()->isTrace() ) {
-			static::get_logger()->trace( sprintf( 'Deleting file %s : %s', $path, $success ) );
-		}
-		return $success;
-	}
-	/**
-	 * @return false|resource
-	 */
-	static function createLockFile( $tempDirectory = null ) {
-		if ( self::lockFileExists() ) {
-			self::deleteLockFile();
-		}
-		$path = PostmanUtils::calculateTemporaryLockPath( $tempDirectory );
-		$success = @fopen( $path, 'xb' );
-		if ( static::get_logger()->isTrace() ) {
-			static::get_logger()->trace( sprintf( 'Creating file %s : %s', $path, $success ) );
-		}
-		return $success;
-	}
-
-	/**
-	 * Creates the pathname of the lockfile
-	 *
-	 * @param mixed $tempDirectory
-	 * @return string
-	 */
-	private static function calculateTemporaryLockPath( $tempDirectory ) {
-		if ( empty( $tempDirectory ) ) {
-			$options = PostmanOptions::getInstance();
-			$tempDirectory = $options->getTempDirectory();
-		}
-		return sprintf( '%s/.postman_%s.lock', $tempDirectory, self::generateUniqueLockKey() );
-	}
-
-	/**
-	 *
-	 * @return string
-	 */
-	private static function generateUniqueLockKey() {
-		// for single sites, use the network_site_url to generate the key because
-		// it is unique for every wordpress site unlike the blog ID which may be the same
-		$key = hash( 'crc32', network_site_url( '/' ) );
-		// TODO for multisites
-		// if the subsite is sharing the config - use the network_site_url of site 0
-		// if the subsite has its own config - use the network_site_url of the subsite
-		return $key;
-	}
-
-	/**
 	 * From http://stackoverflow.com/a/381275/4368109
 	 *
 	 * @param mixed $text
@@ -298,7 +204,7 @@ class PostmanUtils {
 		 *
 		 * Good to know.
 		 */
-		$logger = PostmanUtils::$logger = new PostmanLogger( 'PostmanUtils' );
+		$logger = PostmanUtils::get_logger();
 		if ( $logger->isTrace() ) {
 			$logger->trace( 'calling current_user_can' );
 		}
@@ -316,7 +222,7 @@ class PostmanUtils {
 			return true;
 		}
 		if ( ! isset( PostmanUtils::$emailValidator ) ) {
-			PostmanUtils::$emailValidator = new Zend_Validate_EmailAddress();
+			PostmanUtils::$emailValidator = new EmailAddress();
 		}
 		return PostmanUtils::$emailValidator->isValid( $email );
 	}
@@ -356,7 +262,7 @@ class PostmanUtils {
 	 *
 	 */
 	public static function registerAdminMenu( $viewController, $callbackName, int $priority = 10 ): void {
-		$logger = PostmanUtils::$logger;
+		$logger = PostmanUtils::get_logger();
 		if ( $logger->isTrace() ) {
 			$logger->trace( 'Registering admin menu ' . $callbackName );
 		}
@@ -392,7 +298,7 @@ class PostmanUtils {
 	 * @return mixed
 	 */
 	public static function getRequestParameter( $parameterName ) {
-		$logger = PostmanUtils::$logger;
+		$logger = PostmanUtils::get_logger();
 		if ( isset( $_POST [ $parameterName ] ) ) {
 			$value = filter_var( $_POST [ $parameterName ], FILTER_SANITIZE_STRING );
 			if ( $logger->isTrace() ) {
